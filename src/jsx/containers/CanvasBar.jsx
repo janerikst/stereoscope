@@ -15,6 +15,13 @@ const CanvasBar = observer(props => {
   // content
   const canvasEls = canvasList.map(d => (
     <CanvasThumbnail key={d.id} id={d.id} title={d.title} layout={d.layout} />
+    <CanvasThumbnail
+      key={d.id}
+      id={d.id}
+      title={d.title}
+      layout={d.layout}
+      active={d.active}
+    />
   ));
 
   // render
