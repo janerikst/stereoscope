@@ -33,7 +33,9 @@ class UiState {
   @observable textFile = '';
   @observable annotationFile = '';
 
-  @observable selectedFilters = [];
+  @observable
+  canvases = [{ id: 1, title: '', layout: 'creation_period', filter: [] }];
+  @observable selectedCanvas = '1';
 }
 
 const uiState = new UiState();

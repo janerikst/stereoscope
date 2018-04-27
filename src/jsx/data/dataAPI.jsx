@@ -1,6 +1,8 @@
 import { computed } from 'mobx';
 
 import uiState from '../state/uiState';
+import config from '../config/config';
+
 import { textData, annotationData } from './dataStore';
 
 import {
@@ -41,7 +43,6 @@ class DataAPI {
 
     // helper functions
     const addOffset = (start, end, annotations) => {
-      // console.log(`${start}-${end}`);
       if (offsets[`${start}-${end}`] == undefined) {
         offsets[`${start}-${end}`] = {
           startOffset: start,
@@ -204,6 +205,7 @@ class DataAPI {
           text: d.phrase,
           tagId: d.tagId,
           tagPath: d.tagPath,
+          tagVersion: new Date(d.tagVersion),
           startOffset: d.startOffset,
           endOffset: d.endOffset,
         };
@@ -239,6 +241,27 @@ class DataAPI {
       d.isActive = true;
       return d;
     });
+  }
+
+  // canvases
+  @computed
+  get canvasList() {
+    const { canvases } = uiState;
+    const { LAYOUTS } = config;
+
+    if (canvases.length == 0) {
+      return [];
+    }
+    const output = [];
+    canvases.forEach(d => {
+      output.push({
+        id: d.id,
+        title: d.title,
+        layout: LAYOUTS[d.layout].name,
+        active: d.id == uiState.selectedCanvas,
+      });
+    });
+    return output;
   }
 
   // filters

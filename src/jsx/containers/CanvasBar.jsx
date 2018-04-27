@@ -5,9 +5,19 @@ import dataAPI from 'data/dataAPI';
 import uiState from 'state/uiState';
 import config from 'config/config';
 
+import CanvasThumbnail from '../components/CanvasThumbnail';
+
 const CanvasBar = observer(props => {
+  // vars
+  const { canvasList } = dataAPI;
   const { CANVAS_BAR_SIZE } = config;
 
+  // content
+  const canvasEls = canvasList.map(d => (
+    <CanvasThumbnail key={d.id} id={d.id} title={d.title} layout={d.layout} />
+  ));
+
+  // render
   return (
     <aside
       className="c-canvas-bar l-content-container"
@@ -15,7 +25,12 @@ const CanvasBar = observer(props => {
       <header className="c-header--small">
         <h2>Canvas View</h2>
       </header>
-      <div className="l-content-spacing" />
+      <div className="c-canvas-bar__thumbnails l-content-spacing">
+        {canvasEls}
+        <div className="c-canvas-bar__add">
+          <span>+</span>
+        </div>
+      </div>
     </aside>
   );
 });
