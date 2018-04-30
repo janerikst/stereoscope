@@ -13,6 +13,7 @@ import {
   keyBy,
   isEmpty,
   includes,
+  trim,
 } from 'lodash';
 
 class DataAPI {
@@ -27,6 +28,14 @@ class DataAPI {
     return annotationData.current() || [];
   }
   // GENERAL COMPUTES
+
+  @computed
+  get textTitle() {
+    if (this.rawAnnotations.length == 0) {
+      return '';
+    }
+    return trim(this.rawAnnotations[0].sourceDocumentTitle);
+  }
 
   @computed
   get textElements() {

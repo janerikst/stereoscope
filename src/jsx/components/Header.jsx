@@ -1,9 +1,11 @@
 import React from 'react';
 
 const Header = props => {
+  const { children } = props;
+
   return (
     <div className="c-header">
-      <h1>3DH</h1>
+      <h1>{children}</h1>
     </div>
   );
 };
