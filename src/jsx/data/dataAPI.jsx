@@ -8,6 +8,7 @@ import { textData, annotationData } from './dataStore';
 import {
   values,
   map,
+  forEach,
   orderBy,
   groupBy,
   keyBy,
@@ -346,6 +347,18 @@ class DataAPI {
   }
 
   @computed
+  get activeFilterIdsById() {
+    if (this.filters.length == 0) {
+      return {};
+    }
+    const output = {};
+    forEach(uiState.activeFilterIds, d => {
+      output[d] = 1;
+    });
+    return output;
+  }
+
+  @computed
   get activeFilters() {
     if (this.filters.length == 0) {
       return [];
@@ -353,10 +366,11 @@ class DataAPI {
     return map(this.filters, d => {
       d.active =
         isEmpty(this.activeCanvas.filters) ||
-        this.activeCanvas.filters[d.id] != undefined;
+        this.activeFilterIdsById[d.id] != undefined;
       return d;
     });
   }
 }
+
 const dataAPI = new DataAPI();
 export default dataAPI;

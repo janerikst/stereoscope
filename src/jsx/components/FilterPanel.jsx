@@ -1,7 +1,9 @@
 import React from 'react';
 
 import { max, scaleLinear } from 'd3';
+import { observer } from 'mobx-react';
 
+@observer
 class FilterPanel extends React.Component {
   constructor(props) {
     super(props);

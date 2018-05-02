@@ -1,8 +1,8 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action, compute } from 'mobx';
 
 import { addEvent, windowWidth, windowHeight } from '../utils/browser';
 import config from '../config/config';
-import dataAPI from '../data/dataAPI';
+import dataAPI from 'data/dataAPI';
 
 import { first, last, remove } from 'lodash';
 
@@ -52,15 +52,16 @@ class UiState {
       id: 1,
       title: '',
       layout: 'creation_period',
-      filters: { 'CATMA_27EE1670-540D-44A7-A2B6-AC202F3359A6': 1 },
+      filters: [],
     },
     {
       id: 2,
       title: 'test 2',
       layout: 'distribution',
-      filters: {},
+      filters: [],
     },
   ];
+  @observable activeFilterIds = [];
   @observable activeCanvasId = 1;
   @observable editCanvasId = '';
 
@@ -75,14 +76,18 @@ class UiState {
   @action
   addCanvas = (title, layout) => {
     const newId = last(this.canvases).id + 1;
-    this.canvases.push({ id: newId, title: title, layout: layout, filter: [] });
+    this.canvases.push({
+      id: newId,
+      title: title,
+      layout: layout,
+      filters: observable([]),
+    });
     this.showAddCanvasDialog = !this.showAddCanvasDialog;
   };
 
   @action
   editCanvas = (title, layout) => {
     const canvas = this.canvases.find(d => d.id == this.editCanvasId);
-
     canvas.title = title;
     canvas.layout = layout;
     this.editCanvasId = '';
@@ -99,7 +104,14 @@ class UiState {
 
   @action
   setActiveCanvas = id => {
+    // write active filter to old active canvas
+    let canvas = this.canvases.find(d => d.id == this.activeCanvasId);
+    canvas.filter = this.activeFilterIds;
+
+    // copy new active filters
     this.activeCanvasId = id;
+    canvas = this.canvases.find(d => d.id == this.activeCanvasId);
+    this.activeFilterIds = canvas.filter;
   };
 
   @action
@@ -109,10 +121,11 @@ class UiState {
 
   @action
   changeActiveCanvasFilters = filter => {
-    if (dataAPI.activeCanvas.filters[filter]) {
-      delete dataAPI.activeCanvas.filters[filter];
+    if (dataAPI.activeFilterIdsById[filter]) {
+      remove(this.activeFilterIds, d => d == filter);
     } else {
-      dataAPI.activeCanvas.filters[filter] = 1;
+      console.log('.');
+      this.activeFilterIds.push(filter);
     }
   };
 

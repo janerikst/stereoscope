@@ -29,7 +29,7 @@ const Canvas = observer(props => {
   });
 
   // renders
-
+  console.log('render');
   return (
     <div className="c-canvas l-content-container l-content-container-auto">
       <header className="c-header--small">

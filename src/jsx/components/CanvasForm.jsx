@@ -1,5 +1,7 @@
 import React from 'react';
+import { observer } from 'mobx-react';
 
+@observer
 class CanvasForm extends React.Component {
   constructor(props) {
     super(props);
