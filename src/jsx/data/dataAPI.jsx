@@ -348,9 +348,6 @@ class DataAPI {
 
   @computed
   get activeFilterIdsById() {
-    if (this.filters.length == 0) {
-      return {};
-    }
     const output = {};
     forEach(uiState.activeFilterIds, d => {
       output[d] = 1;
@@ -365,7 +362,7 @@ class DataAPI {
     }
     return map(this.filters, d => {
       d.active =
-        isEmpty(this.activeCanvas.filters) ||
+        isEmpty(this.activeFilterIdsById) ||
         this.activeFilterIdsById[d.id] != undefined;
       return d;
     });

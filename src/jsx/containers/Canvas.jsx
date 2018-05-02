@@ -29,11 +29,12 @@ const Canvas = observer(props => {
   });
 
   // renders
-  console.log('render');
   return (
     <div className="c-canvas l-content-container l-content-container-auto">
       <header className="c-header--small">
-        <h2>Canvas</h2>
+        <h2>
+          Canvas: {activeCanvas.title ? activeCanvas.title : 'Untitled Canvas'}
+        </h2>
       </header>
       <div className="l-content-spacing">
         <div className="c-canvas__glyphs" />

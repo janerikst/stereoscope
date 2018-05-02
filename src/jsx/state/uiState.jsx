@@ -4,7 +4,7 @@ import { addEvent, windowWidth, windowHeight } from '../utils/browser';
 import config from '../config/config';
 import dataAPI from 'data/dataAPI';
 
-import { first, last, remove } from 'lodash';
+import { first, last, remove, clone } from 'lodash';
 
 class UiState {
   // --------------------
@@ -80,7 +80,7 @@ class UiState {
       id: newId,
       title: title,
       layout: layout,
-      filters: observable([]),
+      filters: [],
     });
     this.showAddCanvasDialog = !this.showAddCanvasDialog;
   };
@@ -95,23 +95,23 @@ class UiState {
 
   @action
   deleteCanvas = id => {
-    remove(this.canvases, d => d.id == id);
     if (this.activeCanvasId == id) {
       // tries to delete the active canvas -> set new one
-      this.activeCanvasId = first(this.canvases).id;
+      this.setActiveCanvas(first(this.canvases).id);
     }
+    remove(this.canvases, d => d.id == id);
   };
 
   @action
   setActiveCanvas = id => {
     // write active filter to old active canvas
     let canvas = this.canvases.find(d => d.id == this.activeCanvasId);
-    canvas.filter = this.activeFilterIds;
+    canvas.filters = this.activeFilterIds;
 
     // copy new active filters
     this.activeCanvasId = id;
-    canvas = this.canvases.find(d => d.id == this.activeCanvasId);
-    this.activeFilterIds = canvas.filter;
+    canvas = this.canvases.find(d => d.id == id);
+    this.activeFilterIds = canvas.filters;
   };
 
   @action
@@ -124,7 +124,6 @@ class UiState {
     if (dataAPI.activeFilterIdsById[filter]) {
       remove(this.activeFilterIds, d => d == filter);
     } else {
-      console.log('.');
       this.activeFilterIds.push(filter);
     }
   };
