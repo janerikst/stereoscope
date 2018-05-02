@@ -6,8 +6,7 @@
     "description": "",
     "repository": "",
     "scripts": {
-        "dev":
-            "cross-env NODE_ENV=development webpack-dev-server --devtool source-map --progress --colors --inline --hot",
+        "dev": "cross-env NODE_ENV=development webpack-dev-server --devtool source-map --progress --colors --inline --hot",
         "build": "cross-env NODE_ENV=production webpack -p"
     },
     "devDependencies": {
@@ -53,6 +52,7 @@
         "node-sass": "^4.5.3",
         "react": "^15.5.4",
         "react-addons-perf": "^15.4.2",
-        "react-dom": "^15.5.4"
+        "react-dom": "^15.5.4",
+        "react-modal": "^3.4.4"
     }
 }
