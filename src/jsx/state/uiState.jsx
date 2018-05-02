@@ -2,9 +2,16 @@ import { observable, action, computed } from 'mobx';
 
 import { addEvent, windowWidth, windowHeight } from '../utils/browser';
 import config from '../config/config';
+import dataAPI from '../data/dataAPI';
+
+import { first, last, remove } from 'lodash';
 
 class UiState {
-  // global ui
+  // --------------------
+  //
+  // *** UI VARIABLES ***
+  //
+  // --------------------
 
   @observable mouse = { x: 0, y: 0 }; // mouse position
 

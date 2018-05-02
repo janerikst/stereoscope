@@ -10,7 +10,7 @@ import TextElement from '../components/TextElement';
 const TextBar = observer(props => {
   // vars
   const { textElements } = dataAPI;
-  const { TEXT_BAR_SIZE } = config;
+  const { TEXT_BAR_WIDTH } = config;
 
   // content
   const textEls = textElements.map(d => (
@@ -19,7 +19,7 @@ const TextBar = observer(props => {
 
   // render
   return (
-    <aside className="l-content-container" style={{ width: TEXT_BAR_SIZE }}>
+    <aside className="l-content-container" style={{ width: TEXT_BAR_WIDTH }}>
       <header className="c-header--small">
         <h2>Text View</h2>
       </header>
