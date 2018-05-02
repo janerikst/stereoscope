@@ -29,6 +29,12 @@ class DataAPI {
   }
   // GENERAL COMPUTES
 
+  // --------------------
+  //
+  // *** TEXT ***
+  //
+  // --------------------
+
   @computed
   get textTitle() {
     if (this.rawAnnotations.length == 0) {
@@ -199,7 +205,11 @@ class DataAPI {
     return output;
   }
 
-  // annotations
+  // --------------------
+  //
+  // *** ANNOTATIONS ***
+  //
+  // --------------------
 
   @computed
   get annotations() {
@@ -252,10 +262,15 @@ class DataAPI {
     });
   }
 
-  // canvases
+  // --------------------
+  //
+  // *** CANVASES ***
+  //
+  // --------------------
+
   @computed
   get canvasList() {
-    const { canvases } = uiState;
+    const { canvases, activeCanvasId } = uiState;
     const { LAYOUTS } = config;
 
     if (canvases.length == 0) {
@@ -266,28 +281,80 @@ class DataAPI {
       output.push({
         id: d.id,
         title: d.title,
-        layout: LAYOUTS[d.layout].name,
-        active: d.id == uiState.selectedCanvas,
+        layout: LAYOUTS[d.layout].label,
+        active: d.id == activeCanvasId,
       });
     });
     return output;
   }
 
-  // filters
+  @computed
+  get activeCanvas() {
+    const { canvases, activeCanvasId } = uiState;
+    if (canvases.length == 0) {
+      return {};
+    }
+    return canvases.find(d => d.id == activeCanvasId);
+  }
+
+  @computed
+  get canvasDetails() {
+    const { canvases, editCanvasId } = uiState;
+    if (canvases.length == 0) {
+      return {};
+    }
+    return canvases.find(d => d.id == editCanvasId);
+  }
+
+  // --------------------
+  //
+  // *** LAYOUTS ***
+  //
+  // --------------------
+
+  @computed
+  get layoutList() {
+    return map(config.LAYOUTS, (d, k) => {
+      return { id: k, label: d.label };
+    });
+  }
+
+  // --------------------
+  //
+  // *** FILTERS ***
+  //
+  // --------------------
 
   @computed
   get filters() {
     if (this.annotations.length == 0) {
       return [];
     }
-    return map(groupBy(this.annotations, 'tagId'), d => {
-      const item = d[0];
-      return {
-        id: item.tagId,
-        tagPath: item.tagPath,
-        color: item.color,
-        count: d.length,
-      };
+    return orderBy(
+      map(groupBy(this.annotations, 'tagId'), d => {
+        const item = d[0];
+        return {
+          id: item.tagId,
+          tagPath: item.tagPath,
+          color: item.color,
+          count: d.length,
+        };
+      }),
+      'count',
+      'desc',
+    );
+  }
+
+  @computed
+  get activeFilters() {
+    if (this.filters.length == 0) {
+      return [];
+    }
+    return map(this.filters, d => {
+      d.active =
+        isEmpty(this.activeCanvas.filters) ||
+        this.activeCanvas.filters[d.id] != undefined;
+      return d;
     });
   }
 }

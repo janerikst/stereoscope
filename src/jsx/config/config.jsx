@@ -4,10 +4,11 @@ export default {
   CANVAS_BAR_SIZE: 240,
   LAYOUTS: {
     creation_period: {
-      name: 'Creation period',
+      label: 'Creation period',
     },
     distribution: {
-      name: 'Distribution',
+      label: 'Distribution',
     },
   },
+  LAYOUT_DEFAULT: 'creation_period',
 };

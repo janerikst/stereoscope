@@ -1,0 +1,49 @@
+.o-close
+  display: block;
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 20px;
+  height: 20px;
+  transition: transform .25s ease-in-out;
+
+.o-close:hover:before,.o-close:hover:after
+  border-width: 2px;
+
+.o-close:before 
+    content: "";
+    position: absolute;
+    display: block;
+    margin: auto;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 20px;
+    height: 0;
+    border-top: 1px solid rgba(0,0,0,0.5);
+    transform: rotate(45deg);
+    transform-origin: center;
+
+.o-close:after
+    content: "";
+    position: absolute;
+    display: block;
+    margin: auto;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 20px;
+    height: 0;
+    border-top: 1px solid rgba(0,0,0,0.5);
+    transform: rotate(-45deg);
+    transform-origin: center;
+
+
+.o-close--light:before 
+    border-top: 1px solid rgba(255,255,255,0.75);
+
+
+.o-close--light:after
+    border-top: 1px solid rgba(255,255,255,0.75);

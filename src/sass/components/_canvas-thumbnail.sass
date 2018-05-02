@@ -14,10 +14,31 @@
     color: $c-gray
     font-size: $fs-xsmall
 
-.c-canvas-thumbnail__image
+  h3:hover 
+    background-color: $c-lighter-gray
+
+.c-canvas-thumbnail__image_container
   background-color: $c-lighter-gray
   width: $canvas-thumbnail-width
   height: $canvas-thumbnail-height
+  position: relative
+
+.c-canvas-thumbnail__image
+  width: 100%
+  height: 100%
 
 .c-canvas-thumbnail.is-active .c-canvas-thumbnail__image
-    border: 1px solid $c-light-gray
+  border: 1px solid $c-light-gray
+
+.c-canvas-thumbnail:hover .c-canvas-thumbnail__delete
+  display: block
+
+.c-canvas-thumbnail__delete
+  z-index: 1000
+  position: absolute
+  top: 0
+  right: 0
+  padding:  $sp-small
+  background-color: $c-gray
+  display: none
+
