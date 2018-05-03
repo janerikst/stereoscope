@@ -36,14 +36,18 @@ const Canvas = observer(props => {
           Canvas: {activeCanvas.title ? activeCanvas.title : 'Untitled Canvas'}
         </h2>
       </header>
-      <div className="l-content-spacing">
+      <div className="c-canvas__stage">
         <div className="c-canvas__glyphs" />
         <div className="c-canvas__controls">
-          <div className="c-canvas__layout-control">
-            Layouts:{' '}
-            <select value={activeCanvas.layout} onChange={handleLayoutChange}>
-              {layoutOptions}
-            </select>
+          <div className="c-canvas__layout-control c-filter-panel">
+            <header className="c-filter-panel__header">
+              <h3>Layouts</h3>
+            </header>
+            <div className="c-filter-panel__content">
+              <select value={activeCanvas.layout} onChange={handleLayoutChange}>
+                {layoutOptions}
+              </select>
+            </div>
           </div>
           <div className="c-canvas__filter-control">
             <FilterPanel

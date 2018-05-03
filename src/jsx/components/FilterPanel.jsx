@@ -13,9 +13,12 @@ class FilterPanel extends React.Component {
     // vars
     const { items, height, width, onChange } = this.props;
     const margin = 10;
+    const stageWidth = width - margin * 2;
+    const stageHeight = height - margin * 2;
+
     const barWidth = 10;
     const barSpace = 5;
-    const barHeight = height - margin * 2 - barWidth - 2;
+    const barHeight = stageHeight - barWidth - 2;
 
     // content
     const maxCount = max(items, d => d.count);
@@ -51,10 +54,15 @@ class FilterPanel extends React.Component {
     });
 
     return (
-      <div>
-        <svg width={width} height={height}>
-          <g transform={`translate(${margin},${margin})`}>{bars}</g>
-        </svg>
+      <div className="c-filter-panel">
+        <header className="c-filter-panel__header">
+          <h3>Filter</h3>
+        </header>
+        <div className="c-filter-panel__content">
+          <svg width={stageWidth} height={stageHeight}>
+            {bars}
+          </svg>
+        </div>
       </div>
     );
   }
