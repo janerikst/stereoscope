@@ -1,16 +1,17 @@
 import React from 'react';
 
 const Header = props => {
-  const { text, annotations } = props;
-
+  const { text, annotations, isActive } = props;
   let annotationsGradient = '';
   annotations.forEach((d, i) => {
-    annotationsGradient += `,${d.color} ${i * 2}px, white ${i * 2 +
+    const color = d.active == undefined || d.active ? d.color : '#ddd';
+    annotationsGradient += `,${color} ${i * 2}px, white ${i * 2 +
       1}px, white ${i * 2 + 2}px`;
   });
 
   return (
     <span
+      className={!isActive ? 'is-inactive' : ''}
       style={
         annotations.length ? (
           {

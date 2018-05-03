@@ -185,6 +185,7 @@ class DataAPI {
         annotations: orderBy(
           d.annotations.map(e => ({
             id: e,
+            filterId: this.annotationsById[e].tagId,
             color: this.annotationsById[e].color,
           })),
           e => this.annotationsById[e.id].text.length,
@@ -204,6 +205,38 @@ class DataAPI {
     }
 
     return output;
+  }
+
+  @computed
+  get activeTextElements() {
+    if (this.textElements.length == 0) {
+      return [];
+    }
+
+    const hasFilters = uiState.activeFilterIds.length != 0;
+    return this.textElements.map(d => {
+      if (hasFilters) {
+        // has filters
+        if (d.annotations.length) {
+          // has annotations
+          let found = false;
+          d.annotations.map(e => {
+            e.active = this.activeFilterIdsById[e.filterId] != undefined;
+            if (e.active && !found) {
+              found = true;
+            }
+            return e;
+          });
+          d.active = found;
+        } else {
+          // has no annotations
+          d.active = false;
+        }
+      } else {
+        d.active = true;
+      }
+      return d;
+    });
   }
 
   // --------------------
@@ -257,8 +290,9 @@ class DataAPI {
     if (this.annotations.length == 0) {
       return [];
     }
+    const hasFilters = uiState.activeFilterIds.length != 0;
     return this.annotations.map(d => {
-      d.isActive = true;
+      d.active = !hasFilters || this.activeFilterIdsById[d.tagId];
       return d;
     });
   }

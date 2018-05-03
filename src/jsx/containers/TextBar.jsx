@@ -9,14 +9,20 @@ import TextElement from '../components/TextElement';
 
 const TextBar = observer(props => {
   // vars
-  const { textElements } = dataAPI;
+  const { activeTextElements } = dataAPI;
   const { TEXT_BAR_WIDTH } = config;
 
   // content
-  const textEls = textElements.map(d => (
-    <TextElement key={d.id} text={d.text} annotations={d.annotations} />
-  ));
-
+  const textEls = activeTextElements.map(d => {
+    return (
+      <TextElement
+        key={d.id}
+        text={d.text}
+        annotations={d.annotations}
+        isActive={d.active}
+      />
+    );
+  });
   // render
   return (
     <aside className="l-content-container" style={{ width: TEXT_BAR_WIDTH }}>
