@@ -9,8 +9,15 @@ import FilterPanel from '../components/FilterPanel';
 
 const Canvas = observer(props => {
   // var
-  const { activeCanvas, layoutList, activeFilters } = dataAPI;
-  const { FILTER_PANEL_WIDTH, FILTER_PANEL_HEIGHT } = config;
+  const {
+    activeCanvas,
+    layoutList,
+    activeFilters,
+    activeGlyphs,
+    canvasWidth,
+    canvasHeight,
+  } = dataAPI;
+  const { FILTER_PANEL_WIDTH, FILTER_PANEL_HEIGHT, CANVAS_MARGIN } = config;
 
   // interactions
   const handleLayoutChange = event =>
@@ -28,6 +35,20 @@ const Canvas = observer(props => {
     );
   });
 
+  const glyphs = activeGlyphs.map(d => {
+    return (
+      <g key={d.id} transform={`translate(${d.x},${d.y})`}>
+        <rect width={d.width} height={d.height} fill="#eee" />
+        <rect
+          y={d.annotationY}
+          width={d.width}
+          height={d.annotationHeight}
+          fill={d.color}
+        />
+      </g>
+    );
+  });
+
   // renders
   return (
     <div className="c-canvas l-content-container l-content-container-auto">
@@ -37,7 +58,13 @@ const Canvas = observer(props => {
         </h2>
       </header>
       <div className="c-canvas__stage">
-        <div className="c-canvas__glyphs" />
+        <div className="c-canvas__glyphs">
+          <svg width={canvasWidth} height={canvasHeight}>
+            <g transform={`translate(${CANVAS_MARGIN},${CANVAS_MARGIN})`}>
+              {glyphs}
+            </g>
+          </svg>
+        </div>
         <div className="c-canvas__controls">
           <div className="c-canvas__layout-control c-filter-panel">
             <header className="c-filter-panel__header">

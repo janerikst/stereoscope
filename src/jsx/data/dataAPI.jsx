@@ -5,6 +5,8 @@ import config from '../config/config';
 
 import { textData, annotationData } from './dataStore';
 
+import creationPeriodLayout from '../layouts/creationPeriod.jsx';
+
 import {
   values,
   map,
@@ -185,7 +187,6 @@ class DataAPI {
         annotations: orderBy(
           d.annotations.map(e => ({
             id: e,
-            filterId: this.annotationsById[e].tagId,
             color: this.annotationsById[e].color,
           })),
           e => this.annotationsById[e.id].text.length,
@@ -209,33 +210,41 @@ class DataAPI {
 
   @computed
   get activeTextElements() {
-    if (this.textElements.length == 0) {
+    if (this.textElements.length == 0 || isEmpty(this.activeAnnotationsById)) {
       return [];
     }
 
     const hasFilters = uiState.activeFilterIds.length != 0;
     return this.textElements.map(d => {
+      let active;
+      const annotations = [];
       if (hasFilters) {
         // has filters
         if (d.annotations.length) {
           // has annotations
           let found = false;
-          d.annotations.map(e => {
-            e.active = this.activeFilterIdsById[e.filterId] != undefined;
-            if (e.active && !found) {
+          d.annotations.forEach(e => {
+            const active =
+              this.activeAnnotationsById[e.id].active == true ? true : false;
+            if (active && !found) {
               found = true;
             }
-            return e;
+            annotations.push({ ...e, active });
           });
-          d.active = found;
+          active = found;
         } else {
           // has no annotations
-          d.active = false;
+          active = false;
         }
       } else {
-        d.active = true;
+        active = true;
+        if (d.annotations.length) {
+          d.annotations.forEach(e => {
+            annotations.push({ ...e, active: true });
+          });
+        }
       }
-      return d;
+      return { ...d, active, annotations };
     });
   }
 
@@ -292,9 +301,17 @@ class DataAPI {
     }
     const hasFilters = uiState.activeFilterIds.length != 0;
     return this.annotations.map(d => {
-      d.active = !hasFilters || this.activeFilterIdsById[d.tagId];
-      return d;
+      const active = !hasFilters || this.activeFilterIdsById[d.tagId];
+      return { ...d, active };
     });
+  }
+
+  @computed
+  get activeAnnotationsById() {
+    if (this.activeAnnotations.length == 0) {
+      return {};
+    }
+    return keyBy(this.activeAnnotations, 'id');
   }
 
   // --------------------
@@ -339,6 +356,60 @@ class DataAPI {
       return {};
     }
     return canvases.find(d => d.id == editCanvasId);
+  }
+
+  @computed
+  get canvasWidth() {
+    return (
+      uiState.windowDimensions.width -
+      config.TEXT_BAR_WIDTH -
+      config.CANVAS_BAR_WIDTH
+    );
+  }
+
+  @computed
+  get canvasHeight() {
+    return uiState.windowDimensions.height - 100;
+  }
+
+  // --------------------
+  //
+  // *** GLYPHS ***
+  //
+  // --------------------
+
+  @computed
+  get glyphs() {
+    if (this.annotations.length == 0 || this.text.length == 0) {
+      return [];
+    }
+
+    const textLength = this.text.length;
+    const { GLYPH_HEIGHT, GLYPH_WIDTH } = config;
+
+    return this.annotations.map(d => {
+      const width = GLYPH_WIDTH;
+      const height = GLYPH_HEIGHT;
+      const annotationY = d.startOffset * GLYPH_HEIGHT / textLength;
+      const annotationHeight = Math.max(
+        1,
+        (d.endOffset - d.startOffset) * GLYPH_HEIGHT / textLength,
+      );
+      return { ...d, width, height, annotationY, annotationHeight };
+    });
+  }
+
+  @computed
+  get activeGlyphs() {
+    if (this.glyphs.length == 0 || isEmpty(this.activeAnnotationsById)) {
+      return [];
+    }
+    return creationPeriodLayout.create(
+      this.glyphs.filter(d => this.activeAnnotationsById[d.id].active),
+      this.canvasWidth - config.CANVAS_MARGIN * 2,
+      this.canvasHeight - config.CANVAS_MARGIN * 2,
+      config.GLYPH_SPACE,
+    );
   }
 
   // --------------------
@@ -395,10 +466,10 @@ class DataAPI {
       return [];
     }
     return map(this.filters, d => {
-      d.active =
+      const active =
         isEmpty(this.activeFilterIdsById) ||
         this.activeFilterIdsById[d.id] != undefined;
-      return d;
+      return { ...d, active };
     });
   }
 }
