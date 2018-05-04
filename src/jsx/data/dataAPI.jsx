@@ -270,6 +270,7 @@ class DataAPI {
           tagVersion: new Date(d.tagVersion),
           startOffset: d.startOffset,
           endOffset: d.endOffset,
+          radius: config.ANNOTATION_RADIUS,
         };
       }
       if (d.propertyName == 'catma_displaycolor') {
@@ -312,6 +313,19 @@ class DataAPI {
       return {};
     }
     return keyBy(this.activeAnnotations, 'id');
+  }
+
+  @computed
+  get activeAnnotationsLayouted() {
+    if (this.annotations.length == 0 || isEmpty(this.activeAnnotationsById)) {
+      return [];
+    }
+    return creationPeriodLayout.create(
+      this.activeAnnotations.filter(d => d.active),
+      this.canvasWidth - config.CANVAS_MARGIN * 2,
+      this.canvasHeight - config.CANVAS_MARGIN * 2,
+      config.ANNOTATION_SPACE,
+    );
   }
 
   // --------------------
@@ -370,46 +384,6 @@ class DataAPI {
   @computed
   get canvasHeight() {
     return uiState.windowDimensions.height - 100;
-  }
-
-  // --------------------
-  //
-  // *** GLYPHS ***
-  //
-  // --------------------
-
-  @computed
-  get glyphs() {
-    if (this.annotations.length == 0 || this.text.length == 0) {
-      return [];
-    }
-
-    const textLength = this.text.length;
-    const { GLYPH_HEIGHT, GLYPH_WIDTH } = config;
-
-    return this.annotations.map(d => {
-      const width = GLYPH_WIDTH;
-      const height = GLYPH_HEIGHT;
-      const annotationY = d.startOffset * GLYPH_HEIGHT / textLength;
-      const annotationHeight = Math.max(
-        1,
-        (d.endOffset - d.startOffset) * GLYPH_HEIGHT / textLength,
-      );
-      return { ...d, width, height, annotationY, annotationHeight };
-    });
-  }
-
-  @computed
-  get activeGlyphs() {
-    if (this.glyphs.length == 0 || isEmpty(this.activeAnnotationsById)) {
-      return [];
-    }
-    return creationPeriodLayout.create(
-      this.glyphs.filter(d => this.activeAnnotationsById[d.id].active),
-      this.canvasWidth - config.CANVAS_MARGIN * 2,
-      this.canvasHeight - config.CANVAS_MARGIN * 2,
-      config.GLYPH_SPACE,
-    );
   }
 
   // --------------------

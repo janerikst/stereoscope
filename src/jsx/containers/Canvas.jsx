@@ -13,7 +13,7 @@ const Canvas = observer(props => {
     activeCanvas,
     layoutList,
     activeFilters,
-    activeGlyphs,
+    activeAnnotationsLayouted,
     canvasWidth,
     canvasHeight,
   } = dataAPI;
@@ -35,18 +35,8 @@ const Canvas = observer(props => {
     );
   });
 
-  const glyphs = activeGlyphs.map(d => {
-    return (
-      <g key={d.id} transform={`translate(${d.x},${d.y})`}>
-        <rect width={d.width} height={d.height} fill="#eee" />
-        <rect
-          y={d.annotationY}
-          width={d.width}
-          height={d.annotationHeight}
-          fill={d.color}
-        />
-      </g>
-    );
+  const glyphs = activeAnnotationsLayouted.map(d => {
+    return <circle key={d.id} cx={d.x} cy={d.y} fill={d.color} r={d.radius} />;
   });
 
   // renders

@@ -6,12 +6,12 @@ export default {
     let ySpace = 0;
     const output = [];
     orderBy(glyphs, (d, i) => d.tagVersion).map(glyph => {
-      if (xSpace + glyph.width > width) {
-        ySpace += glyph.height + space;
+      if (xSpace + glyph.radius * 2 > width) {
+        ySpace += glyph.radius * 2 + space;
         xSpace = 0;
       }
       output.push({ ...glyph, x: xSpace, y: ySpace });
-      xSpace += glyph.width + space;
+      xSpace += glyph.radius * 2 + space;
     });
     return output;
   },
