@@ -64,12 +64,24 @@ class UiState {
   @observable activeFilterIds = [];
   @observable activeCanvasId = 1;
   @observable editCanvasId = '';
+  @observable hoveredAnnotationIds = [];
 
   // --------------------
   //
   // *** ACTIONS ***
   //
   // --------------------
+
+  // Annotations
+
+  @action
+  setHoveredAnnotation = ids => {
+    if (ids == undefined) {
+      this.hoveredAnnotationIds = [];
+    } else {
+      this.hoveredAnnotationIds = ids;
+    }
+  };
 
   // Canvas
 

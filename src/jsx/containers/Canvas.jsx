@@ -5,6 +5,7 @@ import dataAPI from 'data/dataAPI';
 import uiState from 'state/uiState';
 import config from 'config/config';
 
+import Annotation from '../components/Annotation';
 import FilterPanel from '../components/FilterPanel';
 
 const Canvas = observer(props => {
@@ -26,6 +27,8 @@ const Canvas = observer(props => {
   const handleFilterChange = filter =>
     uiState.changeActiveCanvasFilters(filter);
 
+  const handleHoverAnnotation = id => uiState.setHoveredAnnotation([id]);
+
   // content
   const layoutOptions = layoutList.map(d => {
     return (
@@ -36,7 +39,18 @@ const Canvas = observer(props => {
   });
 
   const glyphs = activeAnnotationsLayouted.map(d => {
-    return <circle key={d.id} cx={d.x} cy={d.y} fill={d.color} r={d.radius} />;
+    return (
+      <Annotation
+        id={d.id}
+        key={d.id}
+        x={d.x}
+        y={d.y}
+        color={d.color}
+        radius={d.radius}
+        isHovered={d.hovered}
+        onHover={handleHoverAnnotation}
+      />
+    );
   });
 
   // renders
@@ -48,7 +62,7 @@ const Canvas = observer(props => {
         </h2>
       </header>
       <div className="c-canvas__stage">
-        <div className="c-canvas__glyphs">
+        <div className="c-canvas__annotations">
           <svg width={canvasWidth} height={canvasHeight}>
             <g transform={`translate(${CANVAS_MARGIN},${CANVAS_MARGIN})`}>
               {glyphs}

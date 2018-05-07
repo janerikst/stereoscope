@@ -1,17 +1,21 @@
 import React from 'react';
 
-const Header = props => {
-  const { text, annotations, isActive } = props;
+const TextElement = props => {
+  const { id, text, annotations, isActive, isHovered, onHover } = props;
+
   let annotationsGradient = '';
+  let backgroundColor = isHovered ? '#eee' : 'white';
   annotations.forEach((d, i) => {
     const color = d.active == undefined || d.active ? d.color : '#ddd';
-    annotationsGradient += `,${color} ${i * 2}px, white ${i * 2 +
-      1}px, white ${i * 2 + 2}px`;
+    annotationsGradient += `,${color} ${i * 2}px, ${backgroundColor} ${i * 2 +
+      1}px, ${backgroundColor} ${i * 2 + 2}px`;
   });
 
   return (
     <span
-      className={!isActive ? 'is-inactive' : ''}
+      className={`${!isActive ? 'is-inactive' : ''} ${isHovered
+        ? 'is-hovered'
+        : ''} ${annotations.length != 0 ? 'is-selectable' : ''}`}
       style={
         annotations.length ? (
           {
@@ -23,10 +27,14 @@ const Header = props => {
         ) : (
           {}
         )
-      }>
+      }
+      onMouseOver={() => {
+        onHover(annotations.filter(d => d.active).map(d => d.id));
+      }}
+      onMouseOut={() => onHover()}>
       {text}
     </span>
   );
 };
 
-export default Header;
+export default TextElement;

@@ -12,6 +12,9 @@ const TextBar = observer(props => {
   const { activeTextElements } = dataAPI;
   const { TEXT_BAR_WIDTH } = config;
 
+  // interactions
+  const handleTextHover = ids => uiState.setHoveredAnnotation(ids);
+
   // content
   const textEls = activeTextElements.map(d => {
     return (
@@ -20,6 +23,8 @@ const TextBar = observer(props => {
         text={d.text}
         annotations={d.annotations}
         isActive={d.active}
+        isHovered={d.hovered}
+        onHover={handleTextHover}
       />
     );
   });

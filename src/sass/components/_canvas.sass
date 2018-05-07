@@ -3,11 +3,18 @@
   width: 100%
   height: 100%
 
-.c-canvas__glyphs
+.c-canvas__annotations
   background: $c-lightest-gray
   position: absolute
   width: 100%
   height: 100%
+
+  .o-annotation
+    cursor: pointer
+
+  .o-annotation .is-hovered, .o-annotation:hover
+      stroke: $c-black
+      stroke-width: 2px
 
 .c-canvas__filter-controls
   position: relative
