@@ -215,9 +215,10 @@ class DataAPI {
     }
 
     const hasFilters = uiState.activeFilterIds.length != 0;
-    const hasMoreSelected = uiState.selectedAnnotationIds > 1;
+    const hasMoreSelected = uiState.selectedAnnotationIds.length > 1;
+    const output = [];
 
-    return this.textElements.map(d => {
+    this.textElements.forEach(d => {
       let active = true;
       let hovered = false;
       let selected = false;
@@ -255,8 +256,29 @@ class DataAPI {
         selected = false;
       }
 
-      return { ...d, active, hovered, selected, annotations };
+      // take all if not more than one are selected or all sected one
+      if (!hasMoreSelected || selected) {
+        output.push({ ...d, active, hovered, selected, annotations });
+      }
     });
+
+    if (hasMoreSelected) {
+      // group text elements to selected annotations
+      const groupedByAnnotationIds = {};
+      output.forEach(d => {
+        d.annotations.forEach(e => {
+          if (e.selected) {
+            if (groupedByAnnotationIds[e.id] == undefined) {
+              groupedByAnnotationIds[e.id] = [];
+            }
+            groupedByAnnotationIds[e.id].push(d);
+          }
+        });
+      });
+      return map(groupedByAnnotationIds, (d, k) => ({ id: k, items: d }));
+    } else {
+      return output;
+    }
   }
 
   // --------------------

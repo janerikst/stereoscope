@@ -12,11 +12,15 @@ const TextBar = observer(props => {
   const { activeTextElements } = dataAPI;
   const { selectedAnnotationIds } = uiState;
   const { TEXT_BAR_WIDTH } = config;
-  const hasMoreSelectedAnnotations = selectedAnnotationIds.length > 1;
+
+  const selectedAnnotationIdsCount = selectedAnnotationIds.length;
+  const hasMoreSelectedAnnotations = selectedAnnotationIdsCount > 1;
 
   // interactions
   const handleTextHover = ids => uiState.setHoveredAnnotation(ids);
   const handleTextSelect = ids => uiState.changeSelectedAnnotation(ids);
+  const handleSelectedAnnotationReset = ids =>
+    uiState.resetSelectedAnnotation();
 
   // content
   let textEls;
@@ -38,23 +42,25 @@ const TextBar = observer(props => {
     });
   } else {
     // selected text +1
-    textEls = activeTextElements.map(d => {
-      if (d.selected) {
-        return (
-          <div className="c-text-area__selected-text">
-            <TextElement
-              key={d.id}
-              text={d.text}
-              annotations={d.annotations}
-              isActive={d.active}
-              isHovered={d.hovered}
-              isSelected={false}
-              onHover={handleTextHover}
-              onClick={handleTextSelect}
-            />
-          </div>
-        );
-      }
+    textEls = activeTextElements.map(group => {
+      return (
+        <div key={group.id} className="c-text-area__selected-text">
+          {group.items.map(d => {
+            return (
+              <TextElement
+                key={d.id}
+                text={d.text}
+                annotations={d.annotations}
+                isActive={d.active}
+                isHovered={d.hovered}
+                isSelected={false}
+                onHover={handleTextHover}
+                onClick={handleTextSelect}
+              />
+            );
+          })}
+        </div>
+      );
     });
   }
 
@@ -63,6 +69,13 @@ const TextBar = observer(props => {
     <aside className="l-content-container" style={{ width: TEXT_BAR_WIDTH }}>
       <header className="c-header--small">
         <h2>Text View</h2>
+        {selectedAnnotationIdsCount != 0 && (
+          <span
+            className="c-header__right_element o-link"
+            onClick={handleSelectedAnnotationReset}>
+            (Reset)
+          </span>
+        )}
       </header>
       <div className="l-content-spacing">
         <div className="c-text-nav" />

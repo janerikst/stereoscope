@@ -95,6 +95,8 @@ class UiState {
     });
   };
 
+  @action resetSelectedAnnotation = () => (this.selectedAnnotationIds = []);
+
   // Canvas
 
   @action
