@@ -19,6 +19,8 @@ import {
   trim,
 } from 'lodash';
 
+import { scaleLinear } from 'd3';
+
 class DataAPI {
   // DATASETS
   @computed
@@ -288,10 +290,27 @@ class DataAPI {
   // --------------------
 
   @computed
-  get annotations() {
+  get maxAnnotationLength() {
     if (this.rawAnnotations.length == 0) {
+      return 0;
+    }
+    let maxLen = 0;
+    this.rawAnnotations.forEach(d => {
+      maxLen = Math.max(maxLen, d.endOffset - d.startOffset + 1);
+    });
+    return maxLen;
+  }
+
+  @computed
+  get annotations() {
+    if (this.rawAnnotations.length == 0 || this.maxAnnotationLength == 0) {
       return [];
     }
+
+    const annotationScale = scaleLinear()
+      .domain([1, this.maxAnnotationLength])
+      .range([config.ANNOTATION_RADIUS_MIN, config.ANNOTATION_RADIUS_MAX]);
+
     const output = {};
     this.rawAnnotations.forEach(d => {
       if (output[d.annotationId] == undefined) {
@@ -303,7 +322,7 @@ class DataAPI {
           tagVersion: new Date(d.tagVersion),
           startOffset: d.startOffset,
           endOffset: d.endOffset,
-          radius: config.ANNOTATION_RADIUS,
+          radius: annotationScale(d.endOffset - d.startOffset + 1),
         };
       }
       if (d.propertyName == 'catma_displaycolor') {
@@ -386,6 +405,7 @@ class DataAPI {
     if (this.annotations.length == 0 || isEmpty(this.activeAnnotationsById)) {
       return [];
     }
+
     return creationPeriodLayout.create(
       this.activeAnnotations.filter(d => d.active),
       this.canvasWidth - config.CANVAS_MARGIN * 2,
