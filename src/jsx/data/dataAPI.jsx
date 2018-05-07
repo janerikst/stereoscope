@@ -215,49 +215,47 @@ class DataAPI {
     }
 
     const hasFilters = uiState.activeFilterIds.length != 0;
+    const hasMoreSelected = uiState.selectedAnnotationIds > 1;
+
     return this.textElements.map(d => {
       let active = true;
       let hovered = false;
+      let selected = false;
+
       const annotations = [];
-      if (hasFilters) {
-        // has filters
-        if (d.annotations.length) {
-          // has annotations
-          let activeFound = false;
-          let hoveredFound = false;
-          d.annotations.forEach(e => {
-            const active = this.activeAnnotationsById[e.id].active;
-            const hovered = this.activeAnnotationsById[e.id].hovered;
-            if (active && !activeFound) {
-              activeFound = true;
-            }
-            if (hovered && !hoveredFound) {
-              hoveredFound = true;
-            }
-            annotations.push({ ...e, active, hovered });
-          });
-          active = activeFound;
-          hovered = hoveredFound;
-        } else {
-          // has no annotations
-          active = false;
-          hovered = false;
-        }
+
+      if (d.annotations.length) {
+        // has annotations
+        let activeFound = false;
+        let hoveredFound = false;
+        let selectedFound = false;
+
+        d.annotations.forEach(e => {
+          const active = !hasFilters || this.activeAnnotationsById[e.id].active;
+          const hovered = this.activeAnnotationsById[e.id].hovered;
+          const selected = this.activeAnnotationsById[e.id].selected;
+          if (active && !activeFound) {
+            activeFound = true;
+          }
+          if (hovered && !hoveredFound) {
+            hoveredFound = true;
+          }
+          if (selected && !selectedFound) {
+            selectedFound = true;
+          }
+          annotations.push({ ...e, active, hovered, selected });
+        });
+        active = activeFound;
+        hovered = hoveredFound;
+        selected = selectedFound;
       } else {
-        active = true;
-        if (d.annotations.length) {
-          let hoveredFound = false;
-          d.annotations.forEach(e => {
-            const hovered = this.activeAnnotationsById[e.id].hovered;
-            if (hovered && !hoveredFound) {
-              hoveredFound = true;
-            }
-            annotations.push({ ...e, active: true });
-          });
-          hovered = hoveredFound;
-        }
+        // has no annotations
+        active = !hasFilters;
+        hovered = false;
+        selected = false;
       }
-      return { ...d, active, hovered, annotations };
+
+      return { ...d, active, hovered, selected, annotations };
     });
   }
 
@@ -321,19 +319,35 @@ class DataAPI {
   }
 
   @computed
+  get selectedAnnotationIdsById() {
+    if (uiState.selectedAnnotationIds.length == 0) {
+      return {};
+    }
+    const output = {};
+    forEach(uiState.selectedAnnotationIds, d => {
+      output[d] = 1;
+    });
+    return output;
+  }
+
+  @computed
   get activeAnnotations() {
     if (this.annotations.length == 0) {
       return [];
     }
     const hasFilters = uiState.activeFilterIds.length != 0;
     const hasHovers = uiState.hoveredAnnotationIds.length != 0;
+    const hasSelects = uiState.selectedAnnotationIds.length != 0;
+
     return this.annotations.map(d => {
       const active =
         !hasFilters || this.activeFilterIdsById[d.tagId] != undefined;
       const hovered =
         hasHovers && this.hoveredAnnotationIdsById[d.id] != undefined;
+      const selected =
+        hasSelects && this.selectedAnnotationIdsById[d.id] != undefined;
 
-      return { ...d, active, hovered };
+      return { ...d, active, hovered, selected };
     });
   }
 

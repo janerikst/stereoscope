@@ -1,10 +1,19 @@
 import React from 'react';
 
 const TextElement = props => {
-  const { id, text, annotations, isActive, isHovered, onHover } = props;
+  const {
+    id,
+    text,
+    annotations,
+    isActive,
+    isHovered,
+    isSelected,
+    onHover,
+    onClick,
+  } = props;
 
   let annotationsGradient = '';
-  let backgroundColor = isHovered ? '#eee' : 'white';
+  let backgroundColor = isHovered || isSelected ? '#eee' : 'white';
   annotations.forEach((d, i) => {
     const color = d.active == undefined || d.active ? d.color : '#ddd';
     annotationsGradient += `,${color} ${i * 2}px, ${backgroundColor} ${i * 2 +
@@ -15,6 +24,7 @@ const TextElement = props => {
     <span
       className={`${!isActive ? 'is-inactive' : ''} ${isHovered
         ? 'is-hovered'
+        : ''} ${isSelected ? 'is-selected' : ''}
         : ''} ${annotations.length != 0 ? 'is-selectable' : ''}`}
       style={
         annotations.length ? (
@@ -31,7 +41,10 @@ const TextElement = props => {
       onMouseOver={() => {
         onHover(annotations.filter(d => d.active).map(d => d.id));
       }}
-      onMouseOut={() => onHover()}>
+      onMouseOut={() => onHover()}
+      onClick={() => {
+        onClick(annotations.filter(d => d.active).map(d => d.id));
+      }}>
       {text}
     </span>
   );

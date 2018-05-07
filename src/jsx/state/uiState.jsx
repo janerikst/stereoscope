@@ -65,6 +65,7 @@ class UiState {
   @observable activeCanvasId = 1;
   @observable editCanvasId = '';
   @observable hoveredAnnotationIds = [];
+  @observable selectedAnnotationIds = [];
 
   // --------------------
   //
@@ -81,6 +82,17 @@ class UiState {
     } else {
       this.hoveredAnnotationIds = ids;
     }
+  };
+
+  @action
+  changeSelectedAnnotation = ids => {
+    ids.forEach(id => {
+      if (dataAPI.selectedAnnotationIdsById[id]) {
+        remove(this.selectedAnnotationIds, d => d == id);
+      } else {
+        this.selectedAnnotationIds.push(id);
+      }
+    });
   };
 
   // Canvas

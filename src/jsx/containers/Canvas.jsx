@@ -28,6 +28,7 @@ const Canvas = observer(props => {
     uiState.changeActiveCanvasFilters(filter);
 
   const handleHoverAnnotation = id => uiState.setHoveredAnnotation([id]);
+  const handleSelectAnnotation = id => uiState.changeSelectedAnnotation([id]);
 
   // content
   const layoutOptions = layoutList.map(d => {
@@ -38,7 +39,7 @@ const Canvas = observer(props => {
     );
   });
 
-  const glyphs = activeAnnotationsLayouted.map(d => {
+  const annoations = activeAnnotationsLayouted.map(d => {
     return (
       <Annotation
         id={d.id}
@@ -48,7 +49,9 @@ const Canvas = observer(props => {
         color={d.color}
         radius={d.radius}
         isHovered={d.hovered}
+        isSelected={d.selected}
         onHover={handleHoverAnnotation}
+        onClick={handleSelectAnnotation}
       />
     );
   });
@@ -65,7 +68,7 @@ const Canvas = observer(props => {
         <div className="c-canvas__annotations">
           <svg width={canvasWidth} height={canvasHeight}>
             <g transform={`translate(${CANVAS_MARGIN},${CANVAS_MARGIN})`}>
-              {glyphs}
+              {annoations}
             </g>
           </svg>
         </div>
