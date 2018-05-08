@@ -12,7 +12,6 @@ import TextElement from '../components/TextElement';
 class TextBar extends Component {
   constructor(props) {
     super(props);
-    this.lastSelectedText = undefined;
     this.selectedText = undefined;
     this.textWrapper = undefined;
   }
@@ -48,13 +47,8 @@ class TextBar extends Component {
             onHover={handleTextHover}
             onClick={handleTextSelect}
             ref={ref => {
-              if (
-                d.selected &&
-                this.selectedText == undefined &&
-                this.lastSelectedText != d.id
-              ) {
+              if (d.scrollTo) {
                 this.selectedText = ref;
-                this.lastSelectedText = d.id;
               }
             }}
           />
@@ -77,7 +71,7 @@ class TextBar extends Component {
                   onHover={handleTextHover}
                   onClick={handleTextSelect}
                   ref={ref => {
-                    if (d.selected && this.selectedText == undefined) {
+                    if (d.scrollTo) {
                       this.selectedText = ref;
                     }
                   }}
@@ -133,6 +127,7 @@ class TextBar extends Component {
       ) {
         //panel.scrollTop = node.offsetTop - panel.offsetTop;
         this.scrollToEl(panel, node.offsetTop - panel.offsetTop, 300);
+        uiState.scrollToAnnotationDone();
       }
     }
   }

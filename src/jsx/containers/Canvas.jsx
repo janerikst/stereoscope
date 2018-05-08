@@ -28,7 +28,8 @@ const Canvas = observer(props => {
     uiState.changeActiveCanvasFilters(filter);
 
   const handleHoverAnnotation = id => uiState.setHoveredAnnotation([id]);
-  const handleSelectAnnotation = id => uiState.changeSelectedAnnotation([id]);
+  const handleSelectAnnotation = id =>
+    uiState.changeSelectedAnnotation([id], true);
 
   // content
   const layoutOptions = layoutList.map(d => {

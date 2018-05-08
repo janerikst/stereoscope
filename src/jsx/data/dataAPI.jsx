@@ -220,10 +220,13 @@ class DataAPI {
     const hasMoreSelected = uiState.selectedAnnotationIds.length > 1;
     const output = [];
 
+    let globalScrollToFound = false;
+
     this.textElements.forEach(d => {
       let active = true;
       let hovered = false;
       let selected = false;
+      let scrollTo = false;
 
       const annotations = [];
 
@@ -232,11 +235,14 @@ class DataAPI {
         let activeFound = false;
         let hoveredFound = false;
         let selectedFound = false;
+        let scrollToFound = false;
 
         d.annotations.forEach(e => {
           const active = !hasFilters || this.activeAnnotationsById[e.id].active;
           const hovered = this.activeAnnotationsById[e.id].hovered;
           const selected = this.activeAnnotationsById[e.id].selected;
+          let scrollTo = false;
+
           if (active && !activeFound) {
             activeFound = true;
           }
@@ -246,21 +252,24 @@ class DataAPI {
           if (selected && !selectedFound) {
             selectedFound = true;
           }
+          if (!globalScrollToFound && e.id == uiState.scrollToAnnotationId) {
+            scrollToFound = true;
+            globalScrollToFound = true;
+          }
           annotations.push({ ...e, active, hovered, selected });
         });
         active = activeFound;
         hovered = hoveredFound;
         selected = selectedFound;
+        scrollTo = scrollToFound;
       } else {
         // has no annotations
         active = !hasFilters;
-        hovered = false;
-        selected = false;
       }
 
       // take all if not more than one are selected or all sected one
       if (!hasMoreSelected || selected) {
-        output.push({ ...d, active, hovered, selected, annotations });
+        output.push({ ...d, active, hovered, selected, scrollTo, annotations });
       }
     });
 

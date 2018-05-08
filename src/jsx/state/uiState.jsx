@@ -66,6 +66,7 @@ class UiState {
   @observable editCanvasId = '';
   @observable hoveredAnnotationIds = [];
   @observable selectedAnnotationIds = [];
+  @observable scrollToAnnotationId = '';
 
   // --------------------
   //
@@ -85,14 +86,20 @@ class UiState {
   };
 
   @action
-  changeSelectedAnnotation = ids => {
+  changeSelectedAnnotation = (ids, shouldScroll) => {
     ids.forEach(id => {
       if (dataAPI.selectedAnnotationIdsById[id]) {
         remove(this.selectedAnnotationIds, d => d == id);
       } else {
         this.selectedAnnotationIds.push(id);
+        this.scrollToAnnotationId = id;
       }
     });
+  };
+
+  @action
+  scrollToAnnotationDone = () => {
+    this.scrollToAnnotationId = '';
   };
 
   @action resetSelectedAnnotation = () => (this.selectedAnnotationIds = []);
