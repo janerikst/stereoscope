@@ -420,7 +420,6 @@ class DataAPI {
       .range([config.ANNOTATION_RADIUS_MIN, config.ANNOTATION_RADIUS_MAX]);
 
     return this.annotations.map(d => {
-      console.log(d);
       return {
         ...d,
         radius: Math.round(annotationScale(d.endOffset - d.startOffset + 1)),
@@ -447,6 +446,33 @@ class DataAPI {
       this.canvasWidth - config.CANVAS_MARGIN * 2,
       this.canvasHeight - config.CANVAS_MARGIN * 2,
       config.ANNOTATION_SPACE,
+    );
+  }
+
+  // --------------------
+  //
+  // *** TEXT GLYPH ***
+  //
+  // --------------------
+
+  @computed
+  get activeTextGlyphs() {
+    if (this.activeAnnotations.length == 0 || this.text.length == 0) {
+      return [];
+    }
+
+    return orderBy(
+      this.activeAnnotations.map(d => {
+        return {
+          id: d.id,
+          color: d.color,
+          active: d.active,
+          start: d.startOffset / this.text.length * 100,
+          height: (d.endOffset - d.startOffset) / this.text.length * 100,
+        };
+      }),
+      'height',
+      'desc',
     );
   }
 

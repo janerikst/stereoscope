@@ -18,6 +18,7 @@ const Canvas = observer(props => {
     canvasWidth,
     canvasHeight,
   } = dataAPI;
+
   const { FILTER_PANEL_WIDTH, FILTER_PANEL_HEIGHT, CANVAS_MARGIN } = config;
 
   // interactions

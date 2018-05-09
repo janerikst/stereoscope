@@ -7,6 +7,7 @@ import uiState from 'state/uiState';
 import config from 'config/config';
 
 import TextElement from '../components/TextElement';
+import TextGlyph from '../components/TextGlyph';
 
 @observer
 class TextBar extends Component {
@@ -18,7 +19,7 @@ class TextBar extends Component {
 
   render() {
     // vars
-    const { activeTextElements } = dataAPI;
+    const { activeTextElements, activeTextGlyphs } = dataAPI;
     const { selectedAnnotationIds } = uiState;
     const { TEXT_BAR_WIDTH } = config;
 
@@ -83,6 +84,18 @@ class TextBar extends Component {
       });
     }
 
+    const textGlyphs = activeTextGlyphs.map(d => {
+      return (
+        <TextGlyph
+          key={d.id}
+          y={d.start}
+          height={d.height}
+          color={d.color}
+          active={d.active}
+        />
+      );
+    });
+
     // render
     return (
       <aside className="l-content-container" style={{ width: TEXT_BAR_WIDTH }}>
@@ -97,7 +110,7 @@ class TextBar extends Component {
           )}
         </header>
         <div className="l-content-spacing">
-          <div className="c-text-nav" />
+          <div className="c-text-nav">{textGlyphs}</div>
           <div
             className="c-text-area"
             ref={x => {

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import config from 'config/config';
 
 class TextElement extends Component {
   render() {
@@ -13,10 +14,14 @@ class TextElement extends Component {
       onClick,
     } = this.props;
 
+    const { TEXT_SELECT_COLOR, TEXT_INACTIVE_COLOR } = config;
+
     let annotationsGradient = '';
-    let backgroundColor = isHovered || isSelected ? '#eee' : 'white';
+    let backgroundColor =
+      isHovered || isSelected ? TEXT_INACTIVE_COLOR : 'white';
     annotations.forEach((d, i) => {
-      const color = d.active == undefined || d.active ? d.color : '#ddd';
+      const color =
+        d.active == undefined || d.active ? d.color : TEXT_SELECT_COLOR;
       annotationsGradient += `,${color} ${i * 2}px, ${backgroundColor} ${i * 2 +
         1}px, ${backgroundColor} ${i * 2 + 2}px`;
     });
