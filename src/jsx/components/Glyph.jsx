@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Annotation = props => {
+const Glyph = props => {
   const {
     id,
     x,
@@ -14,7 +14,7 @@ const Annotation = props => {
   } = props;
   return (
     <circle
-      className={`o-annotation ${isHovered ? 'is-hovered' : ''} ${isSelected
+      className={`o-glyph ${isHovered ? 'is-hovered' : ''} ${isSelected
         ? 'is-selected'
         : ''}`}
       cx={x}
@@ -28,4 +28,4 @@ const Annotation = props => {
   );
 };
 
-export default Annotation;
+export default Glyph;

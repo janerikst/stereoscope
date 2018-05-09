@@ -312,13 +312,9 @@ class DataAPI {
 
   @computed
   get annotations() {
-    if (this.rawAnnotations.length == 0 || this.maxAnnotationLength == 0) {
+    if (this.rawAnnotations.length == 0) {
       return [];
     }
-
-    const annotationScale = scaleLinear()
-      .domain([1, this.maxAnnotationLength])
-      .range([config.ANNOTATION_RADIUS_MIN, config.ANNOTATION_RADIUS_MAX]);
 
     const output = {};
     this.rawAnnotations.forEach(d => {
@@ -331,7 +327,6 @@ class DataAPI {
           tagVersion: new Date(d.tagVersion),
           startOffset: d.startOffset,
           endOffset: d.endOffset,
-          radius: annotationScale(d.endOffset - d.startOffset + 1),
         };
       }
       if (d.propertyName == 'catma_displaycolor') {
@@ -409,14 +404,46 @@ class DataAPI {
     return keyBy(this.activeAnnotations, 'id');
   }
 
+  // --------------------
+  //
+  // *** GLYPHS ***
+  //
+  // --------------------
+
   @computed
-  get activeAnnotationsLayouted() {
-    if (this.annotations.length == 0 || isEmpty(this.activeAnnotationsById)) {
+  get glyphs() {
+    if (this.annotations.length == 0 || this.maxAnnotationLength == 0) {
+      return [];
+    }
+    const annotationScale = scaleLinear()
+      .domain([1, this.maxAnnotationLength])
+      .range([config.ANNOTATION_RADIUS_MIN, config.ANNOTATION_RADIUS_MAX]);
+
+    return this.annotations.map(d => {
+      console.log(d);
+      return {
+        ...d,
+        radius: Math.round(annotationScale(d.endOffset - d.startOffset + 1)),
+      };
+    });
+  }
+
+  @computed
+  get activeGlyphs() {
+    if (this.glyphs.length == 0 || isEmpty(this.activeAnnotationsById)) {
       return [];
     }
 
     return creationPeriodLayout.create(
-      this.activeAnnotations.filter(d => d.active),
+      this.glyphs
+        .filter(d => this.activeAnnotationsById[d.id].active)
+        .map(d => {
+          return {
+            ...d,
+            hovered: this.activeAnnotationsById[d.id].hovered,
+            selected: this.activeAnnotationsById[d.id].selected,
+          };
+        }),
       this.canvasWidth - config.CANVAS_MARGIN * 2,
       this.canvasHeight - config.CANVAS_MARGIN * 2,
       config.ANNOTATION_SPACE,

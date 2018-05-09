@@ -5,7 +5,7 @@ import dataAPI from 'data/dataAPI';
 import uiState from 'state/uiState';
 import config from 'config/config';
 
-import Annotation from '../components/Annotation';
+import Glyph from '../components/Glyph';
 import FilterPanel from '../components/FilterPanel';
 
 const Canvas = observer(props => {
@@ -14,7 +14,7 @@ const Canvas = observer(props => {
     activeCanvas,
     layoutList,
     activeFilters,
-    activeAnnotationsLayouted,
+    activeGlyphs,
     canvasWidth,
     canvasHeight,
   } = dataAPI;
@@ -40,9 +40,9 @@ const Canvas = observer(props => {
     );
   });
 
-  const annoations = activeAnnotationsLayouted.map(d => {
+  const glyphs = activeGlyphs.map(d => {
     return (
-      <Annotation
+      <Glyph
         id={d.id}
         key={d.id}
         x={d.x}
@@ -69,7 +69,7 @@ const Canvas = observer(props => {
         <div className="c-canvas__annotations">
           <svg width={canvasWidth} height={canvasHeight}>
             <g transform={`translate(${CANVAS_MARGIN},${CANVAS_MARGIN})`}>
-              {annoations}
+              {glyphs}
             </g>
           </svg>
         </div>
