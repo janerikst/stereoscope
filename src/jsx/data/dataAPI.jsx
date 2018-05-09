@@ -34,6 +34,21 @@ class DataAPI {
   }
   // GENERAL COMPUTES
 
+  @computed
+  get isAppReady() {
+    if (
+      this.activeAnnotations.length == 0 ||
+      this.activeTextElements.length == 0 ||
+      this.activeGlyphs.length == 0 ||
+      this.activeTextGlyphs.length == 0 ||
+      this.activeFilters.length == 0
+    ) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   // --------------------
   //
   // *** TEXT ***

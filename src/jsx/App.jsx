@@ -10,19 +10,24 @@ import CanvasBar from 'containers/CanvasBar';
 import dataAPI from 'data/dataAPI';
 
 const App = observer(props => {
-  const { textTitle } = dataAPI;
+  const { textTitle, isAppReady } = dataAPI;
 
   return (
     <div>
-      <div className="l-app-wrapper">
-        <Header>3DH{textTitle ? ` — ${textTitle}` : ''}</Header>
-        <main className="l-content-wrapper">
-          <TextBar />
-          <Canvas />
-          <CanvasBar />
-        </main>
-      </div>
-      <Modals />
+      {isAppReady && (
+        <div>
+          <div className="l-app-wrapper">
+            <Header>3DH{textTitle ? ` — ${textTitle}` : ''}</Header>
+            <main className="l-content-wrapper">
+              <TextBar />
+              <Canvas />
+              <CanvasBar />
+            </main>
+          </div>
+          <Modals />
+        </div>
+      )}
+      {!isAppReady && <div>Loading ...</div>}
     </div>
   );
 });

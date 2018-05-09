@@ -7,6 +7,7 @@ const TextGlyph = props => {
   const currentColor = active ? color : TEXT_INACTIVE_COLOR;
   return (
     <div
+      className={'o-text-glyph'}
       style={{
         top: `${y}%`,
         height: `${height}%`,

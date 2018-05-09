@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { observer } from 'mobx-react';
+import { autorun } from 'mobx';
 
 import dataAPI from 'data/dataAPI';
 import uiState from 'state/uiState';
@@ -14,7 +15,15 @@ class TextBar extends Component {
   constructor(props) {
     super(props);
     this.selectedText = undefined;
+    this.textArea = undefined;
     this.textWrapper = undefined;
+    this.textNavOverlay = undefined;
+    this.state = {
+      overlayHeight: 0,
+      overlayRatio: 0,
+      clientHeight: 0,
+      scrollToActive: false,
+    };
   }
 
   render() {
@@ -22,6 +31,8 @@ class TextBar extends Component {
     const { activeTextElements, activeTextGlyphs } = dataAPI;
     const { selectedAnnotationIds } = uiState;
     const { TEXT_BAR_WIDTH } = config;
+
+    const { overlayHeight, overlayPos } = this.state;
 
     const selectedAnnotationIdsCount = selectedAnnotationIds.length;
     const hasMoreSelectedAnnotations = selectedAnnotationIdsCount > 1;
@@ -110,13 +121,29 @@ class TextBar extends Component {
           )}
         </header>
         <div className="l-content-spacing">
-          <div className="c-text-nav">{textGlyphs}</div>
+          <div className="c-text-nav">
+            {textGlyphs}
+            <div
+              className="c-text-nav__overlay"
+              ref={x => {
+                this.textNavOverlay = x;
+              }}
+              style={{ height: overlayHeight, top: overlayPos }}
+            />
+          </div>
           <div
             className="c-text-area"
             ref={x => {
-              this.textWrapper = x;
-            }}>
-            {textEls}
+              this.textArea = x;
+            }}
+            onScroll={this.handleScroll.bind(this)}>
+            <div
+              className="c-text-area__container"
+              ref={x => {
+                this.textWrapper = x;
+              }}>
+              {textEls}
+            </div>
           </div>
         </div>
       </aside>
@@ -124,9 +151,9 @@ class TextBar extends Component {
   }
 
   componentDidUpdate() {
-    const panel = this.textWrapper;
-    let node = undefined;
+    const textArea = ReactDOM.findDOMNode(this.textArea);
 
+    let node = undefined;
     if (this.selectedText) {
       // hovered text
       node = ReactDOM.findDOMNode(this.selectedText);
@@ -135,13 +162,50 @@ class TextBar extends Component {
 
     if (node) {
       if (
-        node.offsetTop > panel.scrollTop + panel.offsetHeight ||
-        node.offsetTop < panel.scrollTop
+        node.offsetTop > textArea.scrollTop + textArea.offsetHeight ||
+        node.offsetTop < textArea.scrollTop
       ) {
         //panel.scrollTop = node.offsetTop - panel.offsetTop;
-        this.scrollToEl(panel, node.offsetTop - panel.offsetTop, 300);
+        this.setState({ scrollToActive: true });
+        this.scrollToEl(textArea, node.offsetTop - textArea.offsetTop, 300);
         uiState.scrollToAnnotationDone();
       }
+    }
+  }
+
+  getOverlayHeight() {
+    const textWrapper = ReactDOM.findDOMNode(this.textWrapper);
+    const textArea = ReactDOM.findDOMNode(this.textArea);
+    const textWrapperHeight = textWrapper.clientHeight;
+    const textAreaHeight = textArea.clientHeight;
+
+    const ratio = textWrapperHeight / textAreaHeight;
+    const overlayHeight = Math.round(textArea.clientHeight / ratio);
+
+    this.setState({
+      overlayHeight,
+      overlayRatio: ratio,
+      textWrapperHeight: textWrapperHeight,
+    });
+  }
+
+  componentDidMount() {
+    this.getOverlayHeight();
+    const { clientHeight } = this.state;
+    autorun(() => {
+      if (uiState.windowDimensions.height != clientHeight) {
+        this.getOverlayHeight();
+        this.setState({ clientHeight: uiState.windowDimensions.height });
+      }
+    });
+  }
+
+  handleScroll() {
+    if (!this.state.scrollToActive) {
+      const panel = ReactDOM.findDOMNode(this.textArea);
+      this.setState({
+        overlayPos: panel.scrollTop / this.state.overlayRatio,
+      });
     }
   }
 
@@ -152,7 +216,10 @@ class TextBar extends Component {
 
     setTimeout(() => {
       element.scrollTop = element.scrollTop + perTick;
-      if (element.scrollTop === to) return;
+      if (element.scrollTop === to) {
+        this.setState({ scrollToActive: false });
+        return;
+      }
       this.scrollToEl(element, to, duration - 10);
     }, 10);
   }
