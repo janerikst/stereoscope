@@ -31,8 +31,8 @@ class TextBar extends Component {
     const {
       activeTextElements,
       activeTextGlyphs,
+      hasSelectedAnnotations,
       hasMoreSelectedAnnotations,
-      hasOneSelectedAnnotations,
     } = dataAPI;
     const { TEXT_BAR_WIDTH } = config;
     const { overlayHeight, overlayPos } = this.state;
@@ -112,7 +112,7 @@ class TextBar extends Component {
       <aside className="l-content-container" style={{ width: TEXT_BAR_WIDTH }}>
         <header className="c-header--small">
           <h2>Text View</h2>
-          {hasOneSelectedAnnotations && (
+          {hasSelectedAnnotations && (
             <span
               className="c-header__right_element o-link"
               onClick={handleSelectedAnnotationReset}>

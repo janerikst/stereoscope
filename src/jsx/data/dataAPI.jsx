@@ -391,8 +391,8 @@ class DataAPI {
   }
 
   @computed
-  get hasOneSelectedAnnotations() {
-    return uiState.selectedAnnotationIds.length == 1;
+  get hasSelectedAnnotations() {
+    return uiState.selectedAnnotationIds.length != 0;
   }
 
   @computed

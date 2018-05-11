@@ -53,12 +53,7 @@ class UiState {
       title: '',
       layout: 'creation_period',
       filters: [],
-    },
-    {
-      id: 2,
-      title: 'test 2',
-      layout: 'distribution',
-      filters: [],
+      selectedAnnotationIds: [],
     },
   ];
   @observable activeFilterIds = [];
@@ -114,6 +109,7 @@ class UiState {
       title: title,
       layout: layout,
       filters: [],
+      selectedAnnotationIds: [],
     });
     this.showAddCanvasDialog = !this.showAddCanvasDialog;
   };
@@ -140,11 +136,13 @@ class UiState {
     // write active filter to old active canvas
     let canvas = this.canvases.find(d => d.id == this.activeCanvasId);
     canvas.filters = this.activeFilterIds;
+    canvas.selectedAnnotationIds = this.selectedAnnotationIds;
 
     // copy new active filters
     this.activeCanvasId = id;
     canvas = this.canvases.find(d => d.id == id);
     this.activeFilterIds = canvas.filters;
+    this.selectedAnnotationIds = canvas.selectedAnnotationIds;
   };
 
   @action
