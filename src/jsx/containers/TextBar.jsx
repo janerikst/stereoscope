@@ -28,14 +28,14 @@ class TextBar extends Component {
 
   render() {
     // vars
-    const { activeTextElements, activeTextGlyphs } = dataAPI;
-    const { selectedAnnotationIds } = uiState;
+    const {
+      activeTextElements,
+      activeTextGlyphs,
+      hasMoreSelectedAnnotations,
+      hasOneSelectedAnnotations,
+    } = dataAPI;
     const { TEXT_BAR_WIDTH } = config;
-
     const { overlayHeight, overlayPos } = this.state;
-
-    const selectedAnnotationIdsCount = selectedAnnotationIds.length;
-    const hasMoreSelectedAnnotations = selectedAnnotationIdsCount > 1;
 
     // interactions
     const handleTextHover = ids => uiState.setHoveredAnnotation(ids);
@@ -112,7 +112,7 @@ class TextBar extends Component {
       <aside className="l-content-container" style={{ width: TEXT_BAR_WIDTH }}>
         <header className="c-header--small">
           <h2>Text View</h2>
-          {selectedAnnotationIdsCount != 0 && (
+          {hasOneSelectedAnnotations && (
             <span
               className="c-header__right_element o-link"
               onClick={handleSelectedAnnotationReset}>
@@ -121,16 +121,18 @@ class TextBar extends Component {
           )}
         </header>
         <div className="l-content-spacing">
-          <div className="c-text-nav">
-            {textGlyphs}
-            <div
-              className="c-text-nav__overlay"
-              ref={x => {
-                this.textNavOverlay = x;
-              }}
-              style={{ height: overlayHeight, top: overlayPos }}
-            />
-          </div>
+          {!hasMoreSelectedAnnotations && (
+            <div className="c-text-nav">
+              {textGlyphs}
+              <div
+                className="c-text-nav__overlay"
+                ref={x => {
+                  this.textNavOverlay = x;
+                }}
+                style={{ height: overlayHeight, top: overlayPos }}
+              />
+            </div>
+          )}
           <div
             className="c-text-area"
             ref={x => {
@@ -201,7 +203,7 @@ class TextBar extends Component {
   }
 
   handleScroll() {
-    if (!this.state.scrollToActive) {
+    if (!this.state.scrollToActive && !hasMoreSelectedAnnotations) {
       const panel = ReactDOM.findDOMNode(this.textArea);
       this.setState({
         overlayPos: panel.scrollTop / this.state.overlayRatio,
