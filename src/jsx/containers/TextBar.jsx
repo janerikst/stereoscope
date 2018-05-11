@@ -203,6 +203,8 @@ class TextBar extends Component {
   }
 
   handleScroll() {
+    const { hasMoreSelectedAnnotations } = dataAPI;
+
     if (!this.state.scrollToActive && !hasMoreSelectedAnnotations) {
       const panel = ReactDOM.findDOMNode(this.textArea);
       this.setState({
