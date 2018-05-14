@@ -11,6 +11,7 @@
 
   .o-glyph
     cursor: pointer
+    // transition: all 400ms;
 
   .o-glyph.is-hovered, .o-glyph:hover
       stroke: $c-black
@@ -19,6 +20,9 @@
   .o-glyph.is-selected
       stroke: $c-black
       stroke-width: 2px
+
+  .o-glyph.is-hidden
+      opacity: 0.2
 
 .c-canvas__filter-controls
   position: relative

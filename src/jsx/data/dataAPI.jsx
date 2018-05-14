@@ -391,13 +391,23 @@ class DataAPI {
   }
 
   @computed
-  get hasSelectedAnnotations() {
-    return uiState.selectedAnnotationIds.length != 0;
+  get hasMoreSelectedAnnotations() {
+    return uiState.selectedAnnotationIds.length > 1;
   }
 
   @computed
-  get hasMoreSelectedAnnotations() {
-    return uiState.selectedAnnotationIds.length > 1;
+  get hasFilters() {
+    return uiState.activeFilterIds.length != 0;
+  }
+
+  @computed
+  get hasHoveredAnnotations() {
+    return uiState.hoveredAnnotationIds != '';
+  }
+
+  @computed
+  get hasSelectedAnnotations() {
+    return uiState.selectedAnnotationIds.length != 0;
   }
 
   @computed
@@ -405,17 +415,15 @@ class DataAPI {
     if (this.annotations.length == 0) {
       return [];
     }
-    const hasFilters = uiState.activeFilterIds.length != 0;
-    const hasHovers = uiState.hoveredAnnotationIds.length != 0;
-    const hasSelects = uiState.selectedAnnotationIds.length != 0;
-
     return this.annotations.map(d => {
       const active =
-        !hasFilters || this.activeFilterIdsById[d.tagId] != undefined;
+        !this.hasFilters || this.activeFilterIdsById[d.tagId] != undefined;
       const hovered =
-        hasHovers && this.hoveredAnnotationIdsById[d.id] != undefined;
+        this.hasHoveredAnnotations &&
+        this.hoveredAnnotationIdsById[d.id] != undefined;
       const selected =
-        hasSelects && this.selectedAnnotationIdsById[d.id] != undefined;
+        this.hasSelectedAnnotations &&
+        this.selectedAnnotationIdsById[d.id] != undefined;
 
       return { ...d, active, hovered, selected };
     });
@@ -467,6 +475,11 @@ class DataAPI {
             ...d,
             hovered: this.activeAnnotationsById[d.id].hovered,
             selected: this.activeAnnotationsById[d.id].selected,
+            hidden:
+              (this.hasHoveredAnnotations &&
+                !this.activeAnnotationsById[d.id].hovered) ||
+              (this.hasSelectedAnnotations &&
+                !this.activeAnnotationsById[d.id].selected),
           };
         }),
       this.canvasWidth - config.CANVAS_MARGIN * 2,

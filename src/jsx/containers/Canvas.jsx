@@ -47,6 +47,7 @@ const Canvas = observer(props => {
         radius={d.radius}
         isHovered={d.hovered}
         isSelected={d.selected}
+        isHidden={d.hidden}
         onHover={handleHoverAnnotation}
         onClick={handleSelectAnnotation}
       />

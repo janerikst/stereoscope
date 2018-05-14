@@ -9,6 +9,7 @@ const Glyph = props => {
     color,
     isHovered,
     isSelected,
+    isHidden,
     onHover,
     onClick,
   } = props;
@@ -16,7 +17,7 @@ const Glyph = props => {
     <circle
       className={`o-glyph ${isHovered ? 'is-hovered' : ''} ${isSelected
         ? 'is-selected'
-        : ''}`}
+        : ''} ${isHidden ? 'is-hidden' : ''}`}
       cx={x}
       cy={y}
       fill={color}
