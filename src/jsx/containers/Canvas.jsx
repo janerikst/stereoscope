@@ -7,6 +7,7 @@ import config from 'config/config';
 
 import Glyph from '../components/Glyph';
 import FilterPanel from '../components/FilterPanel';
+import LayoutPanel from '../components/LayoutPanel';
 
 const Canvas = observer(props => {
   // var
@@ -15,6 +16,7 @@ const Canvas = observer(props => {
     layoutList,
     activeFilters,
     activeGlyphs,
+    activeLayoutControls,
     canvasWidth,
     canvasHeight,
   } = dataAPI;
@@ -22,25 +24,18 @@ const Canvas = observer(props => {
   const { FILTER_PANEL_WIDTH, FILTER_PANEL_HEIGHT, CANVAS_MARGIN } = config;
 
   // interactions
-  const handleLayoutChange = event =>
-    uiState.changeActiveCanvasLayout(event.target.value);
-
   const handleFilterChange = filter =>
     uiState.changeActiveCanvasFilters(filter);
+
+  const handleLayoutChange = layout => uiState.changeActiveCanvasLayout(layout);
+  const handleLayoutControlChange = (id, value) =>
+    uiState.changeActiveCanvasLayoutControls(id, value);
 
   const handleHoverAnnotation = id => uiState.setHoveredAnnotation([id]);
   const handleSelectAnnotation = id =>
     uiState.changeSelectedAnnotation([id], true);
 
   // content
-  const layoutOptions = layoutList.map(d => {
-    return (
-      <option key={d.id} value={d.id}>
-        {d.label}
-      </option>
-    );
-  });
-
   const glyphs = activeGlyphs.map(d => {
     return (
       <Glyph
@@ -75,15 +70,14 @@ const Canvas = observer(props => {
           </svg>
         </div>
         <div className="c-canvas__controls">
-          <div className="c-canvas__layout-control c-filter-panel">
-            <header className="c-filter-panel__header">
-              <h3>Layouts</h3>
-            </header>
-            <div className="c-filter-panel__content">
-              <select value={activeCanvas.layout} onChange={handleLayoutChange}>
-                {layoutOptions}
-              </select>
-            </div>
+          <div className="c-canvas__layout-control">
+            <LayoutPanel
+              activeLayout={activeCanvas.layout}
+              layoutList={layoutList}
+              layoutControls={activeLayoutControls}
+              onChangeLayout={handleLayoutChange}
+              onChangeControls={handleLayoutControlChange}
+            />
           </div>
           <div className="c-canvas__filter-control">
             <FilterPanel

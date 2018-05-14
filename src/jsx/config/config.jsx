@@ -10,13 +10,5 @@ export default {
   ANNOTATION_RADIUS_MAX: 30,
   ANNOTATION_SPACE: 5,
   CANVAS_MARGIN: 20,
-  LAYOUTS: {
-    creation_period: {
-      label: 'Creation period',
-    },
-    distribution: {
-      label: 'Distribution',
-    },
-  },
-  LAYOUT_DEFAULT: 'creation_period',
+  LAYOUT_DEFAULT: 'scatterplot',
 };

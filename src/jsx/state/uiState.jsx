@@ -51,14 +51,18 @@ class UiState {
     {
       id: 1,
       title: '',
-      layout: 'creation_period',
+      layout: 'scatterplot',
+      layoutControls: {},
       filters: [],
       selectedAnnotationIds: [],
     },
   ];
-  @observable activeFilterIds = [];
+
   @observable activeCanvasId = 1;
   @observable editCanvasId = '';
+  @observable activeFilterIds = [];
+  @observable activeLayoutControls = [];
+
   @observable hoveredAnnotationIds = [];
   @observable selectedAnnotationIds = [];
   @observable scrollToAnnotationId = '';
@@ -108,6 +112,7 @@ class UiState {
       id: newId,
       title: title,
       layout: layout,
+      layoutControls: [],
       filters: [],
       selectedAnnotationIds: [],
     });
@@ -136,12 +141,14 @@ class UiState {
     // write active filter to old active canvas
     let canvas = this.canvases.find(d => d.id == this.activeCanvasId);
     canvas.filters = this.activeFilterIds;
+    canvas.layoutControls = this.activeLayoutControls;
     canvas.selectedAnnotationIds = this.selectedAnnotationIds;
 
     // copy new active filters
     this.activeCanvasId = id;
     canvas = this.canvases.find(d => d.id == id);
     this.activeFilterIds = canvas.filters;
+    this.activeLayoutControls = canvas.layoutControls;
     this.selectedAnnotationIds = canvas.selectedAnnotationIds;
   };
 
@@ -157,6 +164,14 @@ class UiState {
     } else {
       this.activeFilterIds.push(filter);
     }
+  };
+
+  @action
+  changeActiveCanvasLayoutControls = (id, value) => {
+    if (dataAPI.activeLayoutControlsById[id]) {
+      remove(this.activeLayoutControls, d => d.id == id);
+    }
+    this.activeLayoutControls.push({ id: id, value: value });
   };
 
   // Dialogs

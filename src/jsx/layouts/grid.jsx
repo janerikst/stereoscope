@@ -1,7 +1,11 @@
 import { orderBy } from 'lodash';
 
 export default {
-  create: function creation_period(glyphs, width, height, space) {
+  id: 'grid',
+  title: 'Grid',
+  inputs: [],
+  create: function grid(glyphs, width, height, options) {
+    const space = 20;
     let xSpace = 0;
     let ySpace = 0;
     const output = [];

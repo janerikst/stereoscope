@@ -5,7 +5,7 @@ import config from '../config/config';
 
 import { textData, annotationData } from './dataStore';
 
-import creationPeriodLayout from '../layouts/creationPeriod.jsx';
+import layouts from '../layouts/index.jsx';
 
 import {
   values,
@@ -445,9 +445,11 @@ class DataAPI {
       .range([config.ANNOTATION_RADIUS_MIN, config.ANNOTATION_RADIUS_MAX]);
 
     return this.annotations.map(d => {
+      const textLength = d.endOffset - d.startOffset + 1;
       return {
         ...d,
-        radius: Math.round(annotationScale(d.endOffset - d.startOffset + 1)),
+        radius: Math.round(annotationScale(textLength)),
+        textLength: textLength,
       };
     });
   }
@@ -458,7 +460,7 @@ class DataAPI {
       return [];
     }
 
-    return creationPeriodLayout.create(
+    return layouts[0].create(
       this.glyphs
         .filter(d => this.activeAnnotationsById[d.id].active)
         .map(d => {
@@ -510,17 +512,17 @@ class DataAPI {
   @computed
   get canvasList() {
     const { canvases, activeCanvasId } = uiState;
-    const { LAYOUTS } = config;
 
-    if (canvases.length == 0) {
+    if (canvases.length == 0 || isEmpty(this.layoutsById)) {
       return [];
     }
+
     const output = [];
     canvases.forEach(d => {
       output.push({
         id: d.id,
         title: d.title,
-        layout: LAYOUTS[d.layout].label,
+        layout: this.layoutsById[d.layout].title,
         active: d.id == activeCanvasId,
       });
     });
@@ -566,9 +568,33 @@ class DataAPI {
   // --------------------
 
   @computed
+  get layoutsById() {
+    return keyBy(layouts, 'id');
+  }
+
+  @computed
   get layoutList() {
-    return map(config.LAYOUTS, (d, k) => {
-      return { id: k, label: d.label };
+    return map(layouts, d => {
+      return { id: d.id, title: d.title };
+    });
+  }
+
+  @computed
+  get activeLayoutControlsById() {
+    return keyBy(uiState.activeLayoutControls, 'id');
+  }
+
+  @computed
+  get activeLayoutControls() {
+    if (isEmpty(this.layoutsById)) {
+      return [];
+    }
+    return this.layoutsById[this.activeCanvas.layout].inputs.map(d => {
+      const value =
+        this.activeLayoutControlsById[d.id] != undefined
+          ? this.activeLayoutControlsById[d.id].value
+          : d.value;
+      return { ...d, value };
     });
   }
 
