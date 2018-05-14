@@ -26,6 +26,7 @@ const Modals = observer(props => {
   const handleCloseEditCanvasDialog = () => {
     uiState.triggerEditCanvasDialog();
   };
+
   // return
   return (
     <div>

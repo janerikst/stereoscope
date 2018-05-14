@@ -1,3 +1,6 @@
+import { keyBy, orderBy } from 'lodash';
+import { scaleLinear, extent } from 'd3';
+
 export default {
   id: 'scatterplot',
   title: 'ScatterPlot',
@@ -6,17 +9,19 @@ export default {
       id: 'xAxis',
       title: 'X Axis',
       type: 'list',
-      value: 'textPosition',
+      value: 'startOffset',
       values: [
         {
-          id: 'textPosition',
+          id: 'startOffset',
           title: 'Text Position',
-          dataElement: 'startOffset',
         },
         {
-          id: 'annotationLength',
-          title: 'Annotationslänge',
-          dataElement: 'textLength',
+          id: 'textLength',
+          title: 'Annotations Length',
+        },
+        {
+          id: 'tagVersion',
+          title: 'Creation Time',
         },
       ],
     },
@@ -24,33 +29,57 @@ export default {
       id: 'yAxis',
       title: 'Y Axis',
       type: 'list',
-      value: 'annotationLength',
+      value: 'textLength',
       values: [
         {
-          id: 'textPosition',
+          id: 'startOffset',
           title: 'Text Position',
-          dataElement: 'startOffset',
         },
         {
-          id: 'annotationLength',
-          title: 'Annotationslänge',
-          dataElement: 'textLength',
+          id: 'textLength',
+          title: 'Annotations Length',
+        },
+        {
+          id: 'tagVersion',
+          title: 'Creation Time',
         },
       ],
     },
   ],
+
   create: function grid(glyphs, width, height, options) {
-    const space = 20;
-    let xSpace = 0;
-    let ySpace = 0;
+    // vars
+    const margins = { top: 30, bottom: 150, right: 30, left: 30 };
+    const stageWidth = width - margins.left - margins.right;
+    const stageHeight = height - margins.top - margins.bottom;
+
+    // option handling
+    const internalOptions = keyBy(this.inputs, 'id');
+    const optionKey = key => {
+      return options[key] ? options[key].value : internalOptions[key].value;
+    };
+    const keyX = optionKey('xAxis');
+    const keyY = optionKey('yAxis');
+
+    // scales
+    const extentX = extent(glyphs, d => {
+      return d[keyX];
+    });
+    const extentY = extent(glyphs, d => {
+      return d[keyY];
+    });
+
+    const scaleX = scaleLinear()
+      .domain(extentX)
+      .range([margins.right, stageWidth]);
+    const scaleY = scaleLinear()
+      .domain(extentY)
+      .range([stageHeight, margins.top]);
+
+    // process
     const output = [];
-    orderBy(glyphs, (d, i) => d.tagVersion).map(glyph => {
-      if (xSpace + glyph.radius * 2 > width) {
-        ySpace += glyph.radius * 2 + space;
-        xSpace = 0;
-      }
-      output.push({ ...glyph, x: xSpace, y: ySpace });
-      xSpace += glyph.radius * 2 + space;
+    orderBy(glyphs, d => d.tagVersion).map(d => {
+      output.push({ ...d, x: scaleX(d[keyX]), y: scaleY(d[keyY]) });
     });
     return output;
   },

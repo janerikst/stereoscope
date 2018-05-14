@@ -459,8 +459,7 @@ class DataAPI {
     if (this.glyphs.length == 0 || isEmpty(this.activeAnnotationsById)) {
       return [];
     }
-
-    return layouts[0].create(
+    return layouts[this.activeCanvas.layout].create(
       this.glyphs
         .filter(d => this.activeAnnotationsById[d.id].active)
         .map(d => {
@@ -472,7 +471,7 @@ class DataAPI {
         }),
       this.canvasWidth - config.CANVAS_MARGIN * 2,
       this.canvasHeight - config.CANVAS_MARGIN * 2,
-      config.ANNOTATION_SPACE,
+      this.activeLayoutControlsById,
     );
   }
 
@@ -585,7 +584,7 @@ class DataAPI {
   }
 
   @computed
-  get activeLayoutControls() {
+  get activeLayoutControlsList() {
     if (isEmpty(this.layoutsById)) {
       return [];
     }

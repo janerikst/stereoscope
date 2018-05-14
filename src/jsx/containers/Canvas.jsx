@@ -16,7 +16,7 @@ const Canvas = observer(props => {
     layoutList,
     activeFilters,
     activeGlyphs,
-    activeLayoutControls,
+    activeLayoutControlsList,
     canvasWidth,
     canvasHeight,
   } = dataAPI;
@@ -74,7 +74,7 @@ const Canvas = observer(props => {
             <LayoutPanel
               activeLayout={activeCanvas.layout}
               layoutList={layoutList}
-              layoutControls={activeLayoutControls}
+              layoutControls={activeLayoutControlsList}
               onChangeLayout={handleLayoutChange}
               onChangeControls={handleLayoutControlChange}
             />
