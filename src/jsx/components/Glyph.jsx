@@ -12,6 +12,7 @@ const Glyph = props => {
     isHidden,
     onHover,
     onClick,
+    onDoubleClick,
   } = props;
   return (
     <circle
@@ -25,6 +26,7 @@ const Glyph = props => {
       onMouseOver={() => onHover(id)}
       onMouseOut={() => onHover()}
       onClick={() => onClick(id)}
+      onDoubleClick={() => onDoubleClick(id)}
     />
   );
 };

@@ -85,15 +85,19 @@ class UiState {
   };
 
   @action
-  changeSelectedAnnotation = (ids, shouldScroll) => {
+  changeSelectedAnnotation = ids => {
     ids.forEach(id => {
       if (dataAPI.selectedAnnotationIdsById[id]) {
         remove(this.selectedAnnotationIds, d => d == id);
       } else {
         this.selectedAnnotationIds.push(id);
-        this.scrollToAnnotationId = id;
       }
     });
+  };
+
+  @action
+  scrollToAnnotation = id => {
+    this.scrollToAnnotationId = id;
   };
 
   @action

@@ -32,8 +32,8 @@ const Canvas = observer(props => {
     uiState.changeActiveCanvasLayoutControls(id, value);
 
   const handleHoverAnnotation = id => uiState.setHoveredAnnotation([id]);
-  const handleSelectAnnotation = id =>
-    uiState.changeSelectedAnnotation([id], true);
+  const handleScrollToAnnotation = id => uiState.scrollToAnnotation(id);
+  const handleSelectAnnotation = id => uiState.changeSelectedAnnotation([id]);
 
   // content
   const glyphs = activeGlyphs.map(d => {
@@ -49,7 +49,8 @@ const Canvas = observer(props => {
         isSelected={d.selected}
         isHidden={d.hidden}
         onHover={handleHoverAnnotation}
-        onClick={handleSelectAnnotation}
+        onClick={handleScrollToAnnotation}
+        onDoubleClick={handleSelectAnnotation}
       />
     );
   });
