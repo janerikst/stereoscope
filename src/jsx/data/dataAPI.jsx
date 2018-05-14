@@ -158,8 +158,15 @@ class DataAPI {
               );
             }
 
-            // delete pre existing offset
-            if (startOffset != 0 || endOffset != 0) {
+            // delete pre existing offset if not in there
+            if (
+              (startOffset != 0 || endOffset != 0) &&
+              offsets[
+                `${offset.startOffset}-${offset.endOffset}`
+              ].annotations.find(d => {
+                return d == annotation.id;
+              }) == undefined
+            ) {
               delete offsets[`${offset.startOffset}-${offset.endOffset}`];
             }
           }
