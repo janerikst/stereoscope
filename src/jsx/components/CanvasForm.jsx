@@ -37,7 +37,7 @@ class CanvasForm extends React.Component {
     const layoutOptions = layouts.map(d => {
       return (
         <option key={d.id} value={d.id}>
-          {d.label}
+          {d.title}
         </option>
       );
     });
