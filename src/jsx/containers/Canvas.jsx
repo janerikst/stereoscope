@@ -15,7 +15,7 @@ const Canvas = observer(props => {
     activeCanvas,
     layoutList,
     activeFilters,
-    activeGlyphs,
+    activeLayoutedElements,
     activeLayoutControlsList,
     canvasWidth,
     canvasHeight,
@@ -36,7 +36,7 @@ const Canvas = observer(props => {
   const handleSelectAnnotation = id => uiState.changeSelectedAnnotation([id]);
 
   // content
-  const glyphs = activeGlyphs.map(d => {
+  const glyphs = activeLayoutedElements.glyphs.map(d => {
     return (
       <Glyph
         id={d.id}

@@ -71,6 +71,6 @@ export default {
         d.y = yPositions[d.y - 1] + (yPositions[d.y] - yPositions[d.y - 1]) / 2;
       }
     });
-    return output;
+    return { glyphs: output };
   },
 };

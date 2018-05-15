@@ -81,6 +81,6 @@ export default {
     orderBy(glyphs, d => d.tagVersion).map(d => {
       output.push({ ...d, x: scaleX(d[keyX]), y: scaleY(d[keyY]) });
     });
-    return output;
+    return { glyphs: output };
   },
 };

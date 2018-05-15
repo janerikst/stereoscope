@@ -39,7 +39,7 @@ class DataAPI {
     if (
       this.activeAnnotations.length == 0 ||
       this.activeTextElements.length == 0 ||
-      this.activeGlyphs.length == 0 ||
+      isEmpty(this.activeLayoutedElements) ||
       this.activeTextGlyphs.length == 0 ||
       this.activeFilters.length == 0
     ) {
@@ -498,8 +498,6 @@ class DataAPI {
     });
 
     return this.annotations.map(d => {
-      // this.annotations.forEach();
-
       const textLength = d.endOffset - d.startOffset + 1;
       return {
         ...d,
@@ -513,12 +511,26 @@ class DataAPI {
   }
 
   @computed
-  get activeGlyphs() {
-    if (this.glyphs.length == 0 || isEmpty(this.activeAnnotationsById)) {
+  get layoutedElements() {
+    if (this.glyphs.length == 0) {
       return [];
     }
     return layouts[this.activeCanvas.layout].create(
-      this.glyphs
+      this.glyphs,
+      this.canvasWidth - config.CANVAS_MARGIN * 2,
+      this.canvasHeight - config.CANVAS_MARGIN * 2,
+      this.activeLayoutControlsById,
+    );
+  }
+
+  @computed
+  get activeLayoutedElements() {
+    if (isEmpty(this.layoutedElements) || isEmpty(this.activeAnnotationsById)) {
+      return { glyphs: [] };
+    }
+    return {
+      ...this.layoutedElements,
+      glyphs: this.layoutedElements.glyphs
         .filter(d => this.activeAnnotationsById[d.id].active)
         .map(d => {
           return {
@@ -532,10 +544,7 @@ class DataAPI {
                 !this.activeAnnotationsById[d.id].selected),
           };
         }),
-      this.canvasWidth - config.CANVAS_MARGIN * 2,
-      this.canvasHeight - config.CANVAS_MARGIN * 2,
-      this.activeLayoutControlsById,
-    );
+    };
   }
 
   // --------------------

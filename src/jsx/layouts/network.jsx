@@ -62,6 +62,6 @@ export default {
 
     for (var i = 0; i < 400; ++i) simulation.tick();
 
-    return glyphs;
+    return { glyphs };
   },
 };
