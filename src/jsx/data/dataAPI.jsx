@@ -64,12 +64,8 @@ class DataAPI {
   }
 
   @computed
-  get textElements() {
-    if (
-      this.text.length == 0 ||
-      this.annotations.length == 0 ||
-      isEmpty(this.annotationsById)
-    ) {
+  get textIntersections() {
+    if (this.annotations.length == 0) {
       return [];
     }
     // split annotation in parts to create spans
@@ -186,13 +182,25 @@ class DataAPI {
       }
     }
 
-    // combines splitted annotations with the text
+    return orderBy(offsets, 'startOffset', 'asc');
+  }
+
+  @computed
+  get textElements() {
+    if (
+      this.text.length == 0 ||
+      this.textIntersections.length == 0 ||
+      this.annotations.length == 0 ||
+      isEmpty(this.annotationsById)
+    ) {
+      return [];
+    }
 
     const textLength = this.text.length;
     const output = [];
     let lastOffset = 0;
 
-    orderBy(values(offsets), 'startOffset', 'asc').forEach(d => {
+    this.textIntersections.forEach(d => {
       // before
       if (d.startOffset > lastOffset) {
         const textStr = this.text.substring(lastOffset, d.startOffset);
@@ -452,19 +460,54 @@ class DataAPI {
 
   @computed
   get glyphs() {
-    if (this.annotations.length == 0 || this.maxAnnotationLength == 0) {
+    if (
+      this.annotations.length == 0 ||
+      this.maxAnnotationLength == 0 ||
+      this.textIntersections.length == 0
+    ) {
       return [];
     }
     const annotationScale = scaleLinear()
       .domain([1, this.maxAnnotationLength])
       .range([config.ANNOTATION_RADIUS_MIN, config.ANNOTATION_RADIUS_MAX]);
 
+    // get annotation intersects
+
+    const intersections = {};
+    this.textIntersections.forEach(d => {
+      const annotationLen = d.annotations.length;
+      if (annotationLen > 1) {
+        const intersectionLen = d.endOffset - d.startOffset;
+        for (let i = 0; i < annotationLen; i++) {
+          let annotation1 = d.annotations[i];
+          if (intersections[annotation1] == undefined) {
+            intersections[annotation1] = {};
+          }
+          for (let j = 0; j < annotationLen; j++) {
+            if (i == j) {
+              continue;
+            }
+            let annotation2 = d.annotations[j];
+            if (intersections[annotation1][annotation2] == undefined) {
+              intersections[annotation1][annotation2] = 0;
+            }
+            intersections[annotation1][annotation2] += intersectionLen;
+          }
+        }
+      }
+    });
+
     return this.annotations.map(d => {
+      // this.annotations.forEach();
+
       const textLength = d.endOffset - d.startOffset + 1;
       return {
         ...d,
         radius: Math.round(annotationScale(textLength)),
         textLength: textLength,
+        intersections: intersections[d.id]
+          ? map(intersections[d.id], (d, k) => ({ id: k, value: d }))
+          : [],
       };
     });
   }

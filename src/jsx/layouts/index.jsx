@@ -1,4 +1,5 @@
 import grid from './grid.jsx';
-import scatterPlot from './scatterPlot.jsx';
+import network from './network.jsx';
+import scatterplot from './scatterPlot.jsx';
 
-export default { grid, scatterplot: scatterPlot };
+export default { grid, network, scatterplot };
