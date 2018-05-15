@@ -1,10 +1,39 @@
-import { orderBy } from 'lodash';
+import { keyBy, orderBy } from 'lodash';
 
 export default {
   id: 'grid',
   title: 'Grid',
-  inputs: [],
+  inputs: [
+    {
+      id: 'sorting',
+      title: 'Sorting',
+      type: 'list',
+      value: 'tagVersion',
+      values: [
+        {
+          id: 'startOffset',
+          title: 'Text Position',
+        },
+        {
+          id: 'textLength',
+          title: 'Annotations Length',
+        },
+        {
+          id: 'tagVersion',
+          title: 'Creation Time',
+        },
+      ],
+    },
+  ],
   create: function grid(glyphs, width, height, options) {
+    // option handling
+    const internalOptions = keyBy(this.inputs, 'id');
+    const optionKey = key => {
+      return options[key] ? options[key].value : internalOptions[key].value;
+    };
+    const sortKey = optionKey('sorting');
+
+    // vars
     let largestRadiusPerRow = 0;
     const space = 5;
     let xSpace = 0;
@@ -15,7 +44,7 @@ export default {
     const output = [];
 
     // calc x position
-    orderBy(glyphs, 'tagVersion').map(glyph => {
+    orderBy(glyphs, sortKey).map(glyph => {
       if (xSpace + glyph.radius * 2 > width) {
         ySpace += largestRadiusPerRow * 2 + space;
         yPositions[yPos] = ySpace;
