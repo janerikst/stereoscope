@@ -55,6 +55,20 @@ const Canvas = observer(props => {
     );
   });
 
+  const labels = activeLayoutedElements.labelGroups
+    ? activeLayoutedElements.labelGroups.map(group => {
+        const output = [];
+        group.labels.forEach(label => {
+          output.push(
+            <text x={label.x} y={label.y} textAnchor={label.alignment}>
+              {label.value}
+            </text>,
+          );
+        });
+        return output;
+      })
+    : [];
+
   // renders
   return (
     <div className="c-canvas l-content-container l-content-container-auto">
@@ -64,10 +78,13 @@ const Canvas = observer(props => {
         </h2>
       </header>
       <div className="c-canvas__stage">
-        <div className="c-canvas__annotations">
+        <div className="c-canvas__innerstage">
           <svg width={canvasWidth} height={canvasHeight}>
             <g transform={`translate(${CANVAS_MARGIN},${CANVAS_MARGIN})`}>
-              {glyphs}
+              <g className="c-canvas__glyphs">{glyphs}</g>
+              {labels.length != 0 && (
+                <g className="c-canvas__labels">{labels}</g>
+              )}
             </g>
           </svg>
         </div>

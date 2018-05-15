@@ -76,11 +76,38 @@ export default {
       .domain(extentY)
       .range([stageHeight, margins.top]);
 
-    // process
+    // set positions
     const output = [];
     orderBy(glyphs, d => d.tagVersion).map(d => {
       output.push({ ...d, x: scaleX(d[keyX]), y: scaleY(d[keyY]) });
     });
-    return { glyphs: output };
+
+    // set axis
+    const labelGroups = [
+      { key: 'xAxis', title: internalOptions['xAxis'].value, labels: [] },
+      { key: 'yAxis', title: internalOptions['yAxis'].value, labels: [] },
+    ];
+    const xTicks = scaleX.ticks();
+    const yTicks = scaleY.ticks();
+
+    labelGroups[0].labels = xTicks.map((tick, i) => {
+      return {
+        value: tick,
+        x: scaleX(tick),
+        y: scaleY.range()[0] + 30,
+        alignment: 'middle',
+      };
+    });
+
+    labelGroups[1].labels = yTicks.map((tick, i) => {
+      return {
+        value: tick,
+        x: scaleX.range()[0] - 30,
+        y: scaleY(tick),
+        alignment: 'start',
+      };
+    });
+
+    return { glyphs: output, labelGroups };
   },
 };
