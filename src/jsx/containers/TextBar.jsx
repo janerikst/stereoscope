@@ -11,6 +11,78 @@ import TextElement from '../components/TextElement';
 import TextGlyph from '../components/TextGlyph';
 
 // --------------------
+// *** TEXT ELEMENTS ***
+// --------------------
+
+const TextElements = observer(props => {
+  const { onScrollTo } = props;
+
+  const {
+    activeTextElements,
+    hasSelectedAnnotations,
+    hasMoreSelectedAnnotations,
+  } = dataAPI;
+
+  // interactions
+  const handleTextHover = ids => uiState.setHoveredAnnotation(ids);
+  const handleTextSelect = ids => uiState.changeSelectedAnnotation(ids);
+
+  // content
+
+  let textEls;
+  if (!hasMoreSelectedAnnotations) {
+    // normal text
+    textEls = activeTextElements.map(d => {
+      return (
+        <TextElement
+          key={d.id}
+          text={d.text}
+          annotations={d.annotations}
+          isActive={d.active}
+          isHovered={d.hovered}
+          isSelected={d.selected}
+          onHover={handleTextHover}
+          onClick={handleTextSelect}
+          ref={ref => {
+            if (d.scrollTo) {
+              onScrollTo(ref);
+            }
+          }}
+        />
+      );
+    });
+  } else {
+    // selected text +1
+    textEls = activeTextElements.map(group => {
+      return (
+        <div key={group.id} className="c-text-area__selected-text">
+          {group.items.map(d => {
+            return (
+              <TextElement
+                key={d.id}
+                text={d.text}
+                annotations={d.annotations}
+                isActive={d.active}
+                isHovered={d.hovered}
+                isSelected={false}
+                onHover={handleTextHover}
+                onClick={handleTextSelect}
+                ref={ref => {
+                  if (d.scrollTo) {
+                    onScrollTo(ref);
+                  }
+                }}
+              />
+            );
+          })}
+        </div>
+      );
+    });
+  }
+  return <div>{textEls}</div>;
+});
+
+// --------------------
 // *** TEXT GLYPHS ***
 // --------------------
 
@@ -38,7 +110,6 @@ const TextGlyphs = observer(props => {
 class TextBar extends Component {
   constructor(props) {
     super(props);
-    this.selectedText = undefined;
     this.textArea = undefined;
     this.textWrapper = undefined;
     this.textNavOverlay = undefined;
@@ -52,71 +123,14 @@ class TextBar extends Component {
 
   render() {
     // vars
-    const {
-      activeTextElements,
-      hasSelectedAnnotations,
-      hasMoreSelectedAnnotations,
-    } = dataAPI;
+    const { hasSelectedAnnotations, hasMoreSelectedAnnotations } = dataAPI;
+
     const { TEXT_BAR_WIDTH } = config;
     const { overlayHeight, overlayPos } = this.state;
 
     // interactions
-    const handleTextHover = ids => uiState.setHoveredAnnotation(ids);
-    const handleTextSelect = ids => uiState.changeSelectedAnnotation(ids);
     const handleSelectedAnnotationReset = ids =>
       uiState.resetSelectedAnnotation();
-
-    // content
-    let textEls;
-    if (!hasMoreSelectedAnnotations) {
-      // normal text
-      textEls = activeTextElements.map(d => {
-        return (
-          <TextElement
-            key={d.id}
-            text={d.text}
-            annotations={d.annotations}
-            isActive={d.active}
-            isHovered={d.hovered}
-            isSelected={d.selected}
-            onHover={handleTextHover}
-            onClick={handleTextSelect}
-            ref={ref => {
-              if (d.scrollTo) {
-                this.selectedText = ref;
-              }
-            }}
-          />
-        );
-      });
-    } else {
-      // selected text +1
-      textEls = activeTextElements.map(group => {
-        return (
-          <div key={group.id} className="c-text-area__selected-text">
-            {group.items.map(d => {
-              return (
-                <TextElement
-                  key={d.id}
-                  text={d.text}
-                  annotations={d.annotations}
-                  isActive={d.active}
-                  isHovered={d.hovered}
-                  isSelected={false}
-                  onHover={handleTextHover}
-                  onClick={handleTextSelect}
-                  ref={ref => {
-                    if (d.scrollTo) {
-                      this.selectedText = ref;
-                    }
-                  }}
-                />
-              );
-            })}
-          </div>
-        );
-      });
-    }
 
     // render
     return (
@@ -155,35 +169,16 @@ class TextBar extends Component {
               ref={x => {
                 this.textWrapper = x;
               }}>
-              {textEls}
+              <TextElements
+                onScrollTo={ref => {
+                  this.scrollToTextelement(ref);
+                }}
+              />
             </div>
           </div>
         </div>
       </aside>
     );
-  }
-
-  componentDidUpdate() {
-    const textArea = ReactDOM.findDOMNode(this.textArea);
-
-    let node = undefined;
-    if (this.selectedText) {
-      // hovered text
-      node = ReactDOM.findDOMNode(this.selectedText);
-      this.selectedText = undefined;
-    }
-
-    if (node) {
-      if (
-        node.offsetTop > textArea.scrollTop + textArea.offsetHeight ||
-        node.offsetTop < textArea.scrollTop
-      ) {
-        //panel.scrollTop = node.offsetTop - panel.offsetTop;
-        this.setState({ scrollToActive: true });
-        this.scrollToEl(textArea, node.offsetTop - textArea.offsetTop, 300);
-        uiState.scrollToAnnotationDone();
-      }
-    }
   }
 
   getOverlayHeight() {
@@ -213,9 +208,31 @@ class TextBar extends Component {
     });
   }
 
+  scrollToTextelement(ref) {
+    const textArea = ReactDOM.findDOMNode(this.textArea);
+
+    let node = undefined;
+    if (ref) {
+      // hovered text
+      node = ReactDOM.findDOMNode(ref);
+      this.selectedText = undefined;
+    }
+
+    if (node) {
+      if (
+        node.offsetTop > textArea.scrollTop + textArea.offsetHeight ||
+        node.offsetTop < textArea.scrollTop
+      ) {
+        //panel.scrollTop = node.offsetTop - panel.offsetTop;
+        this.setState({ scrollToActive: true });
+        this.scrollToEl(textArea, node.offsetTop - textArea.offsetTop, 300);
+        uiState.scrollToAnnotationDone();
+      }
+    }
+  }
+
   handleScroll() {
     const { hasMoreSelectedAnnotations } = dataAPI;
-
     if (!this.state.scrollToActive && !hasMoreSelectedAnnotations) {
       const panel = ReactDOM.findDOMNode(this.textArea);
       this.setState({
