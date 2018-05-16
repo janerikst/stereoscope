@@ -10,6 +10,10 @@ import config from 'config/config';
 import TextElement from '../components/TextElement';
 import TextGlyph from '../components/TextGlyph';
 
+// --------------------
+// *** TEXT GLYPHS ***
+// --------------------
+
 const TextGlyphs = observer(props => {
   const { activeTextGlyphs } = dataAPI;
   const glyphs = activeTextGlyphs.map(d => {
@@ -25,6 +29,10 @@ const TextGlyphs = observer(props => {
   });
   return <div>{glyphs}</div>;
 });
+
+// --------------------
+// *** TEXT BAR ***
+// --------------------
 
 @observer
 class TextBar extends Component {
