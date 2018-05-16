@@ -10,6 +10,22 @@ import config from 'config/config';
 import TextElement from '../components/TextElement';
 import TextGlyph from '../components/TextGlyph';
 
+const TextGlyphs = observer(props => {
+  const { activeTextGlyphs } = dataAPI;
+  const glyphs = activeTextGlyphs.map(d => {
+    return (
+      <TextGlyph
+        key={d.id}
+        y={d.start}
+        height={d.height}
+        color={d.color}
+        active={d.active}
+      />
+    );
+  });
+  return <div>{glyphs}</div>;
+});
+
 @observer
 class TextBar extends Component {
   constructor(props) {
@@ -30,7 +46,6 @@ class TextBar extends Component {
     // vars
     const {
       activeTextElements,
-      activeTextGlyphs,
       hasSelectedAnnotations,
       hasMoreSelectedAnnotations,
     } = dataAPI;
@@ -95,18 +110,6 @@ class TextBar extends Component {
       });
     }
 
-    const textGlyphs = activeTextGlyphs.map(d => {
-      return (
-        <TextGlyph
-          key={d.id}
-          y={d.start}
-          height={d.height}
-          color={d.color}
-          active={d.active}
-        />
-      );
-    });
-
     // render
     return (
       <aside className="l-content-container" style={{ width: TEXT_BAR_WIDTH }}>
@@ -123,7 +126,7 @@ class TextBar extends Component {
         <div className="l-content-spacing">
           {!hasMoreSelectedAnnotations && (
             <div className="c-text-nav">
-              {textGlyphs}
+              <TextGlyphs />
               <div
                 className="c-text-nav__overlay"
                 ref={x => {
