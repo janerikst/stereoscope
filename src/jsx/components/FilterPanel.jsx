@@ -11,7 +11,14 @@ class FilterPanel extends React.Component {
 
   render() {
     // vars
-    const { items, height, width, onChange } = this.props;
+    const {
+      items,
+      height,
+      width,
+      hasActiveFilter,
+      onChange,
+      onReset,
+    } = this.props;
     const margin = 10;
     const stageWidth = width - margin * 2;
     const stageHeight = height - margin * 2;
@@ -57,6 +64,11 @@ class FilterPanel extends React.Component {
       <div className="c-filter-panel">
         <header className="c-filter-panel__header">
           <h3>Filter</h3>
+          {hasActiveFilter && (
+            <span className="is-right o-link" onClick={onReset}>
+              (Reset)
+            </span>
+          )}
         </header>
         <div className="c-filter-panel__content">
           <svg width={stageWidth} height={stageHeight}>

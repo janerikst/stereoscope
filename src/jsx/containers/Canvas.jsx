@@ -14,6 +14,7 @@ const Canvas = observer(props => {
   const {
     activeCanvas,
     layoutList,
+    hasFilters,
     activeFilters,
     activeLayoutedElements,
     activeLayoutControlsList,
@@ -26,6 +27,7 @@ const Canvas = observer(props => {
   // interactions
   const handleFilterChange = filter =>
     uiState.changeActiveCanvasFilters(filter);
+  const handleFilterReset = filter => uiState.resetActiveCanvasFilters();
 
   const handleLayoutChange = layout => uiState.changeActiveCanvasLayout(layout);
   const handleLayoutControlChange = (id, value) =>
@@ -101,7 +103,9 @@ const Canvas = observer(props => {
           <div className="c-canvas__filter-control">
             <FilterPanel
               items={activeFilters}
+              hasActiveFilter={hasFilters}
               onChange={handleFilterChange}
+              onReset={handleFilterReset}
               width={FILTER_PANEL_WIDTH}
               height={FILTER_PANEL_HEIGHT}
             />

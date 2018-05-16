@@ -170,6 +170,8 @@ class UiState {
     }
   };
 
+  @action resetActiveCanvasFilters = () => (this.activeFilterIds = []);
+
   @action
   changeActiveCanvasLayoutControls = (id, value) => {
     if (dataAPI.activeLayoutControlsById[id]) {

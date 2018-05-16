@@ -415,11 +415,6 @@ class DataAPI {
   }
 
   @computed
-  get hasFilters() {
-    return uiState.activeFilterIds.length != 0;
-  }
-
-  @computed
   get hasHoveredAnnotations() {
     return uiState.hoveredAnnotationIds != '';
   }
@@ -719,6 +714,11 @@ class DataAPI {
       output[d] = 1;
     });
     return output;
+  }
+
+  @computed
+  get hasFilters() {
+    return uiState.activeFilterIds.length != 0;
   }
 
   @computed
