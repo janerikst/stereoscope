@@ -37,7 +37,7 @@ class DataAPI {
   @computed
   get isAppReady() {
     if (
-      this.activeAnnotations.length == 0 ||
+      this.activeDetailedAnnotations.length == 0 ||
       this.activeTextElements.length == 0 ||
       isEmpty(this.activeLayoutedElements) ||
       this.activeTextGlyphs.length == 0 ||
@@ -242,7 +242,10 @@ class DataAPI {
 
   @computed
   get activeTextElements() {
-    if (this.textElements.length == 0 || isEmpty(this.activeAnnotationsById)) {
+    if (
+      this.textElements.length == 0 ||
+      isEmpty(this.activeDetailedAnnotationsById)
+    ) {
       return [];
     }
 
@@ -268,9 +271,10 @@ class DataAPI {
         let scrollToFound = false;
 
         d.annotations.forEach(e => {
-          const active = !hasFilters || this.activeAnnotationsById[e.id].active;
-          const hovered = this.activeAnnotationsById[e.id].hovered;
-          const selected = this.activeAnnotationsById[e.id].selected;
+          const active =
+            !hasFilters || this.activeDetailedAnnotationsById[e.id].active;
+          const hovered = this.activeDetailedAnnotationsById[e.id].hovered;
+          const selected = this.activeDetailedAnnotationsById[e.id].selected;
           let scrollTo = false;
 
           if (active && !activeFound) {
@@ -433,6 +437,16 @@ class DataAPI {
     return this.annotations.map(d => {
       const active =
         !this.hasFilters || this.activeFilterIdsById[d.tagId] != undefined;
+      return { ...d, active };
+    });
+  }
+
+  @computed
+  get activeDetailedAnnotations() {
+    if (this.activeAnnotations.length == 0) {
+      return [];
+    }
+    return this.activeAnnotations.map(d => {
       const hovered =
         this.hasHoveredAnnotations &&
         this.hoveredAnnotationIdsById[d.id] != undefined;
@@ -440,16 +454,16 @@ class DataAPI {
         this.hasSelectedAnnotations &&
         this.selectedAnnotationIdsById[d.id] != undefined;
 
-      return { ...d, active, hovered, selected };
+      return { ...d, hovered, selected };
     });
   }
 
   @computed
-  get activeAnnotationsById() {
-    if (this.activeAnnotations.length == 0) {
+  get activeDetailedAnnotationsById() {
+    if (this.activeDetailedAnnotations.length == 0) {
       return {};
     }
-    return keyBy(this.activeAnnotations, 'id');
+    return keyBy(this.activeDetailedAnnotations, 'id');
   }
 
   // --------------------
@@ -525,23 +539,26 @@ class DataAPI {
 
   @computed
   get activeLayoutedElements() {
-    if (isEmpty(this.layoutedElements) || isEmpty(this.activeAnnotationsById)) {
+    if (
+      isEmpty(this.layoutedElements) ||
+      isEmpty(this.activeDetailedAnnotationsById)
+    ) {
       return { glyphs: [] };
     }
     return {
       ...this.layoutedElements,
       glyphs: this.layoutedElements.glyphs
-        .filter(d => this.activeAnnotationsById[d.id].active)
+        .filter(d => this.activeDetailedAnnotationsById[d.id].active)
         .map(d => {
           return {
             ...d,
-            hovered: this.activeAnnotationsById[d.id].hovered,
-            selected: this.activeAnnotationsById[d.id].selected,
+            hovered: this.activeDetailedAnnotationsById[d.id].hovered,
+            selected: this.activeDetailedAnnotationsById[d.id].selected,
             hidden:
               (this.hasHoveredAnnotations &&
-                !this.activeAnnotationsById[d.id].hovered) ||
+                !this.activeDetailedAnnotationsById[d.id].hovered) ||
               (this.hasSelectedAnnotations &&
-                !this.activeAnnotationsById[d.id].selected),
+                !this.activeDetailedAnnotationsById[d.id].selected),
           };
         }),
     };
