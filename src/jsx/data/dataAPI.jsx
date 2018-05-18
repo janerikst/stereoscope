@@ -19,7 +19,7 @@ import {
   trim,
 } from 'lodash';
 
-import { scaleLinear } from 'd3';
+import { scaleSqrt } from 'd3';
 
 class DataAPI {
   // DATASETS
@@ -476,7 +476,7 @@ class DataAPI {
     ) {
       return [];
     }
-    const annotationScale = scaleLinear()
+    const annotationScale = scaleSqrt()
       .domain([1, this.maxAnnotationLength])
       .range([config.ANNOTATION_RADIUS_MIN, config.ANNOTATION_RADIUS_MAX]);
 
