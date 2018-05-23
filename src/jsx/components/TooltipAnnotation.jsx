@@ -15,7 +15,6 @@ const TooltipContent = props => {
         {d.importance ||
           (d.certainty && (
             <div>
-              <h3>Properties</h3>
               {d.importance ? `Importance: ${d.importance}` : ''}
               {d.certainty ? `Certainty: ${d.certainty}` : ''}
             </div>
