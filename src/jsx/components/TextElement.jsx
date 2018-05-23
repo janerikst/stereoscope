@@ -22,8 +22,8 @@ class TextElement extends Component {
     annotations.forEach((d, i) => {
       const color =
         d.active == undefined || d.active ? d.color : TEXT_SELECT_COLOR;
-      annotationsGradient += `,${color} ${i * 2}px, ${backgroundColor} ${i * 2 +
-        1}px, ${backgroundColor} ${i * 2 + 2}px`;
+      annotationsGradient += `,${color} ${i * 3}px, ${backgroundColor} ${i * 3 +
+        2}px, ${backgroundColor} ${i * 3 + 3}px`;
     });
 
     return (
