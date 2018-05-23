@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Loader = props => {
+const LoaderAnimation = props => {
   return (
     <div className="c-loader">
       <div className="c-spinner">
@@ -12,4 +12,4 @@ const Loader = props => {
   );
 };
 
-export default Loader;
+export default LoaderAnimation;

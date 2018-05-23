@@ -2,7 +2,7 @@ import React from 'react';
 import { observer } from 'mobx-react';
 
 import Header from 'components/Header';
-import Loader from 'components/Loader';
+import LoaderAnimation from 'components/LoaderAnimation';
 import TextBar from 'containers/TextBar';
 import Canvas from 'containers/Canvas';
 import Modals from 'containers/Modals';
@@ -28,7 +28,7 @@ const App = observer(props => {
           <Modals />
         </div>
       )}
-      {!isAppReady && <Loader />}
+      {!isAppReady && <LoaderAnimation />}
     </div>
   );
 });
