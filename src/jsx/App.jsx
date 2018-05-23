@@ -5,8 +5,9 @@ import Header from 'components/Header';
 import LoaderAnimation from 'components/LoaderAnimation';
 import TextBar from 'containers/TextBar';
 import Canvas from 'containers/Canvas';
-import Modals from 'containers/Modals';
 import CanvasBar from 'containers/CanvasBar';
+import Modals from 'containers/Modals';
+import Tooltips from 'containers/Tooltips';
 
 import dataAPI from 'data/dataAPI';
 
@@ -26,6 +27,7 @@ const App = observer(props => {
             </main>
           </div>
           <Modals />
+          <Tooltips />
         </div>
       )}
       {!isAppReady && <LoaderAnimation />}

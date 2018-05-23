@@ -420,7 +420,7 @@ class DataAPI {
 
   @computed
   get hasHoveredAnnotations() {
-    return uiState.hoveredAnnotationIds != '';
+    return uiState.hoveredAnnotationIds.length != 0;
   }
 
   @computed
@@ -463,6 +463,24 @@ class DataAPI {
       return {};
     }
     return keyBy(this.activeDetailedAnnotations, 'id');
+  }
+
+  @computed
+  get hoveredAnnotationsDetails() {
+    if (!this.hasHoveredAnnotations) {
+      return [];
+    }
+    return map(uiState.hoveredAnnotationIds, d => {
+      const annotation = this.activeDetailedAnnotationsById[d];
+      return {
+        id: annotation.id,
+        tagPath: annotation.tagPath,
+        color: annotation.color,
+        author: annotation.author,
+        importance: annotation.importance,
+        certainty: annotation.certainty,
+      };
+    });
   }
 
   // --------------------
