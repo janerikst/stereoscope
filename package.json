@@ -53,6 +53,7 @@
         "react": "^15.5.4",
         "react-addons-perf": "^15.4.2",
         "react-dom": "^15.5.4",
+        "react-icons": "^2.2.7",
         "react-modal": "^3.4.4"
     }
 }
