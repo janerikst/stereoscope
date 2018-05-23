@@ -121,6 +121,7 @@ class UiState {
       selectedAnnotationIds: [],
     });
     this.showAddCanvasDialog = !this.showAddCanvasDialog;
+    this.activeCanvasId = newId;
   };
 
   @action

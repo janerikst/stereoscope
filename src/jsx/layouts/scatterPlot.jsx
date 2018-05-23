@@ -49,7 +49,7 @@ export default {
 
   create: function grid(glyphs, width, height, options) {
     // vars
-    const margins = { top: 30, bottom: 150, right: 30, left: 30 };
+    const margins = { top: 40, bottom: 50, right: 20, left: 80 };
     const stageWidth = width - margins.left - margins.right;
     const stageHeight = height - margins.top - margins.bottom;
 
@@ -60,6 +60,10 @@ export default {
     };
     const keyX = optionKey('xAxis');
     const keyY = optionKey('yAxis');
+    const titleX = internalOptions['xAxis'].values.find(d => d.id == keyX)
+      .title;
+    const titleY = internalOptions['xAxis'].values.find(d => d.id == keyY)
+      .title;
 
     // scales
     const extentX = extent(glyphs, d => {
@@ -71,7 +75,7 @@ export default {
 
     const scaleX = scaleLinear()
       .domain(extentX)
-      .range([margins.right, stageWidth]);
+      .range([margins.left, stageWidth]);
     const scaleY = scaleLinear()
       .domain(extentY)
       .range([stageHeight, margins.top]);
@@ -84,8 +88,22 @@ export default {
 
     // set axis
     const labelGroups = [
-      { key: 'xAxis', title: internalOptions['xAxis'].value, labels: [] },
-      { key: 'yAxis', title: internalOptions['yAxis'].value, labels: [] },
+      {
+        key: 'xAxis',
+        title: titleX,
+        deg: 0,
+        x: stageWidth / 2,
+        y: stageHeight + 60,
+        labels: [],
+      },
+      {
+        key: 'yAxis',
+        title: titleY,
+        deg: -90,
+        x: scaleX.range()[0] - 50,
+        y: stageHeight / 2,
+        labels: [],
+      },
     ];
     const xTicks = scaleX.ticks();
     const yTicks = scaleY.ticks();

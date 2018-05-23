@@ -25,9 +25,7 @@ const CanvasThumbnail = props => {
           onClick={() => onSelect(id)}
         />
       </div>
-      <h3 onClick={() => onEdit(id)}>
-        {title == '' ? <span>Untitled Canvas</span> : title}
-      </h3>
+      <h3 onClick={() => onEdit(id)}>{title}</h3>
       <p>Layout: {layout}</p>
     </div>
   );

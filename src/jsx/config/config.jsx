@@ -1,7 +1,8 @@
 export default {
-  TEXT_BAR_WIDTH: 400,
-  TEXT_NAV_WIDTH: 20,
-  CANVAS_BAR_WIDTH: 240,
+  TEXT_BAR_WIDTH: 420,
+  TEXT_NAV_WIDTH: 16,
+  CANVAS_BAR_WIDTH: 190,
+  CANVAS_DEFAULT_NAME: 'Untitled Canvas',
   TEXT_SELECT_COLOR: '#ddd',
   TEXT_INACTIVE_COLOR: '#eee',
   FILTER_PANEL_WIDTH: 240,
@@ -15,6 +16,5 @@ export default {
     catma_displaycolor: 'color',
     catma_markupauthor: 'author',
   },
-  CANVAS_MARGIN: 20,
   LAYOUT_DEFAULT: 'scatterplot',
 };

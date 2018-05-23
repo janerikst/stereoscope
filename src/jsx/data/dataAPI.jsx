@@ -37,15 +37,15 @@ class DataAPI {
   @computed
   get isAppReady() {
     if (
-      this.activeDetailedAnnotations.length == 0 ||
-      this.activeTextElements.length == 0 ||
-      isEmpty(this.activeLayoutedElements) ||
-      this.activeTextGlyphs.length == 0 ||
-      this.activeFilters.length == 0
+      this.activeTextElements.length != 0 &&
+      this.activeDetailedAnnotations.length != 0 &&
+      !isEmpty(this.activeLayoutedElements) &&
+      this.activeTextGlyphs.length != 0 &&
+      this.activeFilters.length != 0
     ) {
-      return false;
-    } else {
       return true;
+    } else {
+      return false;
     }
   }
 
@@ -548,8 +548,8 @@ class DataAPI {
     }
     return layouts[this.activeCanvas.layout].create(
       this.glyphs,
-      this.canvasWidth - config.CANVAS_MARGIN * 2,
-      this.canvasHeight - config.CANVAS_MARGIN * 2,
+      this.canvasWidth,
+      this.canvasHeight,
       this.activeLayoutControlsById,
     );
   }
@@ -626,12 +626,12 @@ class DataAPI {
     canvases.forEach(d => {
       output.push({
         id: d.id,
-        title: d.title,
+        title: d.title ? d.title : config.CANVAS_DEFAULT_NAME,
         layout: this.layoutsById[d.layout].title,
         active: d.id == activeCanvasId,
       });
     });
-    return output;
+    return orderBy(output, 'id', 'desc');
   }
 
   @computed
@@ -641,6 +641,15 @@ class DataAPI {
       return {};
     }
     return canvases.find(d => d.id == activeCanvasId);
+  }
+
+  @computed
+  get activeCanvasTitle() {
+    if (!this.activeCanvas || this.activeCanvas.title == '') {
+      return config.CANVAS_DEFAULT_NAME;
+    } else {
+      return this.activeCanvas.title;
+    }
   }
 
   @computed

@@ -42,10 +42,10 @@ const CanvasBar = observer(props => {
         <h2>Canvas View</h2>
       </header>
       <div className="c-canvas-bar__thumbnails l-content-spacing">
-        {canvasEls}
         <div className="c-canvas-bar__add" onClick={handleOpenAddCanvasDialog}>
           <span>+</span>
         </div>
+        {canvasEls}
       </div>
     </aside>
   );

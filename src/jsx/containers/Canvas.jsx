@@ -67,6 +67,15 @@ const Canvas = observer(props => {
             </text>,
           );
         });
+        output.push(
+          <text
+            x={group.x}
+            y={group.y}
+            textAnchor={'middle'}
+            transform={`rotate(${group.deg},${group.x},${group.y})`}>
+            {group.title}
+          </text>,
+        );
         return output;
       })
     : [];
@@ -74,23 +83,15 @@ const Canvas = observer(props => {
   // renders
   return (
     <div className="c-canvas l-content-container l-content-container-auto">
-      <header className="c-header--small">
-        <h2>
-          Canvas: {activeCanvas.title ? activeCanvas.title : 'Untitled Canvas'}
-        </h2>
-      </header>
+      <header className="c-header--small">xxx</header>
       <div className="c-canvas__stage">
         <div className="c-canvas__innerstage">
           <svg width={canvasWidth} height={canvasHeight}>
-            <g transform={`translate(${CANVAS_MARGIN},${CANVAS_MARGIN})`}>
-              <g className="c-canvas__glyphs">{glyphs}</g>
-              {labels.length != 0 && (
-                <g className="c-canvas__labels">{labels}</g>
-              )}
-            </g>
+            <g className="c-canvas__glyphs">{glyphs}</g>
+            {labels.length != 0 && <g className="c-canvas__labels">{labels}</g>}
           </svg>
         </div>
-        <div className="c-canvas__controls">
+        {/*<div className="c-canvas__controls">
           <div className="c-canvas__layout-control">
             <LayoutPanel
               activeLayout={activeCanvas.layout}
@@ -110,7 +111,7 @@ const Canvas = observer(props => {
               height={FILTER_PANEL_HEIGHT}
             />
           </div>
-        </div>
+        </div>*/}
       </div>
     </div>
   );
