@@ -9,6 +9,12 @@ export default {
   ANNOTATION_RADIUS_MIN: 2,
   ANNOTATION_RADIUS_MAX: 25,
   ANNOTATION_SPACE: 2,
+  ANNOTATION_PROPERTIES: {
+    Sicher: 'certainty',
+    Wichtig: 'importance',
+    catma_displaycolor: 'color',
+    catma_markupauthor: 'author',
+  },
   CANVAS_MARGIN: 20,
   LAYOUT_DEFAULT: 'scatterplot',
 };

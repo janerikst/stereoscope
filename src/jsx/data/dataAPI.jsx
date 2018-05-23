@@ -349,7 +349,7 @@ class DataAPI {
     if (this.rawAnnotations.length == 0) {
       return [];
     }
-
+    const properties = config.ANNOTATION_PROPERTIES;
     const output = {};
     this.rawAnnotations.forEach(d => {
       if (output[d.annotationId] == undefined) {
@@ -362,12 +362,16 @@ class DataAPI {
           startOffset: d.startOffset,
           endOffset: d.endOffset,
         };
+        // init empty properties
+        map(properties, (v, k) => {
+          output[d.annotationId][v] = '';
+        });
       }
       if (d.propertyName == 'catma_displaycolor') {
-        output[d.annotationId].color =
+        output[d.annotationId][properties[d.propertyName]] =
           '#' + Math.abs(parseInt(d.propertyValue)).toString(16);
-      } else if (d.propertyName == 'catma_markupauthor') {
-        output[d.annotationId].author = d.propertyValue;
+      } else {
+        output[d.annotationId][properties[d.propertyName]] = d.propertyValue;
       }
     });
     return _.orderBy(
