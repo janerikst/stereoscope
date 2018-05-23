@@ -24,9 +24,6 @@ const TooltipContent = props => {
       </div>
     );
   });
-
-  console.log('render');
-
   return (
     <div
       className="c-tooltip__content"
