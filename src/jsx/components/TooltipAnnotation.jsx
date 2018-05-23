@@ -5,7 +5,6 @@ const TooltipContent = props => {
   const annotations = items.map(d => {
     return (
       <div className="c-tooltip__annotation" key={d.id}>
-        <h3>Category</h3>
         <span
           className="c-tooltip__category"
           style={{ backgroundColor: d.color }}
