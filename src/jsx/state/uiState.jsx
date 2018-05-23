@@ -77,7 +77,7 @@ class UiState {
 
   @action
   setHoveredAnnotation = ids => {
-    if (ids == undefined) {
+    if (ids == undefined || ids == '') {
       this.hoveredAnnotationIds = [];
     } else {
       this.hoveredAnnotationIds = ids;
