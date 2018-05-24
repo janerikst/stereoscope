@@ -1,4 +1,5 @@
 import React from 'react';
+import TrashIcon from 'react-icons/lib/fa/trash';
 
 const CanvasThumbnail = props => {
   const {
@@ -16,9 +17,10 @@ const CanvasThumbnail = props => {
       <div className="c-canvas-thumbnail__image_container">
         {isDeleteable && (
           <span
-            className="c-canvas-thumbnail__delete o-close o-close--light"
-            onClick={() => onDelete(id)}
-          />
+            className="c-canvas-thumbnail__delete"
+            onClick={() => onDelete(id)}>
+            <TrashIcon />
+          </span>
         )}
         <div
           className="c-canvas-thumbnail__image"
