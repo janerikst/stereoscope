@@ -45,6 +45,7 @@ class UiState {
   @observable annotationFile = '';
 
   @observable showAddCanvasDialog = false;
+  @observable showDataDialog = false;
   @observable showFilterPanel = false;
   @observable showLayoutPanel = false;
   @observable showLabels = true;
@@ -201,6 +202,11 @@ class UiState {
   };
 
   @action
+  triggerDataDialog = () => {
+    this.showDataDialog = !this.showDataDialog;
+  };
+
+  @action
   triggerFilterPanel = () => {
     this.showFilterPanel = !this.showFilterPanel;
   };
@@ -213,6 +219,15 @@ class UiState {
   @action
   triggerLabels = () => {
     this.showLabels = !this.showLabels;
+  };
+
+  // Data
+
+  @action
+  setDataFiles = (text, annotation) => {
+    this.textFile = text;
+    this.annotationFile = annotation;
+    this.showDataDialog = !this.showDataDialog;
   };
 }
 

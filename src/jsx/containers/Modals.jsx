@@ -7,12 +7,14 @@ import config from 'config/config';
 
 import ReactModal from 'react-modal';
 import CanvasForm from '../components/CanvasForm';
+import DataForm from '../components/DataForm';
 
 const Modals = observer(props => {
   // vars
   const { layoutList, canvasDetails } = dataAPI;
-  const { showAddCanvasDialog, editCanvasId } = uiState;
+  const { showAddCanvasDialog, showDataDialog, editCanvasId } = uiState;
   const { LAYOUT_DEFAULT } = config;
+
   // interactions
   const handleSubmitAddCanvasDialog = (title, layout) => {
     uiState.addCanvas(title, layout);
@@ -25,6 +27,13 @@ const Modals = observer(props => {
   };
   const handleCloseEditCanvasDialog = () => {
     uiState.triggerEditCanvasDialog();
+  };
+  const handleCloseDataDialog = () => {
+    uiState.triggerDataDialog();
+  };
+
+  const handleSubmitDataDialog = (text, annotation) => {
+    uiState.setDataFiles(text, annotation);
   };
 
   // return
@@ -70,6 +79,17 @@ const Modals = observer(props => {
           />
         </ReactModal>
       )}
+      <ReactModal
+        isOpen={showDataDialog}
+        ariaHideApp={false}
+        className="c-modal__content c-modal__content--big"
+        overlayClassName="c-modal__overlay">
+        <span
+          className="c-modal__close o-close"
+          onClick={handleCloseDataDialog}
+        />
+        <DataForm header="Load Data" onSubmit={handleSubmitDataDialog} />
+      </ReactModal>
     </div>
   );
 });

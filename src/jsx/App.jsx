@@ -10,16 +10,27 @@ import Modals from 'containers/Modals';
 import Tooltips from 'containers/Tooltips';
 
 import dataAPI from 'data/dataAPI';
+import uiState from 'state/uiState';
+
+import Icon from 'react-icons/lib/fa/file-text-o';
 
 const App = observer(props => {
   const { textTitle, isAppReady } = dataAPI;
+
+  // interactions
+  const handleTriggerDataDialog = () => {
+    uiState.triggerDataDialog();
+  };
 
   return (
     <div>
       {isAppReady && (
         <div>
           <div className="l-app-wrapper">
-            <Header>3DH{textTitle ? ` — ${textTitle}` : ''}</Header>
+            <Header>
+              {textTitle ? textTitle : ''}{' '}
+              <Icon onClick={handleTriggerDataDialog} />
+            </Header>
             <main className="l-content-wrapper">
               <TextBar />
               <Canvas />
