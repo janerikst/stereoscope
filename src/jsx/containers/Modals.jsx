@@ -79,22 +79,21 @@ const Modals = observer(props => {
           />
         </ReactModal>
       )}
-      {showDataDialog ||
-        (needDataFiles && (
-          <ReactModal
-            isOpen={true}
-            ariaHideApp={false}
-            className="c-modal__content c-modal__content--big"
-            overlayClassName="c-modal__overlay">
-            {!needDataFiles && (
-              <span
-                className="c-modal__close o-close"
-                onClick={handleCloseDataDialog}
-              />
-            )}
-            <DataForm header="Load Data" onSubmit={handleSubmitDataDialog} />
-          </ReactModal>
-        ))}
+      {(showDataDialog || needDataFiles) && (
+        <ReactModal
+          isOpen={true}
+          ariaHideApp={false}
+          className="c-modal__content c-modal__content--big"
+          overlayClassName="c-modal__overlay">
+          {!needDataFiles && (
+            <span
+              className="c-modal__close o-close"
+              onClick={handleCloseDataDialog}
+            />
+          )}
+          <DataForm header="Load Data" onSubmit={handleSubmitDataDialog} />
+        </ReactModal>
+      )}
     </div>
   );
 });

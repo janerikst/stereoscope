@@ -12,8 +12,6 @@ import Tooltips from 'containers/Tooltips';
 import dataAPI from 'data/dataAPI';
 import uiState from 'state/uiState';
 
-import Icon from 'react-icons/lib/fa/file-text-o';
-
 const App = observer(props => {
   const { textTitle, isAppReady } = dataAPI;
 
@@ -27,9 +25,8 @@ const App = observer(props => {
       {isAppReady && (
         <div>
           <div className="l-app-wrapper">
-            <Header>
+            <Header onClick={handleTriggerDataDialog}>
               {textTitle ? textTitle : ''}{' '}
-              <Icon onClick={handleTriggerDataDialog} />
             </Header>
             <main className="l-content-wrapper">
               <TextBar />

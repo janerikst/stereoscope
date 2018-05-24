@@ -1,10 +1,10 @@
 import React from 'react';
 
 const Header = props => {
-  const { children } = props;
+  const { onClick, children } = props;
 
   return (
-    <div className="c-header">
+    <div className="c-header" onClick={onClick}>
       <h1>{children}</h1>
     </div>
   );
