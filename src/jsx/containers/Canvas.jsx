@@ -13,8 +13,6 @@ import LayoutPanel from '../components/LayoutPanel';
 const Canvas = observer(props => {
   // var
   const {
-    activeCanvas,
-    layoutList,
     hasFilters,
     activeFilters,
     activeLayoutedElements,
@@ -23,6 +21,8 @@ const Canvas = observer(props => {
     canvasHeight,
   } = dataAPI;
 
+  const { showFilterPanel, showLayoutPanel } = uiState;
+
   const { FILTER_PANEL_WIDTH, FILTER_PANEL_HEIGHT, CANVAS_MARGIN } = config;
 
   // interactions
@@ -30,7 +30,9 @@ const Canvas = observer(props => {
     uiState.changeActiveCanvasFilters(filter);
   const handleFilterReset = filter => uiState.resetActiveCanvasFilters();
 
-  const handleLayoutChange = layout => uiState.changeActiveCanvasLayout(layout);
+  const handleFilterToggle = () => uiState.triggerFilterPanel();
+  const handleLayoutToggle = () => uiState.triggerLayoutPanel();
+
   const handleLayoutControlChange = (id, value) =>
     uiState.changeActiveCanvasLayoutControls(id, value);
 
@@ -94,27 +96,30 @@ const Canvas = observer(props => {
             {labels.length != 0 && <g className="c-canvas__labels">{labels}</g>}
           </svg>
         </div>
-        {/*<div className="c-canvas__controls">
-          <div className="c-canvas__layout-control">
-            <LayoutPanel
-              activeLayout={activeCanvas.layout}
-              layoutList={layoutList}
-              layoutControls={activeLayoutControlsList}
-              onChangeLayout={handleLayoutChange}
-              onChangeControls={handleLayoutControlChange}
-            />
-          </div>
-          <div className="c-canvas__filter-control">
-            <FilterPanel
-              items={activeFilters}
-              hasActiveFilter={hasFilters}
-              onChange={handleFilterChange}
-              onReset={handleFilterReset}
-              width={FILTER_PANEL_WIDTH}
-              height={FILTER_PANEL_HEIGHT}
-            />
-          </div>
-        </div>*/}
+        <div className="c-canvas__overlays">
+          {showLayoutPanel && (
+            <div className="c-canvas__layout-panel">
+              <LayoutPanel
+                layoutControls={activeLayoutControlsList}
+                onTriggerPanel={handleLayoutToggle}
+                onChangeControls={handleLayoutControlChange}
+              />
+            </div>
+          )}
+          {showFilterPanel && (
+            <div className="c-canvas__filter-panel">
+              <FilterPanel
+                items={activeFilters}
+                hasActiveFilter={hasFilters}
+                onChange={handleFilterChange}
+                onTriggerPanel={handleFilterToggle}
+                onReset={handleFilterReset}
+                width={FILTER_PANEL_WIDTH}
+                height={FILTER_PANEL_HEIGHT}
+              />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

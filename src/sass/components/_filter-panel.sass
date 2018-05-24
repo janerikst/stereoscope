@@ -1,6 +1,7 @@
 .c-filter-panel
   border: 1px solid $c-lighter-gray
   background-color: $c-white
+  box-shadow: 0 3px 6px rgba(0,0,0,0.12)
 
   .c-filter-panel__header
     padding: $sp-small
@@ -12,7 +13,10 @@
       display: inline
 
     .is-right
+      color: $c-gray2
       float: right
+      padding-right: $sp-base
+      font-size: $fs-small
 
   .c-filter-panel__header:after
     content: ""
@@ -23,11 +27,11 @@
     padding: $sp-small
 
   .c-filter-panel__controls
-    padding-top: $sp-xsmall
-    margin-top: $sp-small
-    border-top: 1px solid $c-lighter-gray
-
     div, select 
       padding-top: $sp-xsmall  
       font-size: $fs-xsmall
 
+.c-filter-panel__close
+  position: absolute
+  top: $sp-xsmall * 1.5
+  right: $sp-xsmall * 1.5

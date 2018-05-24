@@ -7,31 +7,15 @@ class LayoutPanel extends React.Component {
 
   render() {
     // vars
-    const {
-      activeLayout,
-      layoutList,
-      layoutControls,
-      onChangeLayout,
-      onChangeControls,
-    } = this.props;
+    const { layoutControls, onTriggerPanel, onChangeControls } = this.props;
 
     // interactions
-    const handleLayoutChange = event => onChangeLayout(event.target.value);
     const handleControlChange = event => {
       const target = event.target;
       const value = target.type === 'checkbox' ? target.checked : target.value;
       const id = target.name;
       onChangeControls(id, value);
     };
-
-    // content
-    const layoutOptions = layoutList.map(d => {
-      return (
-        <option key={d.id} value={d.id}>
-          {d.title}
-        </option>
-      );
-    });
 
     const layoutControlOptions = layoutControls.map(d => {
       let field;
@@ -65,16 +49,18 @@ class LayoutPanel extends React.Component {
       <div className="c-filter-panel">
         <header className="c-filter-panel__header">
           <h3>Layout</h3>
+          <span
+            className="c-filter-panel__close o-close"
+            onClick={onTriggerPanel}
+          />
         </header>
         <div className="c-filter-panel__content">
-          <select value={activeLayout} onChange={handleLayoutChange}>
-            {layoutOptions}
-          </select>
           {layoutControls.length != 0 && (
             <div className="c-filter-panel__controls">
               {layoutControlOptions}
             </div>
           )}
+          {layoutControls.length == 0 && <span> No options found </span>}
         </div>
       </div>
     );

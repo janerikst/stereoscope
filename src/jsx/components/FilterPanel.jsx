@@ -17,6 +17,7 @@ class FilterPanel extends React.Component {
       width,
       hasActiveFilter,
       onChange,
+      onTriggerPanel,
       onReset,
     } = this.props;
     const margin = 10;
@@ -69,6 +70,10 @@ class FilterPanel extends React.Component {
               (Reset)
             </span>
           )}
+          <span
+            className="c-filter-panel__close o-close"
+            onClick={onTriggerPanel}
+          />
         </header>
         <div className="c-filter-panel__content">
           <svg width={stageWidth} height={stageHeight}>
