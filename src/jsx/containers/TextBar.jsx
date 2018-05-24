@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import ReactDOM from 'react-dom';
 import { observer } from 'mobx-react';
 import { autorun } from 'mobx';
@@ -107,7 +107,7 @@ const TextGlyphs = observer(props => {
 // --------------------
 
 @observer
-class TextBar extends Component {
+class TextBar extends PureComponent {
   constructor(props) {
     super(props);
     this.textArea = undefined;

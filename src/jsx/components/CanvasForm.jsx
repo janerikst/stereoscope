@@ -2,7 +2,7 @@ import React from 'react';
 import { observer } from 'mobx-react';
 
 @observer
-class CanvasForm extends React.Component {
+class CanvasForm extends React.PureComponent {
   constructor(props) {
     super(props);
     const { title, layout } = props;
