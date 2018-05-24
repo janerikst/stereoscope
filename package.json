@@ -43,6 +43,7 @@
         "classnames": "^2.2.5",
         "compass": "^0.1.1",
         "compass-mixins": "^0.12.10",
+        "copy-webpack-plugin": "^4.5.1",
         "d3": "^4.9.1",
         "director": "^1.2.8",
         "lodash": "^4.17.4",

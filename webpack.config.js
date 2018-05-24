@@ -1,5 +1,6 @@
 var path = require('path');
 var webpack = require('webpack');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
 	context: __dirname + '/src',
@@ -61,5 +62,10 @@ module.exports = {
 		],
 	},
 	// context: path.join(__dirname, 'build'),
-	plugins: [new webpack.EnvironmentPlugin('NODE_ENV')],
+	plugins: [
+		new webpack.EnvironmentPlugin('NODE_ENV'),
+		new CopyWebpackPlugin([{ from: 'data/', to: 'data/' }], {
+			debug: true,
+		}),
+	],
 };

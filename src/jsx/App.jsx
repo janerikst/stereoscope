@@ -37,11 +37,11 @@ const App = observer(props => {
               <CanvasBar />
             </main>
           </div>
-          <Modals />
           <Tooltips />
         </div>
       )}
       {!isAppReady && <LoaderAnimation />}
+      <Modals />
     </div>
   );
 });

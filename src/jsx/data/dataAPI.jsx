@@ -49,6 +49,22 @@ class DataAPI {
     }
   }
 
+  @computed
+  get needDataFiles() {
+    const { TEXT_FILE, ANNOTATION_FILE } = config;
+    const { textFile, annotationFile } = uiState;
+    if (
+      textFile == '' &&
+      annotationFile == '' &&
+      TEXT_FILE == '' &&
+      ANNOTATION_FILE == ''
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   // --------------------
   //
   // *** TEXT ***
