@@ -45,8 +45,8 @@ class UiState {
   @observable annotationFile = '';
 
   @observable showAddCanvasDialog = false;
-  @observable showFilterPanel = true;
-  @observable showLayoutPanel = true;
+  @observable showFilterPanel = false;
+  @observable showLayoutPanel = false;
   @observable showLabels = true;
 
   @observable
