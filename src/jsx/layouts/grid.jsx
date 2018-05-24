@@ -34,9 +34,12 @@ export default {
     const sortKey = optionKey('sorting');
 
     // vars
+    const marginX = 30;
+    const marginY = 50;
+
     let largestRadiusPerRow = 0;
     const space = 5;
-    let xSpace = 0;
+    let xSpace = marginX;
     let ySpace = 0;
     let yPos = 0;
 
@@ -45,12 +48,12 @@ export default {
 
     // calc x position
     orderBy(glyphs, sortKey).map(glyph => {
-      if (xSpace + glyph.radius * 2 > width) {
+      if (xSpace + glyph.radius * 2 + marginX > width) {
         ySpace += largestRadiusPerRow * 2 + space;
         yPositions[yPos] = ySpace;
         yPos += 1;
         largestRadiusPerRow = 0;
-        xSpace = 0;
+        xSpace = marginX;
       }
       output.push({
         ...glyph,
@@ -68,7 +71,12 @@ export default {
     // optimize y position
     output.forEach(d => {
       if (d.y != 0) {
-        d.y = yPositions[d.y - 1] + (yPositions[d.y] - yPositions[d.y - 1]) / 2;
+        d.y =
+          marginY +
+          yPositions[d.y - 1] +
+          (yPositions[d.y] - yPositions[d.y - 1]) / 2;
+      } else {
+        d.y = marginY;
       }
     });
     return { glyphs: output };
