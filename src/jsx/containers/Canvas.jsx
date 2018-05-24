@@ -65,13 +65,18 @@ const Canvas = observer(props => {
         const output = [];
         group.labels.forEach(label => {
           output.push(
-            <text x={label.x} y={label.y} textAnchor={label.alignment}>
+            <text
+              key={label.id}
+              x={label.x}
+              y={label.y}
+              textAnchor={label.alignment}>
               {label.value}
             </text>,
           );
         });
         output.push(
           <text
+            key={group.id}
             x={group.x}
             y={group.y}
             textAnchor={'middle'}

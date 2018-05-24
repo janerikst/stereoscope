@@ -89,7 +89,7 @@ export default {
     // set axis
     const labelGroups = [
       {
-        key: 'xAxis',
+        id: 'xAxis',
         title: titleX,
         deg: 0,
         x: stageWidth / 2,
@@ -97,7 +97,7 @@ export default {
         labels: [],
       },
       {
-        key: 'yAxis',
+        id: 'yAxis',
         title: titleY,
         deg: -90,
         x: scaleX.range()[0] - 50,
@@ -110,6 +110,7 @@ export default {
 
     labelGroups[0].labels = xTicks.map((tick, i) => {
       return {
+        id: i,
         value: tick,
         x: scaleX(tick),
         y: scaleY.range()[0] + 30,
@@ -119,6 +120,7 @@ export default {
 
     labelGroups[1].labels = yTicks.map((tick, i) => {
       return {
+        id: i,
         value: tick,
         x: scaleX.range()[0] - 30,
         y: scaleY(tick),
