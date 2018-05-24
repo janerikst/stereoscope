@@ -21,7 +21,7 @@ const Canvas = observer(props => {
     canvasHeight,
   } = dataAPI;
 
-  const { showFilterPanel, showLayoutPanel } = uiState;
+  const { showFilterPanel, showLayoutPanel, showLabels } = uiState;
 
   const { FILTER_PANEL_WIDTH, FILTER_PANEL_HEIGHT, CANVAS_MARGIN } = config;
 
@@ -98,7 +98,8 @@ const Canvas = observer(props => {
         <div className="c-canvas__innerstage">
           <svg width={canvasWidth} height={canvasHeight}>
             <g className="c-canvas__glyphs">{glyphs}</g>
-            {labels.length != 0 && <g className="c-canvas__labels">{labels}</g>}
+            {showLabels &&
+            labels.length != 0 && <g className="c-canvas__labels">{labels}</g>}
           </svg>
         </div>
         <div className="c-canvas__overlays">
