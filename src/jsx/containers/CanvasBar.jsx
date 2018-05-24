@@ -26,7 +26,7 @@ const CanvasBar = observer(props => {
       title={d.title}
       layout={d.layout}
       active={d.active}
-      isDeleteable={i != 0}
+      isDeleteable={d.id != 1}
       onSelect={handleSelectCanvas}
       onDelete={handleDeleteCanvas}
       onEdit={handleOpenEditCanvasDialog}
