@@ -54,3 +54,29 @@
 
 .o-close--light:after
     border-top: 1px solid rgba(255,255,255,0.75);
+
+.o-button
+  color: $c-gray
+  width: $sp-semi-medium
+  height: $sp-semi-medium
+  background-color: $c-light-gray
+  text-align: center
+  display: inline-block
+  line-height: $sp-semi-medium
+  vertical-align: middle
+  margin-right: $sp-small
+  cursor: pointer
+  position: relative
+
+  svg
+    position: absolute
+    top: 50%
+    left: 50%
+    transform: translate(-50%,-50%)
+
+  &.is-right
+    margin-left: auto;
+
+  &:hover, &.is-active
+    color: $c-white
+    background-color: $c-red

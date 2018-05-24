@@ -45,6 +45,9 @@ class UiState {
   @observable annotationFile = '';
 
   @observable showAddCanvasDialog = false;
+  @observable showFilterPanel = false;
+  @observable showLayoutPanel = false;
+  @observable showLabels = true;
 
   @observable
   canvases = [
@@ -53,6 +56,7 @@ class UiState {
       title: '',
       layout: 'scatterplot',
       layoutControls: {},
+      showLabels: true,
       filters: [],
       selectedAnnotationIds: [],
     },
@@ -117,6 +121,7 @@ class UiState {
       title: title,
       layout: layout,
       layoutControls: [],
+      showLabels: true,
       filters: [],
       selectedAnnotationIds: [],
     });
@@ -146,6 +151,7 @@ class UiState {
     // write active filter to old active canvas
     let canvas = this.canvases.find(d => d.id == this.activeCanvasId);
     canvas.filters = this.activeFilterIds;
+    canvas.showLabels = this.showLabels;
     canvas.layoutControls = this.activeLayoutControls;
     canvas.selectedAnnotationIds = this.selectedAnnotationIds;
 
@@ -153,6 +159,7 @@ class UiState {
     this.activeCanvasId = id;
     canvas = this.canvases.find(d => d.id == id);
     this.activeFilterIds = canvas.filters;
+    this.showLabels = canvas.showLabels;
     this.activeLayoutControls = canvas.layoutControls;
     this.selectedAnnotationIds = canvas.selectedAnnotationIds;
   };
@@ -191,6 +198,21 @@ class UiState {
   @action
   triggerEditCanvasDialog = id => {
     this.editCanvasId = id;
+  };
+
+  @action
+  triggerFilterPanel = () => {
+    this.showFilterPanel = !this.showFilterPanel;
+  };
+
+  @action
+  triggerLayoutPanel = () => {
+    this.showLayoutPanel = !this.showLayoutPanel;
+  };
+
+  @action
+  triggerLabels = () => {
+    this.showLabels = !this.showLabels;
   };
 }
 

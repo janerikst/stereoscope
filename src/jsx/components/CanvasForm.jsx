@@ -62,7 +62,7 @@ class CanvasForm extends React.Component {
             {layoutOptions}
           </select>
         </p>
-        <input className="o-button" type="submit" value={submitTitle} />
+        <input type="submit" value={submitTitle} />
       </form>
     );
   }

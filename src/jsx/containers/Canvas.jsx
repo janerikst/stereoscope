@@ -5,6 +5,7 @@ import dataAPI from 'data/dataAPI';
 import uiState from 'state/uiState';
 import config from 'config/config';
 
+import CanvasControls from './CanvasControls';
 import Glyph from '../components/Glyph';
 import FilterPanel from '../components/FilterPanel';
 import LayoutPanel from '../components/LayoutPanel';
@@ -83,7 +84,9 @@ const Canvas = observer(props => {
   // renders
   return (
     <div className="c-canvas l-content-container l-content-container-auto">
-      <header className="c-header--small">xxx</header>
+      <header className="c-header--small">
+        <CanvasControls />
+      </header>
       <div className="c-canvas__stage">
         <div className="c-canvas__innerstage">
           <svg width={canvasWidth} height={canvasHeight}>
