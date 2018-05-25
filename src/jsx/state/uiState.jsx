@@ -96,6 +96,7 @@ class UiState {
         remove(this.selectedAnnotationIds, d => d == id);
       } else {
         this.selectedAnnotationIds.push(id);
+        this.hoveredAnnotationIds = [];
       }
     });
   };
