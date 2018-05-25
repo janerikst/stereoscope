@@ -24,9 +24,7 @@ class CanvasThumbnail extends React.Component {
 
     return (
       <div className={`c-canvas-thumbnail ${isActive ? 'is-active' : ''}`}>
-        <div
-          className="c-canvas-thumbnail__image_container"
-          onClick={() => onSelect(id)}>
+        <div className="c-canvas-thumbnail__image_container">
           {isDeleteable && (
             <span
               className="c-canvas-thumbnail__delete"
@@ -41,6 +39,7 @@ class CanvasThumbnail extends React.Component {
             ref={x => {
               this.canvasEl = x;
             }}
+            onClick={() => onSelect(id)}
           />
         </div>
         <h3 onClick={() => onEdit(id)}>{title}</h3>

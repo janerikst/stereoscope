@@ -147,7 +147,7 @@ class UiState {
   deleteCanvas = id => {
     if (this.activeCanvasId == id) {
       // tries to delete the active canvas -> set new one
-      this.setActiveCanvas(first(this.canvases).id);
+      this.setActiveCanvas(this.canvases.find(d => d.id != id).id);
     }
     remove(this.canvases, d => d.id == id);
   };
