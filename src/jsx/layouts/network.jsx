@@ -40,13 +40,6 @@ export default {
 
     //start simulation
 
-    // const ticked = () => {
-    //   // glyphs.attr('transform', function(d) {
-    //   //   return 'translate(' + d.x + ',' + d.y + ')';
-    //   // });
-    //   console.log(glyphs);
-    // };
-
     var simulation = forceSimulation(output)
       .force(
         'link',
@@ -58,7 +51,6 @@ export default {
       .force('charge', forceManyBody().strength(-1))
       .force('center', forceCenter(stageWidth / 2, stageHeight / 2))
       .force('collide', forceCollide(d => d.radius * 1.2))
-      // .on('tick', ticked)
       .force('box_force', boxForce)
       .stop();
 
