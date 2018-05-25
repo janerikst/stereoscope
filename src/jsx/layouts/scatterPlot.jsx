@@ -1,5 +1,6 @@
 import { keyBy, orderBy } from 'lodash';
 import { scaleLinear, extent } from 'd3';
+import moment from 'moment';
 
 export default {
   id: 'scatterplot',
@@ -49,8 +50,8 @@ export default {
 
   create: function grid(glyphs, width, height, options) {
     // vars
-    const margins = { top: 40, bottom: 50, right: 20, left: 80 };
-    const stageWidth = width - margins.left - margins.right;
+    const margins = { top: 40, bottom: 50, right: 40, left: 110 };
+    const stageWidth = width - margins.right;
     const stageHeight = height - margins.top - margins.bottom;
 
     // option handling
@@ -83,7 +84,11 @@ export default {
     // set positions
     const output = [];
     orderBy(glyphs, d => d.tagVersion).map(d => {
-      output.push({ ...d, x: scaleX(d[keyX]), y: scaleY(d[keyY]) });
+      output.push({
+        ...d,
+        x: scaleX(d[keyX]),
+        y: scaleY(d[keyY]),
+      });
     });
 
     // set axis
@@ -100,7 +105,7 @@ export default {
         id: 'yAxis',
         title: titleY,
         deg: -90,
-        x: scaleX.range()[0] - 50,
+        x: scaleX.range()[0] - 80,
         y: stageHeight / 2,
         labels: [],
       },
@@ -121,10 +126,10 @@ export default {
     labelGroups[1].labels = yTicks.map((tick, i) => {
       return {
         id: i,
-        value: tick,
-        x: scaleX.range()[0] - 30,
+        value: keyY == 'tagVersion' ? moment(tick).format('YY/MM/DD') : tick,
+        x: scaleX.range()[0] - 10,
         y: scaleY(tick),
-        alignment: 'start',
+        alignment: 'end',
       };
     });
 
