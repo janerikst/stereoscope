@@ -645,8 +645,11 @@ class DataAPI {
         title: d.title ? d.title : config.CANVAS_DEFAULT_NAME,
         layout: this.layoutsById[d.layout].title,
         active: d.id == activeCanvasId,
+        glyphs:
+          d.id == activeCanvasId ? this.layoutedElements.glyphs : d.glyphs,
       });
     });
+
     return orderBy(output, 'id', 'desc');
   }
 

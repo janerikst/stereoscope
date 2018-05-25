@@ -5,18 +5,24 @@ import dataAPI from 'data/dataAPI';
 import uiState from 'state/uiState';
 import config from 'config/config';
 
+import { scaleLinear } from 'd3';
+
 import CanvasThumbnail from '../components/CanvasThumbnail';
 
 const CanvasBar = observer(props => {
   // vars
-  const { canvasList } = dataAPI;
-  const { CANVAS_BAR_WIDTH } = config;
+  const { canvasList, canvasWidth, canvasHeight } = dataAPI;
+  const { CANVAS_BAR_WIDTH, CANVAS_THUMB_WIDTH, CANVAS_THUMB_HEIGHT } = config;
 
   // interactions
   const handleOpenAddCanvasDialog = () => uiState.triggerAddCanvasDialog();
   const handleOpenEditCanvasDialog = id => uiState.triggerEditCanvasDialog(id);
   const handleSelectCanvas = id => uiState.setActiveCanvas(id);
   const handleDeleteCanvas = id => uiState.deleteCanvas(id);
+
+  // scales
+  const ratioX = CANVAS_THUMB_WIDTH / canvasWidth;
+  const ratioY = CANVAS_THUMB_HEIGHT / canvasHeight;
 
   // content
   const canvasEls = canvasList.map((d, i) => (
@@ -25,11 +31,16 @@ const CanvasBar = observer(props => {
       id={d.id}
       title={d.title}
       layout={d.layout}
-      active={d.active}
+      glyphs={d.glyphs}
+      isActive={d.active}
       isDeleteable={d.id != 1}
       onSelect={handleSelectCanvas}
       onDelete={handleDeleteCanvas}
       onEdit={handleOpenEditCanvasDialog}
+      width={CANVAS_THUMB_WIDTH}
+      height={CANVAS_THUMB_WIDTH}
+      ratioX={ratioX}
+      ratioY={ratioY}
     />
   ));
 

@@ -55,11 +55,13 @@ class UiState {
     {
       id: 1,
       title: '',
-      layout: 'scatterplot',
+      layout: config.LAYOUT_DEFAULT,
       layoutControls: {},
       showLabels: true,
       filters: [],
+      glyphs: {},
       selectedAnnotationIds: [],
+      selectedAnnotationFixed: false,
     },
   ];
 
@@ -125,10 +127,12 @@ class UiState {
       layoutControls: [],
       showLabels: true,
       filters: [],
+      glyphs: {},
       selectedAnnotationIds: [],
+      selectedAnnotationFixed: false,
     });
     this.showAddCanvasDialog = !this.showAddCanvasDialog;
-    this.activeCanvasId = newId;
+    this.setActiveCanvas(newId);
   };
 
   @action
@@ -156,6 +160,7 @@ class UiState {
     canvas.showLabels = this.showLabels;
     canvas.layoutControls = this.activeLayoutControls;
     canvas.selectedAnnotationIds = this.selectedAnnotationIds;
+    canvas.glyphs = [...dataAPI.layoutedElements.glyphs];
 
     // copy new active filters
     this.activeCanvasId = id;
