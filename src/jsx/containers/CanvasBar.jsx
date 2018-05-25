@@ -21,8 +21,8 @@ const CanvasBar = observer(props => {
   const handleDeleteCanvas = id => uiState.deleteCanvas(id);
 
   // scales
-  const ratioX = CANVAS_THUMB_WIDTH / canvasWidth;
-  const ratioY = CANVAS_THUMB_HEIGHT / canvasHeight;
+  const scaleRatio = CANVAS_THUMB_WIDTH / canvasWidth;
+  const thumbHeight = CANVAS_THUMB_WIDTH * canvasHeight / canvasWidth;
 
   // content
   const canvasEls = canvasList.map((d, i) => (
@@ -38,9 +38,8 @@ const CanvasBar = observer(props => {
       onDelete={handleDeleteCanvas}
       onEdit={handleOpenEditCanvasDialog}
       width={CANVAS_THUMB_WIDTH}
-      height={CANVAS_THUMB_WIDTH}
-      ratioX={ratioX}
-      ratioY={ratioY}
+      height={thumbHeight}
+      scaleRatio={scaleRatio}
     />
   ));
 

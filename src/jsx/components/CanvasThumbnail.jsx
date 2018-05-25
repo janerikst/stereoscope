@@ -49,7 +49,7 @@ class CanvasThumbnail extends React.Component {
   }
 
   drawThumbnail() {
-    const { glyphs, width, height, ratioX, ratioY } = this.props;
+    const { glyphs, width, height, scaleRatio } = this.props;
     if (glyphs.length != 0) {
       const canvasEl = ReactDOM.findDOMNode(this.canvasEl);
       const ctx = canvasEl.getContext('2d');
@@ -57,9 +57,9 @@ class CanvasThumbnail extends React.Component {
       glyphs.forEach(d => {
         ctx.beginPath();
         ctx.arc(
-          d.x * ratioX,
-          d.y * ratioY,
-          Math.max(d.radius * ratioX, 1),
+          d.x * scaleRatio,
+          d.y * scaleRatio,
+          Math.max(d.radius * scaleRatio, 1),
           0,
           2 * Math.PI,
         );
