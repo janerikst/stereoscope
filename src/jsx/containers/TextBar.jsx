@@ -222,7 +222,7 @@ class TextBar extends Component {
       this.selectedText = undefined;
     }
 
-    if (node) {
+    if (node && textArea) {
       if (
         node.offsetTop > textArea.scrollTop + textArea.offsetHeight ||
         node.offsetTop < textArea.scrollTop
