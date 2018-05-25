@@ -26,6 +26,7 @@ export default {
           links.push({ source: d.id, target: e.id, value: e.value });
         });
       }
+      output.push({ ...d });
     });
 
     // box boundaries
@@ -46,7 +47,7 @@ export default {
     //   console.log(glyphs);
     // };
 
-    var simulation = forceSimulation(glyphs)
+    var simulation = forceSimulation(output)
       .force(
         'link',
         forceLink(links)
@@ -63,6 +64,6 @@ export default {
 
     for (var i = 0; i < 400; ++i) simulation.tick();
 
-    return { glyphs };
+    return { glyphs: output };
   },
 };
