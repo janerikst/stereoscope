@@ -228,7 +228,7 @@ class UiState {
   setDataFiles = (text, annotation) => {
     this.textFile = text;
     this.annotationFile = annotation;
-    this.showDataDialog = !this.showDataDialog;
+    this.showDataDialog = false;
   };
 }
 
