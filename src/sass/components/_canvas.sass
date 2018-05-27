@@ -13,16 +13,21 @@
     cursor: pointer
     // transition: all 400ms;
 
+  .o-glyph.is-hidden
+      opacity: 0.2
+
+  .o-glyph.is-hidden:hover, .o-glyph.is-hidden.is-selected
+      opacity: 1
+
   .o-glyph.is-hovered, .o-glyph:hover
       stroke: $c-black
-      stroke-width: 1px 
+      stroke-width: 1px
 
   .o-glyph.is-selected
       stroke: $c-black
       stroke-width: 2px
 
-  .o-glyph.is-hidden
-      opacity: 0.2
+
 
 .c-canvas__labels text
   font-size: $fs-xsmall
