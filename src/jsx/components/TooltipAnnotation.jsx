@@ -12,13 +12,12 @@ const TooltipContent = props => {
         {d.tagPath}
         {/*        <br />
         <h3>Author</h3> {d.author}*/}
-        {d.importance ||
-          (d.certainty && (
-            <div>
-              {d.importance ? `Importance: ${d.importance}` : ''}
-              {d.certainty ? `Certainty: ${d.certainty}` : ''}
-            </div>
-          ))}
+        {(d.importance != undefined || d.certainty != undefined) && (
+          <div>
+            {d.importance ? `Importance: ${d.importance}` : ''}
+            {d.certainty ? `Certainty: ${d.certainty}` : ''}
+          </div>
+        )}
       </div>
     );
   });
