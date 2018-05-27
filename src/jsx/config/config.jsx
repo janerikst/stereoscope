@@ -14,10 +14,16 @@ export default {
   ANNOTATION_RADIUS_MAX: 25,
   ANNOTATION_SPACE: 2,
   ANNOTATION_PROPERTIES: {
-    Sicher: 'certainty',
-    Wichtig: 'importance',
-    catma_displaycolor: 'color',
-    catma_markupauthor: 'author',
+    Sicher: { id: 'certainty', type: 'int', min: 1, max: 5, changeable: true },
+    Wichtig: {
+      id: 'importance',
+      type: 'int',
+      min: 1,
+      max: 5,
+      changeable: true,
+    },
+    catma_displaycolor: { id: 'color', type: 'color', changeable: false },
+    catma_markupauthor: { id: 'author', type: 'string', changeable: false },
   },
   LAYOUT_DEFAULT: 'scatterplot',
 };

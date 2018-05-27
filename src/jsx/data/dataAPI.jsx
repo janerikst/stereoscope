@@ -19,7 +19,7 @@ import {
   trim,
 } from 'lodash';
 
-import { scaleSqrt } from 'd3';
+import { scaleSqrt, scaleLinear } from 'd3';
 
 class DataAPI {
   // DATASETS
@@ -349,6 +349,12 @@ class DataAPI {
   // --------------------
 
   @computed
+  get annotationPropertiesById() {
+    const { ANNOTATION_PROPERTIES } = config;
+    return keyBy(values(ANNOTATION_PROPERTIES), 'id');
+  }
+
+  @computed
   get maxAnnotationLength() {
     if (this.rawAnnotations.length == 0) {
       return 0;
@@ -368,6 +374,7 @@ class DataAPI {
     const properties = config.ANNOTATION_PROPERTIES;
     const output = {};
     this.rawAnnotations.forEach(d => {
+      const property = properties[d.propertyName];
       if (output[d.annotationId] == undefined) {
         output[d.annotationId] = {
           id: d.annotationId,
@@ -380,16 +387,20 @@ class DataAPI {
         };
         // init empty properties
         map(properties, (v, k) => {
-          output[d.annotationId][v] = '';
+          output[d.annotationId][v.id] = undefined;
         });
       }
-      if (d.propertyName == 'catma_displaycolor') {
-        output[d.annotationId][properties[d.propertyName]] =
+
+      if (property.type == 'color') {
+        output[d.annotationId][property.id] =
           '#' + Math.abs(parseInt(d.propertyValue)).toString(16);
-      } else {
-        output[d.annotationId][properties[d.propertyName]] = d.propertyValue;
+      } else if (property.type == 'int') {
+        output[d.annotationId][property.id] = parseInt(d.propertyValue);
+      } else if (property.type == 'string') {
+        output[d.annotationId][property.id] = d.propertyValue;
       }
     });
+
     return _.orderBy(
       _.values(output),
       ['startOffset', 'endOffset'],
@@ -595,6 +606,28 @@ class DataAPI {
           };
         }),
     };
+  }
+
+  @computed
+  get glyphScaleCertainty() {
+    if (isEmpty(this.annotationPropertiesById)) {
+      return undefined;
+    }
+    const property = this.annotationPropertiesById['certainty'];
+    return scaleLinear()
+      .domain([property.min, property.max])
+      .range([0.2, 1]);
+  }
+
+  @computed
+  get glyphScaleImportance() {
+    if (isEmpty(this.annotationPropertiesById)) {
+      return undefined;
+    }
+    const property = this.annotationPropertiesById['importance'];
+    return scaleLinear()
+      .domain([property.min, property.max])
+      .range([5, 0]);
   }
 
   // --------------------

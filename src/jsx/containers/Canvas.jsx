@@ -19,10 +19,11 @@ const Canvas = observer(props => {
     activeLayoutControlsList,
     canvasWidth,
     canvasHeight,
+    glyphScaleCertainty,
+    glyphScaleImportance,
   } = dataAPI;
 
   const { showFilterPanel, showLayoutPanel, showLabels } = uiState;
-
   const { FILTER_PANEL_WIDTH, FILTER_PANEL_HEIGHT, CANVAS_MARGIN } = config;
 
   // interactions
@@ -50,6 +51,10 @@ const Canvas = observer(props => {
         y={d.y}
         color={d.color}
         radius={d.radius}
+        certainty={d.certainty}
+        importance={d.importance}
+        scaleCertainty={glyphScaleCertainty}
+        scaleImportance={glyphScaleImportance}
         isHovered={d.hovered}
         isSelected={d.selected}
         isHidden={d.hidden}
