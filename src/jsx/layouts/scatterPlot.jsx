@@ -50,7 +50,7 @@ export default {
 
   create: function grid(glyphs, width, height, options) {
     // vars
-    const margins = { top: 40, bottom: 50, right: 40, left: 90 };
+    const margins = { top: 40, bottom: 40, right: 40, left: 90 };
     const stageWidth = width - margins.right;
     const stageHeight = height - margins.top - margins.bottom;
 
