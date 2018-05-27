@@ -50,7 +50,7 @@ export default {
 
   create: function grid(glyphs, width, height, options) {
     // vars
-    const margins = { top: 40, bottom: 50, right: 40, left: 110 };
+    const margins = { top: 40, bottom: 50, right: 40, left: 90 };
     const stageWidth = width - margins.right;
     const stageHeight = height - margins.top - margins.bottom;
 
@@ -105,7 +105,7 @@ export default {
         id: 'yAxis',
         title: titleY,
         deg: -90,
-        x: scaleX.range()[0] - 80,
+        x: scaleX.range()[0] - 60,
         y: stageHeight / 2,
         labels: [],
       },
@@ -126,7 +126,7 @@ export default {
     labelGroups[1].labels = yTicks.map((tick, i) => {
       return {
         id: i,
-        value: keyY == 'tagVersion' ? moment(tick).format('YY/MM/DD') : tick,
+        value: keyY == 'tagVersion' ? moment(tick).format('MM/DD') : tick,
         x: scaleX.range()[0] - 10,
         y: scaleY(tick),
         alignment: 'end',
