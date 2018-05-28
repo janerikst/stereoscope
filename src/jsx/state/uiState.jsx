@@ -4,7 +4,7 @@ import { addEvent, windowWidth, windowHeight } from '../utils/browser';
 import config from '../config/config';
 import dataAPI from 'data/dataAPI';
 
-import { first, last, remove, includes } from 'lodash';
+import { first, last, remove, intersection, includes } from 'lodash';
 
 class UiState {
   // --------------------
@@ -57,6 +57,7 @@ class UiState {
       title: '',
       layout: config.LAYOUT_DEFAULT,
       layoutControls: {},
+      textBarShowsAll: true,
       showLabels: true,
       filters: [],
       glyphs: {},
@@ -92,22 +93,32 @@ class UiState {
   };
 
   @action
-  changeSelectedAnnotation = ids => {
-    ids.forEach(id => {
-      if (dataAPI.selectedAnnotationIdsById[id]) {
-        remove(this.selectedAnnotationIds, d => d == id);
+  changeSelectedAnnotation = (ids, single = false) => {
+    if (single) {
+      if (intersection(this.selectedAnnotationIds, ids).length == ids.length) {
+        this.selectedAnnotationIds = [];
       } else {
-        this.selectedAnnotationIds.push(id);
-        this.hoveredAnnotationIds = [];
+        this.selectedAnnotationIds = ids;
       }
-    });
+
+      this.hoveredAnnotationIds = [];
+    } else {
+      ids.forEach(id => {
+        if (dataAPI.selectedAnnotationIdsById[id]) {
+          remove(this.selectedAnnotationIds, d => d == id);
+        } else {
+          this.selectedAnnotationIds.push(id);
+          this.hoveredAnnotationIds = [];
+        }
+      });
+    }
   };
 
   @action
   scrollToAnnotation = id => {
     if (
-      this.selectedAnnotationIds.length < 2 ||
-      (this.selectedAnnotationIds.length > 2 &&
+      dataAPI.activeCanvas.textBarShowsAll ||
+      (!dataAPI.activeCanvas.textBarShowsAll &&
         includes(this.selectedAnnotationIds, id))
     ) {
       this.scrollToAnnotationId = id;
@@ -133,6 +144,7 @@ class UiState {
       title: title,
       layout: layout,
       layoutControls: [],
+      textBarShowsAll: true,
       showLabels: true,
       filters: [],
       glyphs: {},
@@ -182,6 +194,11 @@ class UiState {
   @action
   changeActiveCanvasLayout = layout => {
     dataAPI.activeCanvas.layout = layout;
+  };
+
+  @action
+  changeTextBarMode = mode => {
+    dataAPI.activeCanvas.textBarShowsAll = mode;
   };
 
   @action

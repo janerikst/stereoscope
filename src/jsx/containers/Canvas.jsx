@@ -39,7 +39,10 @@ const Canvas = observer(props => {
 
   const handleHoverAnnotation = id => uiState.setHoveredAnnotation([id]);
   const handleScrollToAnnotation = id => uiState.scrollToAnnotation(id);
-  const handleSelectAnnotation = id => uiState.changeSelectedAnnotation([id]);
+  const handleSelectAnnotation = id => {
+    uiState.changeSelectedAnnotation([id], false);
+    uiState.scrollToAnnotation(id);
+  };
 
   // content
   const glyphs = activeLayoutedElements.glyphs.map(d => {
@@ -60,7 +63,7 @@ const Canvas = observer(props => {
         isHidden={d.hidden}
         onHover={handleHoverAnnotation}
         onClick={handleScrollToAnnotation}
-        onDoubleClick={handleSelectAnnotation}
+        onAltClick={handleSelectAnnotation}
       />
     );
   });

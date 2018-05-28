@@ -37,7 +37,7 @@ class DataAPI {
   @computed
   get isAppReady() {
     if (
-      this.activeTextElements.length != 0 &&
+      this.textElements.length != 0 &&
       this.activeDetailedAnnotations.length != 0 &&
       !isEmpty(this.activeLayoutedElements) &&
       this.activeTextGlyphs.length != 0 &&
@@ -260,17 +260,17 @@ class DataAPI {
   get activeTextElements() {
     if (
       this.textElements.length == 0 ||
-      isEmpty(this.activeDetailedAnnotationsById)
+      isEmpty(this.activeDetailedAnnotationsById) ||
+      isEmpty(this.activeCanvas)
     ) {
       return [];
     }
 
     const hasFilters = uiState.activeFilterIds.length != 0;
-    const hasMoreSelected = uiState.selectedAnnotationIds.length > 1;
+    let globalScrollToFound = false; // first element to scroll
     const output = [];
 
-    let globalScrollToFound = false; // first element to scroll
-    if (hasMoreSelected) {
+    if (!this.activeCanvas.textBarShowsAll) {
       // show just annotations
       forEach(uiState.selectedAnnotationIds, d => {
         let scrollToFound = false;
@@ -331,21 +331,22 @@ class DataAPI {
           active = !hasFilters;
         }
 
-        // take all if not more than one are selected or all sected one
-        if (!hasMoreSelected || selected) {
-          output.push({
-            ...d,
-            active,
-            hovered,
-            selected,
-            scrollTo,
-            annotations,
-          });
-        }
+        output.push({
+          ...d,
+          active,
+          hovered,
+          selected,
+          scrollTo,
+          annotations,
+        });
       });
     }
 
-    return output;
+    if (this.activeCanvas.textBarShowsAll) {
+      return output;
+    } else {
+      return orderBy(output, d => d.startOffset);
+    }
   }
 
   // --------------------
@@ -447,11 +448,6 @@ class DataAPI {
   }
 
   @computed
-  get hasMoreSelectedAnnotations() {
-    return uiState.selectedAnnotationIds.length > 1;
-  }
-
-  @computed
   get hasHoveredAnnotations() {
     return uiState.hoveredAnnotationIds.length != 0;
   }
@@ -459,6 +455,11 @@ class DataAPI {
   @computed
   get hasSelectedAnnotations() {
     return uiState.selectedAnnotationIds.length != 0;
+  }
+
+  @computed
+  get countSelectedAnnotations() {
+    return uiState.selectedAnnotationIds.length;
   }
 
   @computed
@@ -641,6 +642,11 @@ class DataAPI {
   // *** TEXT GLYPH ***
   //
   // --------------------
+
+  @computed
+  get textBarShowsAll() {
+    return this.activeCanvas.textBarShowsAll;
+  }
 
   @computed
   get activeTextGlyphs() {

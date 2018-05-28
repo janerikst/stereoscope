@@ -16,8 +16,16 @@ const Glyph = props => {
     isHidden,
     onHover,
     onClick,
-    onDoubleClick,
+    onAltClick,
   } = props;
+
+  const handleClick = e => {
+    if (e.altKey) {
+      onAltClick(id);
+    } else {
+      onClick(id);
+    }
+  };
 
   return (
     <circle
@@ -40,8 +48,7 @@ const Glyph = props => {
       stroke="#000"
       onMouseOver={() => onHover(id)}
       onMouseOut={() => onHover()}
-      onClick={() => onClick(id)}
-      onDoubleClick={() => onDoubleClick(id)}
+      onClick={handleClick}
     />
   );
 };

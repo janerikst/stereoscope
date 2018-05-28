@@ -12,6 +12,7 @@ class TextElement extends Component {
       isSelected,
       onHover,
       onClick,
+      onAltClick,
     } = this.props;
 
     const { TEXT_SELECT_COLOR, TEXT_INACTIVE_COLOR } = config;
@@ -25,6 +26,18 @@ class TextElement extends Component {
       annotationsGradient += `,${color} ${i * 3}px, ${backgroundColor} ${i * 3 +
         2}px, ${backgroundColor} ${i * 3 + 3}px`;
     });
+
+    const activeAnnotations = () => {
+      return annotations.filter(d => d.active).map(d => d.id);
+    };
+
+    const handleClick = e => {
+      if (e.altKey) {
+        onAltClick(activeAnnotations());
+      } else {
+        onClick(activeAnnotations());
+      }
+    };
 
     return (
       <span
@@ -46,12 +59,10 @@ class TextElement extends Component {
           )
         }
         onMouseOver={() => {
-          onHover(annotations.filter(d => d.active).map(d => d.id));
+          onHover(activeAnnotations());
         }}
         onMouseOut={() => onHover()}
-        onClick={() => {
-          onClick(annotations.filter(d => d.active).map(d => d.id));
-        }}>
+        onClick={handleClick}>
         {text}
       </span>
     );

@@ -21,19 +21,22 @@ const TextElements = observer(props => {
   const {
     activeTextElements,
     hasSelectedAnnotations,
-    hasMoreSelectedAnnotations,
+    textBarShowsAll,
   } = dataAPI;
 
   // interactions
   const handleTextHover = ids => uiState.setHoveredAnnotation(ids);
-  const handleTextSelect = ids => {
+  const handleSingleTextSelect = ids => {
+    uiState.changeSelectedAnnotation(ids, true);
+  };
+  const handleMultiTextSelect = ids => {
     uiState.changeSelectedAnnotation(ids);
   };
 
   // content
 
   let textEls;
-  if (!hasMoreSelectedAnnotations) {
+  if (textBarShowsAll) {
     // normal text
     textEls = activeTextElements.map(d => {
       return (
@@ -45,7 +48,8 @@ const TextElements = observer(props => {
           isHovered={d.hovered}
           isSelected={d.selected}
           onHover={handleTextHover}
-          onClick={handleTextSelect}
+          onClick={handleSingleTextSelect}
+          onAltClick={handleMultiTextSelect}
           ref={ref => {
             if (d.scrollTo) {
               onScrollTo(ref);
@@ -55,8 +59,6 @@ const TextElements = observer(props => {
       );
     });
   } else {
-    // selected text 1+
-    //
     textEls = activeTextElements.map(d => {
       return (
         <TextAnnotation
@@ -68,8 +70,9 @@ const TextElements = observer(props => {
           color={d.color}
           isActive={d.active}
           isHovered={d.hovered}
-          onClick={handleTextSelect}
+          onClick={handleMultiTextSelect}
           ref={ref => {
+            console.log(d.scrollTo);
             if (d.scrollTo) {
               onScrollTo(ref);
             }
@@ -117,15 +120,16 @@ class TextBar extends Component {
       overlayRatio: 0,
       clientHeight: 0,
       scrollToActive: false,
+      scrollToRef: undefined,
     };
   }
 
   render() {
     // vars
     const {
-      activeCanvasTitle,
+      textBarShowsAll,
       hasSelectedAnnotations,
-      hasMoreSelectedAnnotations,
+      countSelectedAnnotations,
     } = dataAPI;
 
     const { TEXT_BAR_WIDTH } = config;
@@ -134,15 +138,36 @@ class TextBar extends Component {
     // interactions
     const handleSelectedAnnotationReset = ids =>
       uiState.resetSelectedAnnotation();
+    const handleTextBarModeChange = mode => uiState.changeTextBarMode(mode);
 
     // render
     return (
-      <aside className="l-content-container" style={{ width: TEXT_BAR_WIDTH }}>
+      <aside
+        className="c-text-bar l-content-container"
+        style={{ width: TEXT_BAR_WIDTH }}>
         <header className="c-header--small">
-          <h2>Canvas: {activeCanvasTitle}</h2>
+          <div className="c-text-bar__controls">
+            <span
+              className={textBarShowsAll ? 'is-active' : ''}
+              onClick={() => handleTextBarModeChange(true)}>
+              Text
+            </span>{' '}
+            |{' '}
+            <span
+              className={!textBarShowsAll ? 'is-active' : ''}
+              onClick={() => handleTextBarModeChange(false)}>
+              Selected Annotations ({countSelectedAnnotations})
+            </span>{' '}
+            {hasSelectedAnnotations && (
+              <span
+                className="o-close"
+                onClick={handleSelectedAnnotationReset}
+              />
+            )}
+          </div>
         </header>
         <div className="l-content-spacing">
-          {!hasMoreSelectedAnnotations && (
+          {textBarShowsAll && (
             <div className="c-text-nav">
               <TextGlyphs />
               <div
@@ -167,7 +192,8 @@ class TextBar extends Component {
               }}>
               <TextElements
                 onScrollTo={ref => {
-                  this.scrollToTextelement(ref);
+                  console.log('scroll-->');
+                  this.setState({ scrollToRef: ref });
                 }}
               />
             </div>
@@ -202,6 +228,15 @@ class TextBar extends Component {
         this.setState({ clientHeight: uiState.windowDimensions.height });
       }
     });
+    if (this.state.scrollToRef) {
+      this.scrollToTextelement(this.state.scrollToRef);
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.state.scrollToRef) {
+      this.scrollToTextelement(this.state.scrollToRef);
+    }
   }
 
   scrollToTextelement(ref) {
@@ -222,14 +257,15 @@ class TextBar extends Component {
         //panel.scrollTop = node.offsetTop - panel.offsetTop;
         this.setState({ scrollToActive: true });
         this.scrollToEl(textArea, node.offsetTop - textArea.offsetTop, 300);
-        uiState.scrollToAnnotationDone();
       }
     }
+
+    this.setState({ scrollToRef: undefined });
+    uiState.scrollToAnnotationDone();
   }
 
   handleScroll() {
-    const { hasMoreSelectedAnnotations } = dataAPI;
-    if (!this.state.scrollToActive && !hasMoreSelectedAnnotations) {
+    if (!this.state.scrollToActive) {
       const panel = ReactDOM.findDOMNode(this.textArea);
       this.setState({
         overlayPos: panel.scrollTop / this.state.overlayRatio,
