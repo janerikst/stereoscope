@@ -650,7 +650,11 @@ class DataAPI {
 
   @computed
   get activeTextGlyphs() {
-    if (this.activeAnnotations.length == 0 || this.text.length == 0) {
+    if (
+      this.activeAnnotations.length == 0 ||
+      this.text.length == 0 ||
+      isEmpty(this.activeDetailedAnnotationsById)
+    ) {
       return [];
     }
 
@@ -660,6 +664,7 @@ class DataAPI {
           id: d.id,
           color: d.color,
           active: d.active,
+          selected: this.activeDetailedAnnotationsById[d.id].selected,
           start: d.startOffset / this.text.length * 100,
           height: (d.endOffset - d.startOffset) / this.text.length * 100,
         };

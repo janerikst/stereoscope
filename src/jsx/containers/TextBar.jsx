@@ -96,7 +96,8 @@ const TextGlyphs = observer(props => {
         y={d.start}
         height={d.height}
         color={d.color}
-        active={d.active}
+        isActive={d.active}
+        isSelected={d.selected}
       />
     );
   });
