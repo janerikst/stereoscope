@@ -4,7 +4,7 @@ import { addEvent, windowWidth, windowHeight } from '../utils/browser';
 import config from '../config/config';
 import dataAPI from 'data/dataAPI';
 
-import { first, last, remove, clone } from 'lodash';
+import { first, last, remove, includes } from 'lodash';
 
 class UiState {
   // --------------------
@@ -105,7 +105,13 @@ class UiState {
 
   @action
   scrollToAnnotation = id => {
-    this.scrollToAnnotationId = id;
+    if (
+      this.selectedAnnotationIds.length < 2 ||
+      (this.selectedAnnotationIds.length > 2 &&
+        includes(this.selectedAnnotationIds, id))
+    ) {
+      this.scrollToAnnotationId = id;
+    }
   };
 
   @action

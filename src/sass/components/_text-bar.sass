@@ -12,8 +12,29 @@
   .is-selectable
     cursor: pointer
 
-.c-text-area__selected-text
-  margin-padding: $sp-base
+.c-text-area__text-annotation
   padding: $sp-base 0
-  border-bottom: 1px dotted $c-lighter-gray
+  border-bottom: 1px solid $c-lighter-gray
 
+  header
+    position: relative
+    color: $c-gray2
+    font-size: $fs-xsmall
+    margin-bottom: $sp-xsmall
+    padding-right: $sp-medium
+
+  div
+    padding: 0 $sp-small
+
+  &:first-child
+    padding-top: $sp-small
+
+.c-text-area__text-annotation.is-inactive, .c-text-area__text-annotation.is-inactive header
+  color: $c-light-gray
+
+.c-text-area__close
+  position: absolute
+  right: $sp-xsmall
+  top: -$sp-xsmall
+  width: 30px
+  height: 30px

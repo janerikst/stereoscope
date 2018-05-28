@@ -269,77 +269,83 @@ class DataAPI {
     const hasMoreSelected = uiState.selectedAnnotationIds.length > 1;
     const output = [];
 
-    let globalScrollToFound = false;
-
-    this.textElements.forEach(d => {
-      let active = true;
-      let hovered = false;
-      let selected = false;
-      let scrollTo = false;
-
-      const annotations = [];
-
-      if (d.annotations.length) {
-        // has annotations
-        let activeFound = false;
-        let hoveredFound = false;
-        let selectedFound = false;
-        let scrollToFound = false;
-
-        d.annotations.forEach(e => {
-          const active =
-            !hasFilters || this.activeDetailedAnnotationsById[e.id].active;
-          const hovered = this.activeDetailedAnnotationsById[e.id].hovered;
-          const selected = this.activeDetailedAnnotationsById[e.id].selected;
-          let scrollTo = false;
-
-          if (active && !activeFound) {
-            activeFound = true;
-          }
-          if (hovered && !hoveredFound) {
-            hoveredFound = true;
-          }
-          if (selected && !selectedFound) {
-            selectedFound = true;
-          }
-          if (!globalScrollToFound && e.id == uiState.scrollToAnnotationId) {
-            scrollToFound = true;
-            globalScrollToFound = true;
-          }
-          annotations.push({ ...e, active, hovered, selected });
-        });
-        active = activeFound;
-        hovered = hoveredFound;
-        selected = selectedFound;
-        scrollTo = scrollToFound;
-      } else {
-        // has no annotations
-        active = !hasFilters;
-      }
-
-      // take all if not more than one are selected or all sected one
-      if (!hasMoreSelected || selected) {
-        output.push({ ...d, active, hovered, selected, scrollTo, annotations });
-      }
-    });
-
+    let globalScrollToFound = false; // first element to scroll
     if (hasMoreSelected) {
-      // group text elements to selected annotations
-      const groupedByAnnotationIds = {};
-      output.forEach(d => {
-        d.annotations.forEach(e => {
-          if (e.selected) {
-            if (groupedByAnnotationIds[e.id] == undefined) {
-              groupedByAnnotationIds[e.id] = [];
-            }
-            groupedByAnnotationIds[e.id].push(d);
-          }
+      // show just annotations
+      forEach(uiState.selectedAnnotationIds, d => {
+        let scrollToFound = false;
+        if (!globalScrollToFound && d == uiState.scrollToAnnotationId) {
+          scrollToFound = true;
+          globalScrollToFound = true;
+        }
+        output.push({
+          ...this.activeDetailedAnnotationsById[d],
+          scrollTo: scrollToFound,
         });
       });
-      return map(groupedByAnnotationIds, (d, k) => ({ id: k, items: d }));
     } else {
-      return output;
+      // show text elements
+      this.textElements.forEach(d => {
+        let active = true;
+        let hovered = false;
+        let selected = false;
+        let scrollTo = false;
+
+        const annotations = [];
+
+        if (d.annotations.length) {
+          // has annotations
+          let activeFound = false;
+          let hoveredFound = false;
+          let selectedFound = false;
+          let scrollToFound = false;
+
+          d.annotations.forEach(e => {
+            const active =
+              !hasFilters || this.activeDetailedAnnotationsById[e.id].active;
+            const hovered = this.activeDetailedAnnotationsById[e.id].hovered;
+            const selected = this.activeDetailedAnnotationsById[e.id].selected;
+            let scrollTo = false;
+
+            if (active && !activeFound) {
+              activeFound = true;
+            }
+            if (hovered && !hoveredFound) {
+              hoveredFound = true;
+            }
+            if (selected && !selectedFound) {
+              selectedFound = true;
+            }
+            if (!globalScrollToFound && e.id == uiState.scrollToAnnotationId) {
+              scrollToFound = true;
+              globalScrollToFound = true;
+            }
+            annotations.push({ ...e, active, hovered, selected });
+          });
+          active = activeFound;
+          hovered = hoveredFound;
+          selected = selectedFound;
+          scrollTo = scrollToFound;
+        } else {
+          // has no annotations
+          active = !hasFilters;
+        }
+
+        // take all if not more than one are selected or all sected one
+        if (!hasMoreSelected || selected) {
+          output.push({
+            ...d,
+            active,
+            hovered,
+            selected,
+            scrollTo,
+            annotations,
+          });
+        }
+      });
     }
+
+    return output;
   }
 
   // --------------------

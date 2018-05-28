@@ -8,6 +8,7 @@ import uiState from 'state/uiState';
 import config from 'config/config';
 
 import TextElement from '../components/TextElement';
+import TextAnnotation from '../components/TextAnnotation';
 import TextGlyph from '../components/TextGlyph';
 
 // --------------------
@@ -25,7 +26,9 @@ const TextElements = observer(props => {
 
   // interactions
   const handleTextHover = ids => uiState.setHoveredAnnotation(ids);
-  const handleTextSelect = ids => uiState.changeSelectedAnnotation(ids);
+  const handleTextSelect = ids => {
+    uiState.changeSelectedAnnotation(ids);
+  };
 
   // content
 
@@ -52,30 +55,26 @@ const TextElements = observer(props => {
       );
     });
   } else {
-    // selected text +1
-    textEls = activeTextElements.map(group => {
+    // selected text 1+
+    //
+    textEls = activeTextElements.map(d => {
       return (
-        <div key={group.id} className="c-text-area__selected-text">
-          {group.items.map(d => {
-            return (
-              <TextElement
-                key={d.id}
-                text={d.text}
-                annotations={d.annotations}
-                isActive={d.active}
-                isHovered={d.hovered}
-                isSelected={false}
-                onHover={handleTextHover}
-                onClick={handleTextSelect}
-                ref={ref => {
-                  if (d.scrollTo) {
-                    onScrollTo(ref);
-                  }
-                }}
-              />
-            );
-          })}
-        </div>
+        <TextAnnotation
+          key={d.id}
+          id={d.id}
+          text={d.text}
+          author={d.author}
+          tagPath={d.tagPath}
+          color={d.color}
+          isActive={d.active}
+          isHovered={d.hovered}
+          onClick={handleTextSelect}
+          ref={ref => {
+            if (d.scrollTo) {
+              onScrollTo(ref);
+            }
+          }}
+        />
       );
     });
   }
@@ -141,13 +140,6 @@ class TextBar extends Component {
       <aside className="l-content-container" style={{ width: TEXT_BAR_WIDTH }}>
         <header className="c-header--small">
           <h2>Canvas: {activeCanvasTitle}</h2>
-          {hasSelectedAnnotations && (
-            <span
-              className="c-header__right_element o-link"
-              onClick={handleSelectedAnnotationReset}>
-              (Reset)
-            </span>
-          )}
         </header>
         <div className="l-content-spacing">
           {!hasMoreSelectedAnnotations && (
