@@ -41,7 +41,7 @@ const Canvas = observer(props => {
   const handleScrollToAnnotation = id => uiState.scrollToAnnotation(id);
   const handleSelectAnnotation = id => {
     uiState.changeSelectedAnnotation([id], false);
-    uiState.scrollToAnnotation(id);
+    // uiState.scrollToAnnotation(id);
   };
 
   // content
