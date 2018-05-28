@@ -111,6 +111,8 @@ class UiState {
         includes(this.selectedAnnotationIds, id))
     ) {
       this.scrollToAnnotationId = id;
+    } else {
+      this.scrollToAnnotationId = '';
     }
   };
 
