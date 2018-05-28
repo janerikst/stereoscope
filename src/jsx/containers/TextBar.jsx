@@ -72,7 +72,6 @@ const TextElements = observer(props => {
           isHovered={d.hovered}
           onClick={handleMultiTextSelect}
           ref={ref => {
-            console.log(d.scrollTo);
             if (d.scrollTo) {
               onScrollTo(ref);
             }
@@ -192,7 +191,6 @@ class TextBar extends Component {
               }}>
               <TextElements
                 onScrollTo={ref => {
-                  console.log('scroll-->');
                   this.setState({ scrollToRef: ref });
                 }}
               />
