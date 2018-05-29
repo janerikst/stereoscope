@@ -1,0 +1,58 @@
+.c-text-attributes
+  z-index: 1000
+  position: absoulute
+  bottom: 0
+  background-color: $c-white
+  box-shadow: 0 -3px 6px rgba(0,0,0,0.12)
+  border: 1px solid $c-lighter-gray
+  padding: $sp-small
+
+  .c-text-attributes__wrapper
+    position: relative
+
+  h2
+    color: $c-gray
+    margin-bottom: $sp-base
+
+  h3
+    color: $c-gray
+    font-size: $fs-small
+    padding-top: $sp-small
+    padding-right: $sp-small
+
+  h4
+    color: $c-gray2
+    font-size: $fs-small
+    margin-bottom: $sp-xsmall
+
+.c-text-attributes__btn
+  text-align: center
+
+.c-text-attributes__items
+  display: flex
+  align-items: center
+
+.c-text-attributes__item
+  margin-right: $sp-small
+
+  ul
+    display: flex
+    margin-bottom: $sp-small
+  li 
+    font-size: $fs-small
+    padding: $sp-xsmall
+    border: 1px solid $c-lighter-gray
+    margin-right: $sp-xsmall
+    cursor: pointer
+
+    &.is-state-2, &:hover
+      border-color: $c-black
+
+    &.is-state-1
+      border-color: $c-gray
+      border-style: dotted
+
+.c-text-attributes__close
+  position: absolute
+  top: 0
+  right: 0

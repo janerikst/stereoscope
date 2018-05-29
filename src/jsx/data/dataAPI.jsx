@@ -17,6 +17,7 @@ import {
   isEmpty,
   includes,
   trim,
+  range,
 } from 'lodash';
 
 import { scaleSqrt, scaleLinear } from 'd3';
@@ -356,9 +357,17 @@ class DataAPI {
   // --------------------
 
   @computed
-  get annotationPropertiesById() {
+  get annotationConfigPropertiesById() {
     const { ANNOTATION_PROPERTIES } = config;
     return keyBy(values(ANNOTATION_PROPERTIES), 'id');
+  }
+
+  @computed
+  get annotationPropertiesById() {
+    if (uiState.annotationProperties.length == 0) {
+      return {};
+    }
+    return keyBy(uiState.annotationProperties, 'id');
   }
 
   @computed
@@ -463,11 +472,30 @@ class DataAPI {
   }
 
   @computed
-  get activeAnnotations() {
+  get annotationsWithUpdatedProperties() {
     if (this.annotations.length == 0) {
       return [];
     }
     return this.annotations.map(d => {
+      if (this.annotationPropertiesById[d.id] != undefined) {
+        const property = this.annotationPropertiesById[d.id];
+        const annotation = { ...d };
+        forEach(property.items, item => {
+          annotation[item.id] = item.value;
+        });
+        return annotation;
+      } else {
+        return { ...d };
+      }
+    });
+  }
+
+  @computed
+  get activeAnnotations() {
+    if (this.annotationsWithUpdatedProperties.length == 0) {
+      return [];
+    }
+    return this.annotationsWithUpdatedProperties.map(d => {
       const active =
         !this.hasFilters || this.activeFilterIdsById[d.tagId] != undefined;
       return { ...d, active };
@@ -515,6 +543,59 @@ class DataAPI {
         certainty: annotation.certainty,
       };
     });
+  }
+
+  @computed
+  get selectedAnnotationPropertiesList() {
+    if (isEmpty(this.activeDetailedAnnotationsById)) {
+      return [];
+    }
+
+    const { ANNOTATION_PROPERTIES } = config;
+    const output = [];
+
+    values(ANNOTATION_PROPERTIES).forEach(property => {
+      if (property.changeable) {
+        // create annotation property dict
+        const annotationProperies = {};
+        if (uiState.selectedAnnotationIds.length != 0) {
+          uiState.selectedAnnotationIds.forEach(annotation => {
+            const propertyValue = this.activeDetailedAnnotationsById[
+              annotation
+            ][property.id];
+
+            if (propertyValue != undefined) {
+              if (annotationProperies[propertyValue] == undefined) {
+                annotationProperies[propertyValue] = 0;
+              }
+              annotationProperies[propertyValue] += 1;
+            }
+          });
+        }
+        // create list
+        const attribute = { id: property.id, title: property.title, items: [] };
+        if (property.type == 'int') {
+          range(property.min, property.max + 1).forEach(e => {
+            let state;
+            if (annotationProperies[e] != undefined) {
+              if (annotationProperies[e] == this.countSelectedAnnotations) {
+                state = 2; // fully selected
+              } else {
+                state = 1; // not fully selected
+              }
+            } else {
+              state = 0; // not selected
+            }
+            attribute.items.push({
+              id: e,
+              state: state,
+            });
+          });
+        }
+        output.push(attribute);
+      }
+    });
+    return output;
   }
 
   // --------------------
@@ -596,20 +677,22 @@ class DataAPI {
     ) {
       return { glyphs: [] };
     }
+
     return {
       ...this.layoutedElements,
       glyphs: this.layoutedElements.glyphs
         .filter(d => this.activeDetailedAnnotationsById[d.id].active)
         .map(d => {
+          const annotation = this.activeDetailedAnnotationsById[d.id];
           return {
             ...d,
-            hovered: this.activeDetailedAnnotationsById[d.id].hovered,
-            selected: this.activeDetailedAnnotationsById[d.id].selected,
+            hovered: annotation.hovered,
+            selected: annotation.selected,
             hidden:
-              (this.hasHoveredAnnotations &&
-                !this.activeDetailedAnnotationsById[d.id].hovered) ||
-              (this.hasSelectedAnnotations &&
-                !this.activeDetailedAnnotationsById[d.id].selected),
+              (this.hasHoveredAnnotations && !annotation.hovered) ||
+              (this.hasSelectedAnnotations && !annotation.selected),
+            certainty: annotation.certainty,
+            importance: annotation.importance,
           };
         }),
     };
@@ -617,10 +700,10 @@ class DataAPI {
 
   @computed
   get glyphScaleCertainty() {
-    if (isEmpty(this.annotationPropertiesById)) {
+    if (isEmpty(this.annotationConfigPropertiesById)) {
       return undefined;
     }
-    const property = this.annotationPropertiesById['certainty'];
+    const property = this.annotationConfigPropertiesById['certainty'];
     return scaleLinear()
       .domain([property.min, property.max])
       .range([0.2, 1]);
@@ -628,10 +711,10 @@ class DataAPI {
 
   @computed
   get glyphScaleImportance() {
-    if (isEmpty(this.annotationPropertiesById)) {
+    if (isEmpty(this.annotationConfigPropertiesById)) {
       return undefined;
     }
-    const property = this.annotationPropertiesById['importance'];
+    const property = this.annotationConfigPropertiesById['importance'];
     return scaleLinear()
       .domain([property.min, property.max])
       .range([5, 0]);

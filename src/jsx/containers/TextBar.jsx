@@ -10,6 +10,7 @@ import config from 'config/config';
 import TextElement from '../components/TextElement';
 import TextAnnotation from '../components/TextAnnotation';
 import TextGlyph from '../components/TextGlyph';
+import TextAttributes from '../components/TextAttributes';
 
 // --------------------
 // *** TEXT ELEMENTS ***
@@ -134,6 +135,7 @@ class TextBar extends Component {
       textBarShowsAll,
       hasSelectedAnnotations,
       countSelectedAnnotations,
+      selectedAnnotationPropertiesList,
     } = dataAPI;
 
     const { TEXT_BAR_WIDTH } = config;
@@ -143,6 +145,8 @@ class TextBar extends Component {
     const handleSelectedAnnotationReset = ids =>
       uiState.resetSelectedAnnotation();
     const handleTextBarModeChange = mode => uiState.changeTextBarMode(mode);
+    const handleChangeSelectedAnnotationProperties = (property, value) =>
+      uiState.changeSelectedAnnotationProperties(property, value);
 
     // render
     return (
@@ -160,14 +164,8 @@ class TextBar extends Component {
             <span
               className={!textBarShowsAll ? 'is-active' : ''}
               onClick={() => handleTextBarModeChange(false)}>
-              Selected Annotations ({countSelectedAnnotations})
-            </span>{' '}
-            {hasSelectedAnnotations && (
-              <span
-                className="o-close"
-                onClick={handleSelectedAnnotationReset}
-              />
-            )}
+              Selected Annotations only ({countSelectedAnnotations})
+            </span>
           </div>
         </header>
         <div className="l-content-spacing">
@@ -202,6 +200,14 @@ class TextBar extends Component {
             </div>
           </div>
         </div>
+        {hasSelectedAnnotations && (
+          <TextAttributes
+            items={selectedAnnotationPropertiesList}
+            annotationCount={countSelectedAnnotations}
+            onSelectClick={handleChangeSelectedAnnotationProperties}
+            onCloseClick={handleSelectedAnnotationReset}
+          />
+        )}
       </aside>
     );
   }

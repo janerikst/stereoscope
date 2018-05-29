@@ -4,7 +4,15 @@ import { addEvent, windowWidth, windowHeight } from '../utils/browser';
 import config from '../config/config';
 import dataAPI from 'data/dataAPI';
 
-import { first, last, remove, intersection, includes } from 'lodash';
+import {
+  first,
+  last,
+  remove,
+  intersection,
+  includes,
+  isEmpty,
+  find,
+} from 'lodash';
 
 class UiState {
   // --------------------
@@ -71,6 +79,8 @@ class UiState {
   @observable activeFilterIds = [];
   @observable activeLayoutControls = [];
 
+  @observable annotationProperties = [];
+
   @observable hoveredAnnotationIds = [];
   @observable selectedAnnotationIds = [];
   @observable scrollToAnnotationId = '';
@@ -114,11 +124,11 @@ class UiState {
     }
   };
 
-  @action 
+  @action
   changeTextBarModeAndScrollToAnnotation = id => {
     dataAPI.activeCanvas.textBarShowsAll = true;
-    this.scrollToAnnotationId = id;  
-  }
+    this.scrollToAnnotationId = id;
+  };
 
   @action
   scrollToAnnotation = id => {
@@ -139,6 +149,41 @@ class UiState {
   };
 
   @action resetSelectedAnnotation = () => (this.selectedAnnotationIds = []);
+
+  @action
+  changeSelectedAnnotationProperties(property, value) {
+    if (this.selectedAnnotationIds.length == 0) {
+      return;
+    }
+
+    uiState.selectedAnnotationIds.forEach(annotationId => {
+      let annotationProperty = dataAPI.annotationPropertiesById[annotationId];
+      if (annotationProperty) {
+        // already exists
+        const propertyItem = find(
+          annotationProperty.items,
+          e => e.id == property,
+        );
+        if (!propertyItem) {
+          // add item
+          annotationProperty.items.push({ id: property, value: value });
+        } else {
+          if (propertyItem.value == value) {
+            // delete item
+            remove(annotationProperty.items, e => e.id == property);
+          } else {
+            // edit item
+            propertyItem.value = value;
+          }
+        }
+      } else {
+        // new
+        annotationProperty = { id: annotationId, items: [] };
+        annotationProperty.items.push({ id: property, value: value });
+        this.annotationProperties.push(annotationProperty);
+      }
+    });
+  }
 
   // Canvas
 

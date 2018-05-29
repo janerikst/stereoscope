@@ -14,9 +14,17 @@ export default {
   ANNOTATION_RADIUS_MAX: 25,
   ANNOTATION_SPACE: 2,
   ANNOTATION_PROPERTIES: {
-    Sicher: { id: 'certainty', type: 'int', min: 1, max: 5, changeable: true },
+    Sicher: {
+      id: 'certainty',
+      title: 'Certainty',
+      type: 'int',
+      min: 1,
+      max: 5,
+      changeable: true,
+    },
     Wichtig: {
       id: 'importance',
+      title: 'Importance',
       type: 'int',
       min: 1,
       max: 5,
