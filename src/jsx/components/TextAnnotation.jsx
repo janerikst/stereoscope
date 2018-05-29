@@ -21,7 +21,7 @@ class TextAnnotation extends Component {
           ? ' is-inactive '
           : ''}${isHovered ? ' is-hovered ' : ''}`}>
         <header>
-          Author: {author} | Category: {tagPath}
+          Category: {tagPath} | Author: {author}
           <span
             className="c-text-area__close o-close"
             onClick={() => onClick([id])}
