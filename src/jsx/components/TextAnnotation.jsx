@@ -27,7 +27,7 @@ class TextAnnotation extends Component {
             className="c-text-area__close o-close"
             onClick={() => onCloseClick([id])}
           />
-          | <span className="o-link" onClick={() => onTextClick(id)}>[jump]</span>
+          | <span className="o-link" onClick={() => onTextClick(id)}>[goto]</span>
         </header>
 
         <div style={{ borderLeft: `3px solid ${color}` }} >{text}</div>
