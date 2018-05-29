@@ -13,7 +13,8 @@ class TextAnnotation extends Component {
       isHovered,
       isSelected,
       onHover,
-      onClick,
+      onCloseClick,
+      onTextClick,
     } = this.props;
     return (
       <div
@@ -24,11 +25,12 @@ class TextAnnotation extends Component {
           Category: {tagPath} | Author: {author}
           <span
             className="c-text-area__close o-close"
-            onClick={() => onClick([id])}
+            onClick={() => onCloseClick([id])}
           />
+          | <span className="o-link" onClick={() => onTextClick(id)}>[jump]</span>
         </header>
 
-        <div style={{ borderLeft: `3px solid ${color}` }}>{text}</div>
+        <div style={{ borderLeft: `3px solid ${color}` }} >{text}</div>
       </div>
     );
   }

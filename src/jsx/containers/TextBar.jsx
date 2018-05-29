@@ -32,6 +32,9 @@ const TextElements = observer(props => {
   const handleMultiTextSelect = ids => {
     uiState.changeSelectedAnnotation(ids);
   };
+  const handleScrollToText = id => {
+    uiState.changeTextBarModeAndScrollToAnnotation(id);
+  };
 
   // content
 
@@ -70,7 +73,8 @@ const TextElements = observer(props => {
           color={d.color}
           isActive={d.active}
           isHovered={d.hovered}
-          onClick={handleMultiTextSelect}
+          onCloseClick={handleMultiTextSelect}
+          onTextClick={handleScrollToText}
           ref={ref => {
             if (d.scrollTo) {
               onScrollTo(ref);

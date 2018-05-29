@@ -114,6 +114,12 @@ class UiState {
     }
   };
 
+  @action 
+  changeTextBarModeAndScrollToAnnotation = id => {
+    dataAPI.activeCanvas.textBarShowsAll = true;
+    this.scrollToAnnotationId = id;  
+  }
+
   @action
   scrollToAnnotation = id => {
     if (
