@@ -67,7 +67,7 @@ class FilterPanel extends React.Component {
           <h3>Filter</h3>
           {hasActiveFilter && (
             <span className="is-right o-link" onClick={onReset}>
-              (Reset)
+              [Reset]
             </span>
           )}
           <span
