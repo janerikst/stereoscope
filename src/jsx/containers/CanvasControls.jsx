@@ -10,6 +10,7 @@ import FilterIcon from 'react-icons/lib/fa/filter';
 import ConfigIcon from 'react-icons/lib/fa/cog';
 import ChartIcon from 'react-icons/lib/fa/bar-chart';
 import LabelIcon from 'react-icons/lib/fa/font';
+import CommentIcon from 'react-icons/lib/fa/comment';
 
 const CanvasControls = observer(props => {
   // var
@@ -24,6 +25,7 @@ const CanvasControls = observer(props => {
   const handleFilterToggle = () => uiState.triggerFilterPanel();
   const handleLayoutToggle = () => uiState.triggerLayoutPanel();
   const handleLabelToggle = () => uiState.triggerLabels();
+  const handleCommentToggle = () => uiState.triggerComment();
   const handleDeleteCanvas = () => uiState.deleteCanvas(activeCanvas.id);
 
   // content
@@ -52,6 +54,9 @@ const CanvasControls = observer(props => {
       </Button>
       <Button isActive={showLabels} onClick={handleLabelToggle}>
         <LabelIcon />
+      </Button>
+      <Button isActive={activeCanvas.showComment} onClick={handleCommentToggle}>
+        <CommentIcon />
       </Button>
       {activeCanvas.id != 1 && (
         <Button isRight={true} onClick={handleDeleteCanvas}>

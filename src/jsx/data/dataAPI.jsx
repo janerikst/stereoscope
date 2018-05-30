@@ -806,11 +806,12 @@ class DataAPI {
 
   @computed
   get canvasDetails() {
-    const { canvases, editCanvasId } = uiState;
+    const { canvases, editCanvasId, cloneCanvasId } = uiState;
     if (canvases.length == 0) {
       return {};
     }
-    return canvases.find(d => d.id == editCanvasId);
+    const canvasId = editCanvasId ? editCanvasId : cloneCanvasId;
+    return canvases.find(d => d.id == canvasId);
   }
 
   @computed

@@ -17,6 +17,8 @@ const CanvasBar = observer(props => {
   // interactions
   const handleOpenAddCanvasDialog = () => uiState.triggerAddCanvasDialog();
   const handleOpenEditCanvasDialog = id => uiState.triggerEditCanvasDialog(id);
+  const handleOpenCloneCanvasDialog = id =>
+    uiState.triggerCloneCanvasDialog(id);
   const handleSelectCanvas = id => uiState.setActiveCanvas(id);
   const handleDeleteCanvas = id => uiState.deleteCanvas(id);
 
@@ -36,6 +38,7 @@ const CanvasBar = observer(props => {
       isDeleteable={d.id != 1}
       onSelect={handleSelectCanvas}
       onDelete={handleDeleteCanvas}
+      onClone={handleOpenCloneCanvasDialog}
       onEdit={handleOpenEditCanvasDialog}
       width={CANVAS_THUMB_WIDTH}
       height={thumbHeight}

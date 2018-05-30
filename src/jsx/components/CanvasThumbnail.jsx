@@ -5,6 +5,7 @@ import { observer } from 'mobx-react';
 import config from 'config/config';
 
 import TrashIcon from 'react-icons/lib/fa/trash';
+import CloneIcon from 'react-icons/lib/fa/clone';
 
 @observer
 class CanvasThumbnail extends React.Component {
@@ -18,6 +19,7 @@ class CanvasThumbnail extends React.Component {
       onSelect,
       onEdit,
       onDelete,
+      onClone,
       width,
       height,
     } = this.props;
@@ -25,9 +27,14 @@ class CanvasThumbnail extends React.Component {
     return (
       <div className={`c-canvas-thumbnail ${isActive ? 'is-active' : ''}`}>
         <div className="c-canvas-thumbnail__image_container">
+          <span
+            className="c-canvas-thumbnail__icon c-canvas-thumbnail__clone"
+            onClick={() => onClone(id)}>
+            <CloneIcon />
+          </span>
           {isDeleteable && (
             <span
-              className="c-canvas-thumbnail__delete"
+              className="c-canvas-thumbnail__icon c-canvas-thumbnail__delete"
               onClick={() => onDelete(id)}>
               <TrashIcon />
             </span>

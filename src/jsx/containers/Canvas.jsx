@@ -14,6 +14,7 @@ const Canvas = observer(props => {
   // var
   const {
     hasFilters,
+    activeCanvas,
     activeFilters,
     activeLayoutedElements,
     activeLayoutControlsList,
@@ -118,6 +119,11 @@ const Canvas = observer(props => {
                 onTriggerPanel={handleLayoutToggle}
                 onChangeControls={handleLayoutControlChange}
               />
+            </div>
+          )}
+          {activeCanvas.showComment && (
+            <div className="c-canvas__layout-comment">
+              {activeCanvas.comment}
             </div>
           )}
           {showFilterPanel && (

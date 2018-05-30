@@ -32,14 +32,23 @@
 
 .c-canvas-thumbnail:hover .c-canvas-thumbnail__delete
   display: block
+  
+.c-canvas-thumbnail:hover .c-canvas-thumbnail__clone
+  display: block
 
-.c-canvas-thumbnail__delete
+.c-canvas-thumbnail__icon
   color: $c-white
   z-index: 1000
   position: absolute
-  top: 0
-  right: 0
   padding:  $sp-small
   background-color: $c-gray
   display: none
+
+.c-canvas-thumbnail__delete
+  top: 0
+  right: 0
+
+.c-canvas-thumbnail__clone
+  top: 0
+  left: 0
 

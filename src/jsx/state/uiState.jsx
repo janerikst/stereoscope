@@ -63,10 +63,12 @@ class UiState {
     {
       id: 1,
       title: '',
+      comment: '',
       layout: config.LAYOUT_DEFAULT,
       layoutControls: {},
       textBarShowsAll: true,
       showLabels: true,
+      showComment: false,
       filters: [],
       glyphs: {},
       selectedAnnotationIds: [],
@@ -76,6 +78,7 @@ class UiState {
 
   @observable activeCanvasId = 1;
   @observable editCanvasId = '';
+  @observable cloneCanvasId = '';
   @observable activeFilterIds = [];
   @observable activeLayoutControls = [];
 
@@ -104,6 +107,9 @@ class UiState {
 
   @action
   changeSelectedAnnotation = (ids, single = false) => {
+    if (dataAPI.activeCanvas.selectedAnnotationFixed) {
+      return;
+    }
     if (single) {
       if (intersection(this.selectedAnnotationIds, ids).length == ids.length) {
         this.selectedAnnotationIds = [];
@@ -188,15 +194,17 @@ class UiState {
   // Canvas
 
   @action
-  addCanvas = (title, layout) => {
+  addCanvas = (title, layout, comment) => {
     const newId = last(this.canvases).id + 1;
     this.canvases.push({
       id: newId,
       title: title,
+      comment: comment,
       layout: layout,
       layoutControls: [],
       textBarShowsAll: true,
       showLabels: true,
+      showComment: comment.length != 0 ? true : false,
       filters: [],
       glyphs: {},
       selectedAnnotationIds: [],
@@ -207,10 +215,12 @@ class UiState {
   };
 
   @action
-  editCanvas = (title, layout) => {
+  editCanvas = (title, layout, comment, selectedFixed) => {
     const canvas = this.canvases.find(d => d.id == this.editCanvasId);
     canvas.title = title;
     canvas.layout = layout;
+    canvas.comment = comment;
+    canvas.selectedAnnotationFixed = selectedFixed;
     this.editCanvasId = '';
   };
 
@@ -240,6 +250,29 @@ class UiState {
     this.showLabels = canvas.showLabels;
     this.activeLayoutControls = canvas.layoutControls;
     this.selectedAnnotationIds = canvas.selectedAnnotationIds;
+  };
+
+  @action
+  cloneCanvas = (title, layout, comment, selectedFixed) => {
+    let orginialCanvas = this.canvases.find(d => d.id == this.cloneCanvasId);
+    const newId = last(this.canvases).id + 1;
+    this.canvases.push({
+      id: newId,
+      title: title,
+      comment: comment,
+      layout: layout,
+      layoutControls: [...this.activeLayoutControls],
+      textBarShowsAll: orginialCanvas.textBarShowsAll,
+      showLabels: this.showLabels,
+      showComment:
+        orginialCanvas.showComment || comment.length != 0 ? true : false,
+      filters: [...this.activeFilterIds],
+      glyphs: [...dataAPI.layoutedElements.glyphs],
+      selectedAnnotationIds: [...this.selectedAnnotationIds],
+      selectedAnnotationFixed: selectedFixed,
+    });
+    this.cloneCanvasId = '';
+    this.setActiveCanvas(newId);
   };
 
   @action
@@ -284,6 +317,11 @@ class UiState {
   };
 
   @action
+  triggerCloneCanvasDialog = id => {
+    this.cloneCanvasId = id;
+  };
+
+  @action
   triggerDataDialog = () => {
     this.showDataDialog = !this.showDataDialog;
   };
@@ -303,6 +341,16 @@ class UiState {
     this.showLabels = !this.showLabels;
   };
 
+  @action
+  triggerComment = () => {
+    dataAPI.activeCanvas.showComment = !dataAPI.activeCanvas.showComment;
+  };
+
+  @action
+  triggerSelectedAnnotationFixed = () => {
+    dataAPI.activeCanvas.selectedAnnotationFixed = !dataAPI.activeCanvas
+      .selectedAnnotationFixed;
+  };
   // Data
 
   @action

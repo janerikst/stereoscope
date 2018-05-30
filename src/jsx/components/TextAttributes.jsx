@@ -1,7 +1,15 @@
 import React from 'react';
 
 const TextAttributes = props => {
-  const { items, annotationCount, onSelectClick, onCloseClick } = props;
+  const {
+    items,
+    annotationCount,
+    selectedFixed,
+    showCloseBtn,
+    onSelectClick,
+    onSelectFixedClick,
+    onCloseClick,
+  } = props;
   // content
   const attributes = items.map(property => {
     return (
@@ -30,20 +38,26 @@ const TextAttributes = props => {
     <div className="c-text-attributes">
       <div className="c-text-attributes__wrapper">
         <h2>
-          Selected Annotation{annotationCount > 1 ? 's' : ''} ({annotationCount})
+          Selected Annotation{annotationCount > 1 ? 's' : ''} ({annotationCount}){' '}
+          <span className="c-text-attributes__fixed">
+            <input
+              type="checkbox"
+              name="selectedFixed"
+              checked={selectedFixed}
+              onChange={onSelectFixedClick}
+            />{' '}
+            fixed
+          </span>
         </h2>
-        <span
-          className="c-text-attributes__close o-close"
-          onClick={onCloseClick}
-        />
-        <div className="c-text-attributes__items">
-          <h3>Attributes</h3> {attributes}
-        </div>
-        {annotationCount > 1 && (
-          <div className="c-text-attributes__btn">
-            <div className="o-text-button">
-              Create new canvas from selection
-            </div>
+        {showCloseBtn && (
+          <span
+            className="c-text-attributes__close o-close"
+            onClick={onCloseClick}
+          />
+        )}
+        {!selectedFixed && (
+          <div className="c-text-attributes__items">
+            <h3>Attributes</h3> {attributes}
           </div>
         )}
       </div>
