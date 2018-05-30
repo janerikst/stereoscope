@@ -121,7 +121,8 @@ const Canvas = observer(props => {
               />
             </div>
           )}
-          {activeCanvas.showComment && (
+          {activeCanvas.showComment &&
+          activeCanvas.comment.length != 0 && (
             <div className="c-canvas__layout-comment">
               {activeCanvas.comment}
             </div>
