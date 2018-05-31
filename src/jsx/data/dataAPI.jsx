@@ -24,16 +24,33 @@ import { scaleSqrt, scaleLinear } from 'd3';
 
 class DataAPI {
   // DATASETS
+
+  // *****
+  // text file data
+  // *****
   @computed
   get text() {
     return textData.current() || '';
   }
 
+  // *****
+  // annotation file data
+  // *****
+
   @computed
   get rawAnnotations() {
     return annotationData.current() || [];
   }
-  // GENERAL COMPUTES
+
+  // --------------------
+  //
+  // *** GENERAL COMPUTES ***
+  //
+  // --------------------
+
+  // *****
+  // check if all necessary data is loaded to start the app
+  // *****
 
   @computed
   get isAppReady() {
@@ -49,6 +66,10 @@ class DataAPI {
       return false;
     }
   }
+
+  // *****
+  // checks if localfiles or loaded files are available
+  // *****
 
   @computed
   get needDataFiles() {
@@ -72,6 +93,10 @@ class DataAPI {
   //
   // --------------------
 
+  // *****
+  // get title of the text
+  // *****
+
   @computed
   get textTitle() {
     if (this.rawAnnotations.length == 0) {
@@ -79,6 +104,10 @@ class DataAPI {
     }
     return trim(this.rawAnnotations[0].sourceDocumentTitle);
   }
+
+  // *****
+  // calculates the intersection of the annotations
+  // *****
 
   @computed
   get textIntersections() {
@@ -202,6 +231,10 @@ class DataAPI {
     return orderBy(offsets, 'startOffset', 'asc');
   }
 
+  // *****
+  // all text elements derived from text and text intersections
+  // *****
+
   @computed
   get textElements() {
     if (
@@ -256,6 +289,10 @@ class DataAPI {
 
     return output;
   }
+
+  // *****
+  // text elements with active, hovered, selected and scroll to state
+  // *****
 
   @computed
   get activeTextElements() {
@@ -356,11 +393,19 @@ class DataAPI {
   //
   // --------------------
 
+  // *****
+  // dict of all annotation attributes from the config file
+  // *****
+
   @computed
   get annotationConfigPropertiesById() {
     const { ANNOTATION_PROPERTIES } = config;
     return keyBy(values(ANNOTATION_PROPERTIES), 'id');
   }
+
+  // *****
+  // dict of all annotation with changed attributes
+  // *****
 
   @computed
   get annotationPropertiesById() {
@@ -369,6 +414,10 @@ class DataAPI {
     }
     return keyBy(uiState.annotationProperties, 'id');
   }
+
+  // *****
+  // get maximal annotation length
+  // *****
 
   @computed
   get maxAnnotationLength() {
@@ -381,6 +430,10 @@ class DataAPI {
     });
     return maxLen;
   }
+
+  // *****
+  // annotation derived from raw annotations with attributes like color, author ..
+  // *****
 
   @computed
   get annotations() {
@@ -424,6 +477,10 @@ class DataAPI {
     );
   }
 
+  // *****
+  // dict of annotations
+  // *****
+
   @computed
   get annotationsById() {
     if (this.annotations.length == 0) {
@@ -431,6 +488,10 @@ class DataAPI {
     }
     return keyBy(this.annotations, 'id');
   }
+
+  // *****
+  // dict of hovered annotations ids from uiState
+  // *****
 
   @computed
   get hoveredAnnotationIdsById() {
@@ -444,6 +505,10 @@ class DataAPI {
     return output;
   }
 
+  // *****
+  // dict of selected annotations ids from uiState
+  // *****
+
   @computed
   get selectedAnnotationIdsById() {
     if (uiState.selectedAnnotationIds.length == 0) {
@@ -456,20 +521,36 @@ class DataAPI {
     return output;
   }
 
+  // *****
+  // bool if hovered annotations exist
+  // *****
+
   @computed
   get hasHoveredAnnotations() {
     return uiState.hoveredAnnotationIds.length != 0;
   }
+
+  // *****
+  // bool if selected annotations exist
+  // *****
 
   @computed
   get hasSelectedAnnotations() {
     return uiState.selectedAnnotationIds.length != 0;
   }
 
+  // *****
+  // count of selected annotations
+  // *****
+
   @computed
   get countSelectedAnnotations() {
     return uiState.selectedAnnotationIds.length;
   }
+
+  // *****
+  // annotation enrichted with the changed properties from uiState
+  // *****
 
   @computed
   get annotationsWithUpdatedProperties() {
@@ -490,6 +571,10 @@ class DataAPI {
     });
   }
 
+  // *****
+  // annotation with active state -> filtered
+  // *****
+
   @computed
   get activeAnnotations() {
     if (this.annotationsWithUpdatedProperties.length == 0) {
@@ -501,6 +586,10 @@ class DataAPI {
       return { ...d, active };
     });
   }
+
+  // *****
+  // active annotation with hovered and selected state
+  // *****
 
   @computed
   get activeDetailedAnnotations() {
@@ -519,6 +608,10 @@ class DataAPI {
     });
   }
 
+  // *****
+  // dict of activeDetailedAnnotations
+  // *****
+
   @computed
   get activeDetailedAnnotationsById() {
     if (this.activeDetailedAnnotations.length == 0) {
@@ -526,6 +619,10 @@ class DataAPI {
     }
     return keyBy(this.activeDetailedAnnotations, 'id');
   }
+
+  // *****
+  // compines all information of the hovered annotion ids -> uistate
+  // *****
 
   @computed
   get hoveredAnnotationsDetails() {
@@ -544,6 +641,10 @@ class DataAPI {
       };
     });
   }
+
+  // *****
+  // creates a list of properties and their possible values for the selected annotations
+  // *****
 
   @computed
   get selectedAnnotationPropertiesList() {
@@ -604,6 +705,12 @@ class DataAPI {
   //
   // --------------------
 
+  // *****
+  // graphical glyphs derived from annotations
+  // with the information of the intersections
+  // with other annotations for the network layout
+  // *****
+
   @computed
   get glyphs() {
     if (
@@ -656,6 +763,11 @@ class DataAPI {
     });
   }
 
+  // *****
+  // glyphs positioned by the active layout
+  // and enriched layout specific elements
+  // *****
+
   @computed
   get layoutedElements() {
     if (this.glyphs.length == 0) {
@@ -668,6 +780,10 @@ class DataAPI {
       this.activeLayoutControlsById,
     );
   }
+
+  // *****
+  // layout elements filtered
+  // *****
 
   @computed
   get filteredLayoutedElements() {
@@ -684,6 +800,10 @@ class DataAPI {
       ),
     };
   }
+
+  // *****
+  // active layout elements enrichted with hover, selected, hidden and properties
+  // *****
 
   @computed
   get activeLayoutedElements() {
@@ -712,6 +832,10 @@ class DataAPI {
     };
   }
 
+  // *****
+  // glyph scale for certainty
+  // *****
+
   @computed
   get glyphScaleCertainty() {
     if (isEmpty(this.annotationConfigPropertiesById)) {
@@ -722,6 +846,10 @@ class DataAPI {
       .domain([property.min, property.max])
       .range([0.2, 1]);
   }
+
+  // *****
+  // glyph scale for importance
+  // *****
 
   @computed
   get glyphScaleImportance() {
@@ -740,10 +868,18 @@ class DataAPI {
   //
   // --------------------
 
+  // *****
+  // bool for switch between text and annotation only
+  // *****
+
   @computed
   get textBarShowsAll() {
     return this.activeCanvas.textBarShowsAll;
   }
+
+  // *****
+  // text glyphs for the text nav
+  // *****
 
   @computed
   get activeTextGlyphs() {
@@ -776,6 +912,10 @@ class DataAPI {
   // *** CANVASES ***
   //
   // --------------------
+
+  // *****
+  // list of all canvas with thumbnail data
+  // *****
 
   @computed
   get canvasList() {
@@ -819,6 +959,10 @@ class DataAPI {
     return orderBy(output, 'id', 'desc');
   }
 
+  // *****
+  // active canvas from uiState
+  // *****
+
   @computed
   get activeCanvas() {
     const { canvases, activeCanvasId } = uiState;
@@ -828,6 +972,10 @@ class DataAPI {
     return canvases.find(d => d.id == activeCanvasId);
   }
 
+  // *****
+  // canvas title with default title if not set
+  // *****
+
   @computed
   get activeCanvasTitle() {
     if (!this.activeCanvas || this.activeCanvas.title == '') {
@@ -836,6 +984,10 @@ class DataAPI {
       return this.activeCanvas.title;
     }
   }
+
+  // *****
+  // canvas details used by edit / clone modal
+  // *****
 
   @computed
   get canvasDetails() {
@@ -847,6 +999,10 @@ class DataAPI {
     return canvases.find(d => d.id == canvasId);
   }
 
+  // *****
+  // canvas width
+  // *****
+
   @computed
   get canvasWidth() {
     return (
@@ -855,6 +1011,10 @@ class DataAPI {
       config.CANVAS_BAR_WIDTH
     );
   }
+
+  // *****
+  // canvas height
+  // *****
 
   @computed
   get canvasHeight() {
@@ -867,10 +1027,18 @@ class DataAPI {
   //
   // --------------------
 
+  // *****
+  // dict of possible layouts
+  // *****
+
   @computed
   get layoutsById() {
     return keyBy(layouts, 'id');
   }
+
+  // *****
+  // list of possible layouts
+  // *****
 
   @computed
   get layoutList() {
@@ -879,10 +1047,18 @@ class DataAPI {
     });
   }
 
+  // *****
+  // dict of active layout controls
+  // *****
+
   @computed
   get activeLayoutControlsById() {
     return keyBy(uiState.activeLayoutControls, 'id');
   }
+
+  // *****
+  // list of active layout controls
+  // *****
 
   @computed
   get activeLayoutControlsList() {
@@ -904,6 +1080,10 @@ class DataAPI {
   //
   // --------------------
 
+  // *****
+  // filters derived from annotation
+  // *****
+
   @computed
   get filters() {
     if (this.annotations.length == 0) {
@@ -924,6 +1104,10 @@ class DataAPI {
     );
   }
 
+  // *****
+  // dict of active filters
+  // *****
+
   @computed
   get activeFilterIdsById() {
     const output = {};
@@ -933,10 +1117,18 @@ class DataAPI {
     return output;
   }
 
+  // *****
+  // bool if filters are active
+  // *****
+
   @computed
   get hasFilters() {
     return uiState.activeFilterIds.length != 0;
   }
+
+  // *****
+  // filters with active state
+  // *****
 
   @computed
   get activeFilters() {
