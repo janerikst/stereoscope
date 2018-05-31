@@ -63,13 +63,7 @@ class CanvasThumbnail extends React.Component {
       ctx.clearRect(0, 0, width, height);
       glyphs.forEach(d => {
         ctx.beginPath();
-        ctx.arc(
-          d.x * scaleRatio,
-          d.y * scaleRatio,
-          Math.max(d.radius * scaleRatio, 1),
-          0,
-          2 * Math.PI,
-        );
+        ctx.arc(d.x, d.y, d.radius, 0, 2 * Math.PI);
         ctx.fillStyle = d.color;
         ctx.fill();
       });

@@ -11,8 +11,8 @@ import CanvasThumbnail from '../components/CanvasThumbnail';
 
 const CanvasBar = observer(props => {
   // vars
-  const { canvasList, canvasWidth, canvasHeight } = dataAPI;
-  const { CANVAS_BAR_WIDTH, CANVAS_THUMB_WIDTH, CANVAS_THUMB_HEIGHT } = config;
+  const { canvasList } = dataAPI;
+  const { CANVAS_BAR_WIDTH } = config;
 
   // interactions
   const handleOpenAddCanvasDialog = () => uiState.triggerAddCanvasDialog();
@@ -21,10 +21,6 @@ const CanvasBar = observer(props => {
     uiState.triggerCloneCanvasDialog(id);
   const handleSelectCanvas = id => uiState.setActiveCanvas(id);
   const handleDeleteCanvas = id => uiState.deleteCanvas(id);
-
-  // scales
-  const scaleRatio = CANVAS_THUMB_WIDTH / canvasWidth;
-  const thumbHeight = CANVAS_THUMB_WIDTH * canvasHeight / canvasWidth;
 
   // content
   const canvasEls = canvasList.map((d, i) => (
@@ -40,9 +36,8 @@ const CanvasBar = observer(props => {
       onDelete={handleDeleteCanvas}
       onClone={handleOpenCloneCanvasDialog}
       onEdit={handleOpenEditCanvasDialog}
-      width={CANVAS_THUMB_WIDTH}
-      height={thumbHeight}
-      scaleRatio={scaleRatio}
+      width={d.thumbnailWidth}
+      height={d.thumbnailHeight}
     />
   ));
 

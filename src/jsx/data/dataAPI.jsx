@@ -766,20 +766,37 @@ class DataAPI {
   @computed
   get canvasList() {
     const { canvases, activeCanvasId } = uiState;
-
     if (canvases.length == 0 || isEmpty(this.layoutsById)) {
       return [];
     }
 
+    const { CANVAS_BAR_WIDTH, CANVAS_THUMB_WIDTH } = config;
+
+    // scales
+    const scaleRatio = CANVAS_THUMB_WIDTH / this.canvasWidth;
+    const thumbHeight =
+      CANVAS_THUMB_WIDTH * this.canvasHeight / this.canvasWidth;
+
     const output = [];
     canvases.forEach(d => {
+      const glyphs =
+        d.id == activeCanvasId ? this.layoutedElements.glyphs : d.glyphs;
+
       output.push({
         id: d.id,
         title: d.title ? d.title : config.CANVAS_DEFAULT_NAME,
         layout: this.layoutsById[d.layout].title,
         active: d.id == activeCanvasId,
-        glyphs:
-          d.id == activeCanvasId ? this.layoutedElements.glyphs : d.glyphs,
+        glyphs: map(glyphs, d => {
+          return {
+            x: d.x * scaleRatio,
+            y: d.y * scaleRatio,
+            radius: Math.max(d.radius * scaleRatio, 1),
+            color: d.color,
+          };
+        }),
+        thumbnailWidth: CANVAS_THUMB_WIDTH,
+        thumbnailHeight: thumbHeight,
       });
     });
 
