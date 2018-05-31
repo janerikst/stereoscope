@@ -4,7 +4,17 @@ import uiState from 'state/uiState';
 
 const Tooltip = observer(props => {
   if (!props.visible) return null;
-  const { x, y } = uiState.mouse;
+  const { width } = props;
+  const { windowDimensions } = uiState;
+  let { x, y } = uiState.mouse;
+
+  const halfWidth = (width + 20) / 2;
+  if (x - halfWidth < 0) {
+    x = halfWidth;
+  } else if (x + halfWidth > windowDimensions.width) {
+    x = windowDimensions.width - halfWidth;
+  }
+
   return (
     <div
       style={{

@@ -11,7 +11,7 @@ const Tooltips = observer(props => {
   return (
     <div>
       {uiState.hoveredAnnotationIds.length != 0 && (
-        <Tooltip visible>
+        <Tooltip width={400} visible>
           <TooltipAnnotation items={dataAPI.hoveredAnnotationsDetails} />
         </Tooltip>
       )}
