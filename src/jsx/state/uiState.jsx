@@ -241,7 +241,7 @@ class UiState {
     canvas.showLabels = this.showLabels;
     canvas.layoutControls = this.activeLayoutControls;
     canvas.selectedAnnotationIds = this.selectedAnnotationIds;
-    canvas.glyphs = [...dataAPI.layoutedElements.glyphs];
+    canvas.glyphs = [...dataAPI.filteredLayoutedElements.glyphs];
 
     // copy new active filters
     this.activeCanvasId = id;
@@ -267,7 +267,7 @@ class UiState {
       showComment:
         orginialCanvas.showComment || comment.length != 0 ? true : false,
       filters: [...this.activeFilterIds],
-      glyphs: [...dataAPI.layoutedElements.glyphs],
+      glyphs: [...dataAPI.filteredLayoutedElements.glyphs],
       selectedAnnotationIds: [...this.selectedAnnotationIds],
       selectedAnnotationFixed: selectedFixed,
     });

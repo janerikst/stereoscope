@@ -670,31 +670,45 @@ class DataAPI {
   }
 
   @computed
-  get activeLayoutedElements() {
+  get filteredLayoutedElements() {
     if (
       isEmpty(this.layoutedElements) ||
       isEmpty(this.activeDetailedAnnotationsById)
     ) {
       return { glyphs: [] };
     }
-
     return {
       ...this.layoutedElements,
-      glyphs: this.layoutedElements.glyphs
-        .filter(d => this.activeDetailedAnnotationsById[d.id].active)
-        .map(d => {
-          const annotation = this.activeDetailedAnnotationsById[d.id];
-          return {
-            ...d,
-            hovered: annotation.hovered,
-            selected: annotation.selected,
-            hidden:
-              (this.hasHoveredAnnotations && !annotation.hovered) ||
-              (this.hasSelectedAnnotations && !annotation.selected),
-            certainty: annotation.certainty,
-            importance: annotation.importance,
-          };
-        }),
+      glyphs: this.layoutedElements.glyphs.filter(
+        d => this.activeDetailedAnnotationsById[d.id].active,
+      ),
+    };
+  }
+
+  @computed
+  get activeLayoutedElements() {
+    if (
+      isEmpty(this.filteredLayoutedElements) ||
+      isEmpty(this.activeDetailedAnnotationsById)
+    ) {
+      return { glyphs: [] };
+    }
+
+    return {
+      ...this.filteredLayoutedElements,
+      glyphs: this.filteredLayoutedElements.glyphs.map(d => {
+        const annotation = this.activeDetailedAnnotationsById[d.id];
+        return {
+          ...d,
+          hovered: annotation.hovered,
+          selected: annotation.selected,
+          hidden:
+            (this.hasHoveredAnnotations && !annotation.hovered) ||
+            (this.hasSelectedAnnotations && !annotation.selected),
+          certainty: annotation.certainty,
+          importance: annotation.importance,
+        };
+      }),
     };
   }
 
@@ -780,7 +794,9 @@ class DataAPI {
     const output = [];
     canvases.forEach(d => {
       const glyphs =
-        d.id == activeCanvasId ? this.layoutedElements.glyphs : d.glyphs;
+        d.id == activeCanvasId
+          ? this.filteredLayoutedElements.glyphs
+          : d.glyphs;
 
       output.push({
         id: d.id,
