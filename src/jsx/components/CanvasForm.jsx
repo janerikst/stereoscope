@@ -83,7 +83,6 @@ class CanvasForm extends React.Component {
           Comment: <br />
           <textarea
             rows="5"
-            cols="40"
             name="comment"
             value={this.state.comment}
             onChange={this.handleInputChange}
