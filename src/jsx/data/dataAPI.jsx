@@ -143,76 +143,92 @@ class DataAPI {
     for (let i = 0; i < annotationCount; i++) {
       const annotation = this.annotations[i];
       let hasIntersections = false;
+      let lastMiddleOffset = undefined;
 
       if (!isEmpty(offsets)) {
         // offset exists
-        map(offsets, offset => {
-          if (
-            intersects(
-              annotation.startOffset,
-              annotation.endOffset,
-              offset.startOffset,
-              offset.endOffset - 1,
-            )
-          ) {
-            if (!hasIntersections) {
-              hasIntersections = true;
-            }
-
-            // found intersection
-            const startOffset = annotation.startOffset - offset.startOffset;
-            const endOffset = annotation.endOffset - offset.endOffset;
-            const offsetAnnotations = offset.annotations;
-
-            // front part
-
-            if (startOffset > 0) {
-              addOffset(
-                offset.startOffset,
+        map(
+          orderBy(
+            values(offsets),
+            ['startOffset', 'endOffset'],
+            ['asc', 'desc'],
+          ),
+          offset => {
+            if (
+              intersects(
                 annotation.startOffset,
-                offsetAnnotations,
-              );
-            } else if (startOffset < 0) {
-              addOffset(annotation.startOffset, offset.startOffset, [
-                annotation.id,
-              ]);
-            }
+                annotation.endOffset,
+                offset.startOffset,
+                offset.endOffset - 1,
+              )
+            ) {
+              if (!hasIntersections) {
+                hasIntersections = true;
+              }
 
-            // middle part
+              // found intersection
+              const startOffset = annotation.startOffset - offset.startOffset;
+              const endOffset = annotation.endOffset - offset.endOffset;
+              const offsetAnnotations = offset.annotations;
 
-            addOffset(
-              Math.max(annotation.startOffset, offset.startOffset),
-              Math.min(annotation.endOffset, offset.endOffset),
-              offsetAnnotations.concat(annotation.id),
-            );
+              // front part
 
-            // back part
+              if (startOffset > 0) {
+                addOffset(
+                  offset.startOffset,
+                  annotation.startOffset,
+                  offsetAnnotations,
+                );
+              } else if (
+                startOffset < 0 &&
+                lastMiddleOffset < annotation.startOffset // dont add thing that there before
+              ) {
+                addOffset(annotation.startOffset, offset.startOffset, [
+                  annotation.id,
+                ]);
+              }
 
-            if (endOffset > 0) {
-              addOffset(offset.endOffset, annotation.endOffset, [
-                annotation.id,
-              ]);
-            } else if (endOffset < 0) {
+              // middle part
+
               addOffset(
+                Math.max(annotation.startOffset, offset.startOffset),
+                Math.min(annotation.endOffset, offset.endOffset),
+                offsetAnnotations.concat(annotation.id),
+              );
+
+              lastMiddleOffset = Math.min(
                 annotation.endOffset,
                 offset.endOffset,
-                offsetAnnotations,
               );
-            }
 
-            // delete pre existing offset if not in there
-            if (
-              (startOffset != 0 || endOffset != 0) &&
-              offsets[
-                `${offset.startOffset}-${offset.endOffset}`
-              ].annotations.find(d => {
-                return d == annotation.id;
-              }) == undefined
-            ) {
-              delete offsets[`${offset.startOffset}-${offset.endOffset}`];
+              // back part
+
+              if (endOffset > 0) {
+                addOffset(offset.endOffset, annotation.endOffset, [
+                  annotation.id,
+                ]);
+              } else if (endOffset < 0) {
+                addOffset(
+                  annotation.endOffset,
+                  offset.endOffset,
+                  offsetAnnotations,
+                );
+              }
+
+              // delete pre existing offset if not in there
+              if (
+                (startOffset != 0 || endOffset != 0) &&
+                offsets[
+                  `${offset.startOffset}-${offset.endOffset}`
+                ].annotations.find(d => {
+                  return d == annotation.id;
+                }) == undefined
+              ) {
+                delete offsets[`${offset.startOffset}-${offset.endOffset}`];
+              }
             }
-          }
-        });
+          },
+        );
       } else {
         // offset is empty > init
         addOffset(annotation.startOffset, annotation.endOffset, [
@@ -227,8 +243,7 @@ class DataAPI {
         ]);
       }
     }
-
-    return orderBy(offsets, 'startOffset', 'asc');
+    return orderBy(values(offsets), ['startOffset'], 'asc');
   }
 
   // *****
@@ -286,7 +301,6 @@ class DataAPI {
         annotations: [],
       });
     }
-
     return output;
   }
 
