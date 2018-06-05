@@ -31,8 +31,8 @@ export default {
 
     // box boundaries
     const boxForce = () => {
-      for (let i = 0, n = glyphs.length; i < n; i++) {
-        const d = glyphs[i];
+      for (let i = 0, n = output.length; i < n; i++) {
+        const d = output[i];
         d.x = Math.max(d.radius, Math.min(stageWidth - d.radius, d.x));
         d.y = Math.max(d.radius, Math.min(stageHeight - d.radius, d.y));
       }
