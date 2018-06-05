@@ -9,7 +9,6 @@ class TextAnnotation extends Component {
       author,
       tagPath,
       color,
-      showCloseBtn,
       isActive,
       isHovered,
       isSelected,
@@ -23,12 +22,10 @@ class TextAnnotation extends Component {
           ? ' is-inactive '
           : ''}${isHovered ? ' is-hovered ' : ''}`}>
         <header>
-          {showCloseBtn && (
-            <span
-              className="c-text-area__close o-close"
-              onClick={() => onCloseClick([id])}
-            />
-          )}
+          <span
+            className="c-text-area__close o-close"
+            onClick={() => onCloseClick([id])}
+          />
           Category: {tagPath} | Author: {author}
           |{' '}
           <span className="o-link" onClick={() => onTextClick(id)}>

@@ -73,7 +73,6 @@ const TextElements = observer(props => {
           author={d.author}
           tagPath={d.tagPath}
           color={d.color}
-          showCloseBtn={!activeCanvas.selectedAnnotationFixed}
           isActive={d.active}
           isHovered={d.hovered}
           onCloseClick={handleMultiTextSelect}
@@ -150,8 +149,6 @@ class TextBar extends Component {
     const handleTextBarModeChange = mode => uiState.changeTextBarMode(mode);
     const handleChangeSelectedAnnotationProperties = (property, value) =>
       uiState.changeSelectedAnnotationProperties(property, value);
-    const handleTriggerSelectedAnnotationFixed = () =>
-      uiState.triggerSelectedAnnotationFixed();
 
     // render
     return (
@@ -209,10 +206,7 @@ class TextBar extends Component {
           <TextAttributes
             items={selectedAnnotationPropertiesList}
             annotationCount={countSelectedAnnotations}
-            selectedFixed={activeCanvas.selectedAnnotationFixed}
-            showCloseBtn={!activeCanvas.selectedAnnotationFixed}
             onSelectClick={handleChangeSelectedAnnotationProperties}
-            onSelectFixedClick={handleTriggerSelectedAnnotationFixed}
             onCloseClick={handleSelectedAnnotationReset}
           />
         )}

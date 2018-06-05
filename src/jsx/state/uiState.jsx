@@ -72,7 +72,6 @@ class UiState {
       filters: [],
       glyphs: {},
       selectedAnnotationIds: [],
-      selectedAnnotationFixed: false,
     },
   ];
 
@@ -107,9 +106,6 @@ class UiState {
 
   @action
   changeSelectedAnnotation = (ids, single = false) => {
-    if (dataAPI.activeCanvas.selectedAnnotationFixed) {
-      return;
-    }
     if (single) {
       if (intersection(this.selectedAnnotationIds, ids).length == ids.length) {
         this.selectedAnnotationIds = [];
@@ -208,19 +204,17 @@ class UiState {
       filters: [],
       glyphs: {},
       selectedAnnotationIds: [],
-      selectedAnnotationFixed: false,
     });
     this.showAddCanvasDialog = !this.showAddCanvasDialog;
     this.setActiveCanvas(newId);
   };
 
   @action
-  editCanvas = (title, layout, comment, selectedFixed) => {
+  editCanvas = (title, layout, comment) => {
     const canvas = this.canvases.find(d => d.id == this.editCanvasId);
     canvas.title = title;
     canvas.layout = layout;
     canvas.comment = comment;
-    canvas.selectedAnnotationFixed = selectedFixed;
     this.editCanvasId = '';
   };
 
@@ -253,7 +247,7 @@ class UiState {
   };
 
   @action
-  cloneCanvas = (title, layout, comment, selectedFixed) => {
+  cloneCanvas = (title, layout, comment) => {
     let orginialCanvas = this.canvases.find(d => d.id == this.cloneCanvasId);
     const newId = last(this.canvases).id + 1;
     this.canvases.push({
@@ -269,7 +263,6 @@ class UiState {
       filters: [...this.activeFilterIds],
       glyphs: [...dataAPI.filteredLayoutedElements.glyphs],
       selectedAnnotationIds: [...this.selectedAnnotationIds],
-      selectedAnnotationFixed: selectedFixed,
     });
     this.cloneCanvasId = '';
     this.setActiveCanvas(newId);
@@ -346,11 +339,6 @@ class UiState {
     dataAPI.activeCanvas.showComment = !dataAPI.activeCanvas.showComment;
   };
 
-  @action
-  triggerSelectedAnnotationFixed = () => {
-    dataAPI.activeCanvas.selectedAnnotationFixed = !dataAPI.activeCanvas
-      .selectedAnnotationFixed;
-  };
   // Data
 
   @action

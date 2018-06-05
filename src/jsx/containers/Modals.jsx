@@ -29,25 +29,15 @@ const Modals = observer(props => {
     uiState.triggerAddCanvasDialog();
   };
 
-  const handleSubmitEditCanvasDialog = (
-    title,
-    layout,
-    comment,
-    selectionFixed,
-  ) => {
-    uiState.editCanvas(title, layout, comment, selectionFixed);
+  const handleSubmitEditCanvasDialog = (title, layout, comment) => {
+    uiState.editCanvas(title, layout, comment);
   };
   const handleCloseEditCanvasDialog = () => {
     uiState.triggerEditCanvasDialog();
   };
 
-  const handleSubmitCloneCanvasDialog = (
-    title,
-    layout,
-    comment,
-    selectionFixed,
-  ) => {
-    uiState.cloneCanvas(title, layout, comment, selectionFixed);
+  const handleSubmitCloneCanvasDialog = (title, layout, comment) => {
+    uiState.cloneCanvas(title, layout, comment);
   };
   const handleCloseCloneCanvasDialog = () => {
     uiState.triggerCloneCanvasDialog();
@@ -98,8 +88,6 @@ const Modals = observer(props => {
             title={canvasDetails.title}
             layout={canvasDetails.layout}
             comment={canvasDetails.comment}
-            selectedFixed={canvasDetails.selectedAnnotationFixed}
-            showSelectedFixed={true}
             layouts={layoutList}
             onSubmit={handleSubmitEditCanvasDialog}
           />
@@ -121,8 +109,6 @@ const Modals = observer(props => {
             title={canvasDetails.title}
             layout={canvasDetails.layout}
             comment={canvasDetails.comment}
-            selectedFixed={canvasDetails.selectedAnnotationFixed}
-            showSelectedFixed={true}
             submitTitle="Clone Canvas"
             layouts={layoutList}
             onSubmit={handleSubmitCloneCanvasDialog}
