@@ -904,6 +904,7 @@ class DataAPI {
     ) {
       return [];
     }
+    const textLen = this.text.length;
 
     return orderBy(
       this.activeAnnotations.map(d => {
@@ -912,8 +913,8 @@ class DataAPI {
           color: d.color,
           active: d.active,
           selected: this.activeDetailedAnnotationsById[d.id].selected,
-          start: d.startOffset / this.text.length * 100,
-          height: (d.endOffset - d.startOffset) / this.text.length * 100,
+          start: d.startOffset / textLen * 100,
+          height: (d.endOffset - d.startOffset) / textLen * 100,
         };
       }),
       'height',
