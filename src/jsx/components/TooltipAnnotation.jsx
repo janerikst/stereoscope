@@ -15,6 +15,11 @@ const TooltipContent = props => {
         {(d.importance != undefined || d.certainty != undefined) && (
           <div>
             {d.importance ? `Importance: ${d.importance}` : ''}
+            {d.importance != undefined && d.certainty != undefined ? (
+              <br />
+            ) : (
+              ''
+            )}
             {d.certainty ? `Certainty: ${d.certainty}` : ''}
           </div>
         )}
