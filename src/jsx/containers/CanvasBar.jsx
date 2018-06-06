@@ -11,7 +11,7 @@ import CanvasThumbnail from '../components/CanvasThumbnail';
 
 const CanvasBar = observer(props => {
   // vars
-  const { canvasList } = dataAPI;
+  const { canvasList, downloadDetailedAnnotations } = dataAPI;
   const { CANVAS_BAR_WIDTH } = config;
 
   // interactions
@@ -21,6 +21,9 @@ const CanvasBar = observer(props => {
     uiState.triggerCloneCanvasDialog(id);
   const handleSelectCanvas = id => uiState.setActiveCanvas(id);
   const handleDeleteCanvas = id => uiState.deleteCanvas(id);
+  const handleDownloadCanvas = id => {
+    dataAPI.downloadCanvas(id);
+  };
 
   // content
   const canvasEls = canvasList.map((d, i) => (
@@ -35,6 +38,7 @@ const CanvasBar = observer(props => {
       onSelect={handleSelectCanvas}
       onDelete={handleDeleteCanvas}
       onClone={handleOpenCloneCanvasDialog}
+      onDownload={handleDownloadCanvas}
       onEdit={handleOpenEditCanvasDialog}
       width={d.thumbnailWidth}
       height={d.thumbnailHeight}

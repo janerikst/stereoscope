@@ -6,6 +6,7 @@ import config from 'config/config';
 
 import TrashIcon from 'react-icons/lib/fa/trash';
 import CloneIcon from 'react-icons/lib/fa/clone';
+import DownloadIcon from 'react-icons/lib/fa/download';
 
 @observer
 class CanvasThumbnail extends React.Component {
@@ -20,6 +21,7 @@ class CanvasThumbnail extends React.Component {
       onEdit,
       onDelete,
       onClone,
+      onDownload,
       width,
       height,
     } = this.props;
@@ -31,6 +33,11 @@ class CanvasThumbnail extends React.Component {
             className="c-canvas-thumbnail__icon c-canvas-thumbnail__clone"
             onClick={() => onClone(id)}>
             <CloneIcon />
+          </span>
+          <span
+            className="c-canvas-thumbnail__icon c-canvas-thumbnail__download"
+            onClick={() => onDownload(id)}>
+            <DownloadIcon />
           </span>
           {isDeleteable && (
             <span

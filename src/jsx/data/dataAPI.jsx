@@ -21,6 +21,7 @@ import {
 } from 'lodash';
 
 import { scaleSqrt, scaleLinear } from 'd3';
+import FileDownload from 'react-file-download';
 
 class DataAPI {
   // DATASETS
@@ -443,6 +444,60 @@ class DataAPI {
       maxLen = Math.max(maxLen, d.endOffset - d.startOffset + 1);
     });
     return maxLen;
+  }
+
+  // *****
+  // raw annotations with updated properites for download
+  // *****
+
+  @computed
+  get rawAnnotationsWithUpdatedProperties() {
+    if (this.rawAnnotations.length == 0) {
+      return [];
+    }
+    const { annotationProperties } = uiState;
+    const properties = config.ANNOTATION_PROPERTIES;
+    // flip properties
+    const propertiesReverse = {};
+    forEach(properties, (d, k) => {
+      propertiesReverse[d.id] = k;
+    });
+
+    // group raw annotation by id
+    const rawAnnotationsGrouped = {
+      ...groupBy(this.rawAnnotations, 'annotationId'),
+    };
+
+    // go through annotation properties
+    forEach(annotationProperties, property => {
+      const foundProps = {};
+      const itemsById = keyBy(property.items, 'id');
+      // check existing properties
+      rawAnnotationsGrouped[property.id].forEach(annotation => {
+        if (itemsById[properties[annotation.propertyName].id] != undefined) {
+          annotation.propertyValue = property.value;
+        }
+        foundProps[property.id] = 1;
+      });
+      // check if new ones are in there
+      property.items.forEach(item => {
+        if (foundProps[item.id] == undefined) {
+          rawAnnotationsGrouped[property.id].push({
+            ...rawAnnotationsGrouped[property.id][0],
+            propertyName: propertiesReverse[item.id],
+            propertyValue: item.value,
+          });
+        }
+      });
+    });
+    // make dict flat
+    const output = [];
+    forEach(values(rawAnnotationsGrouped), d => {
+      forEach(d, e => {
+        output.push(e);
+      });
+    });
+    return output;
   }
 
   // *****
@@ -1156,6 +1211,52 @@ class DataAPI {
         this.activeFilterIdsById[d.id] != undefined;
       return { ...d, active };
     });
+  }
+
+  // --------------------
+  //
+  // *** HELPER ***
+  //
+  // --------------------
+
+  // *****
+  // download annotations
+  // *****
+
+  downloadCanvas(id) {
+    if (this.rawAnnotationsWithUpdatedProperties.length == 0) {
+      return [];
+    }
+
+    const { activeCanvasId } = uiState;
+    let filters;
+
+    // get filters
+    if (id == activeCanvasId) {
+      filters = uiState.activeFilterIds;
+    } else {
+      const canvas = uiState.canvases.find(d => d.id == id);
+      filters = canvas.filters;
+    }
+
+    // get raw annotations filtered
+    let annotations;
+    if (filters.length > 0) {
+      let filtersById = {};
+      filters.forEach(d => (filtersById[d] = 1));
+      annotations = [
+        ...this.rawAnnotationsWithUpdatedProperties.filter(
+          d => filtersById[d.tagId] != undefined,
+        ),
+      ];
+    } else {
+      annotations = [...this.rawAnnotationsWithUpdatedProperties];
+    }
+
+    var blob = new Blob([JSON.stringify(annotations)], {
+      type: 'application/json;charset=utf-8',
+    });
+    FileDownload(blob, 'canvas.json');
   }
 }
 
