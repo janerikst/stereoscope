@@ -30,10 +30,7 @@
 .c-canvas-thumbnail.is-active .c-canvas-thumbnail__image_container
   border: 2px solid $c-red
 
-.c-canvas-thumbnail:hover .c-canvas-thumbnail__delete
-  display: block
-  
-.c-canvas-thumbnail:hover .c-canvas-thumbnail__clone
+.c-canvas-thumbnail:hover .c-canvas-thumbnail__delete, .c-canvas-thumbnail:hover .c-canvas-thumbnail__clone, .c-canvas-thumbnail:hover .c-canvas-thumbnail__download
   display: block
 
 .c-canvas-thumbnail__icon
@@ -44,6 +41,9 @@
   background-color: $c-gray
   display: none
 
+  &:hover
+    background-color: $c-red
+
 .c-canvas-thumbnail__delete
   top: 0
   right: 0
@@ -51,4 +51,8 @@
 .c-canvas-thumbnail__clone
   top: 0
   left: 0
+
+.c-canvas-thumbnail__download
+  top: 0
+  left: 40px
 

@@ -11,9 +11,11 @@ import ConfigIcon from 'react-icons/lib/fa/cog';
 import ChartIcon from 'react-icons/lib/fa/bar-chart';
 import LabelIcon from 'react-icons/lib/fa/font';
 import CommentIcon from 'react-icons/lib/fa/comment';
+import FileIcon from 'react-icons/lib/fa/file-image-o';
 
 const CanvasControls = observer(props => {
   // var
+  const { onDownload } = props;
   const { activeCanvas, layoutList } = dataAPI;
   const { showFilterPanel, showLayoutPanel, showLabels } = uiState;
 
@@ -58,8 +60,11 @@ const CanvasControls = observer(props => {
       <Button isActive={activeCanvas.showComment} onClick={handleCommentToggle}>
         <CommentIcon />
       </Button>
+      <Button isRight={true} onClick={onDownload}>
+        <FileIcon />
+      </Button>
       {activeCanvas.id != 1 && (
-        <Button isRight={true} onClick={handleDeleteCanvas}>
+        <Button onClick={handleDeleteCanvas}>
           <TrashIcon />
         </Button>
       )}
