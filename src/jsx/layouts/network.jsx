@@ -30,13 +30,13 @@ export default {
     });
 
     // box boundaries
-    const boxForce = () => {
-      for (let i = 0, n = output.length; i < n; i++) {
-        const d = output[i];
-        d.x = Math.max(d.radius, Math.min(stageWidth - d.radius, d.x));
-        d.y = Math.max(d.radius, Math.min(stageHeight - d.radius, d.y));
-      }
-    };
+    // const boxForce = () => {
+    //   for (let i = 0, n = output.length; i < n; i++) {
+    //     const d = output[i];
+    //     d.x = Math.max(d.radius, Math.min(stageWidth - d.radius, d.x));
+    //     d.y = Math.max(d.radius, Math.min(stageHeight - d.radius, d.y));
+    //   }
+    // };
 
     //start simulation
 
@@ -51,7 +51,7 @@ export default {
       .force('charge', forceManyBody().strength(-1))
       .force('center', forceCenter(stageWidth / 2, stageHeight / 2))
       .force('collide', forceCollide(d => d.radius * 1.2))
-      .force('box_force', boxForce)
+      // .force('box_force', boxForce)
       .stop();
 
     for (var i = 0; i < 400; ++i) simulation.tick();
