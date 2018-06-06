@@ -46,6 +46,7 @@
         "copy-webpack-plugin": "^4.5.1",
         "d3": "^4.9.1",
         "director": "^1.2.8",
+        "dom-to-image": "^2.6.0",
         "lodash": "^4.17.4",
         "mobx": "^3.2.2",
         "mobx-react": "^4.2.1",
@@ -54,6 +55,7 @@
         "node-sass": "^4.5.3",
         "react": "^16.0.0",
         "react-dom": "^16.0.0",
+        "react-file-download": "^0.3.5",
         "react-icons": "^2.2.7",
         "react-modal": "^3.4.4"
     }
