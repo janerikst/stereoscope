@@ -14,9 +14,75 @@ import Glyph from '../components/Glyph';
 import FilterPanel from '../components/FilterPanel';
 import LayoutPanel from '../components/LayoutPanel';
 
+import {
+  call,
+  event,
+  select,
+  zoom,
+  zoomIdentity,
+  zoomTransform,
+  drag,
+  transition,
+} from 'd3';
+
 @observer
 class Canvas extends Component {
-  // download active canvas image
+  constructor(props) {
+    super(props);
+    let zoomBehavior;
+    let lastLayout;
+  }
+
+  componentDidMount() {
+    const { activeCanvas } = dataAPI;
+    this.lastLayout = activeCanvas.layout;
+
+    const svglEl = select(this.svgEl);
+    this.zoomBehavior = zoom()
+      .scaleExtent([0.5, 3])
+      .on('start', () => {
+        uiState.blockToolTip();
+      })
+      .on('end', () => {
+        uiState.unblockToolTip();
+      })
+      .on('zoom', this.dragAndZoomContainer.bind(this));
+    svglEl.call(this.zoomBehavior);
+  }
+
+  componentWillUnmount() {
+    select(this.svgEl).call(
+      zoom()
+        .scaleExtent([])
+        .on('zoom', function() {}),
+    );
+  }
+
+  componentDidUpdate() {
+    const { activeCanvas } = dataAPI;
+    if (activeCanvas.layout != this.lastLayout) {
+      this.lastLayout = activeCanvas.layout;
+      const svglEl = select(this.svgEl);
+      if (svglEl) {
+        var t = zoomIdentity.translate(0, 0).scale(1);
+        svglEl.call(this.zoomBehavior.transform, t);
+      }
+    }
+  }
+
+  dragAndZoomContainer() {
+    select(this.containerEl).attr(
+      'transform',
+      'translate(' +
+        event.transform.x +
+        ',' +
+        event.transform.y +
+        ') scale(' +
+        event.transform.k +
+        ')',
+    );
+  }
+
   render() {
     // var
     const {
@@ -123,12 +189,21 @@ class Canvas extends Component {
             ref={x => {
               this.stage = x;
             }}>
-            <svg width={canvasWidth} height={canvasHeight}>
-              <g className="c-canvas__glyphs">{glyphs}</g>
-              {showLabels &&
-              labels.length != 0 && (
-                <g className="c-canvas__labels">{labels}</g>
-              )}
+            <svg
+              width={canvasWidth}
+              height={canvasHeight}
+              viewBox={`0 0 ${canvasWidth} ${canvasHeight}`}
+              preserveAspectRatio="xMidYMid meet"
+              ref={x => (this.svgEl = x)}>
+              <g
+                className="c-canvas__container"
+                ref={x => (this.containerEl = x)}>
+                <g className="c-canvas__glyphs">{glyphs}</g>
+                {showLabels &&
+                labels.length != 0 && (
+                  <g className="c-canvas__labels">{labels}</g>
+                )}
+              </g>
             </svg>
           </div>
           <div className="c-canvas__overlays">
