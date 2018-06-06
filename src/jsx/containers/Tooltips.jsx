@@ -10,7 +10,8 @@ import TooltipAnnotation from '../components/TooltipAnnotation';
 const Tooltips = observer(props => {
   return (
     <div>
-      {uiState.hoveredAnnotationIds.length != 0 && (
+      {!uiState.toolTipBlocked &&
+      uiState.hoveredAnnotationIds.length != 0 && (
         <Tooltip width={400} visible>
           <TooltipAnnotation items={dataAPI.hoveredAnnotationsDetails} />
         </Tooltip>

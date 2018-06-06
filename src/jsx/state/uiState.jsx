@@ -57,6 +57,7 @@ class UiState {
   @observable showFilterPanel = false;
   @observable showLayoutPanel = false;
   @observable showLabels = true;
+  @observable toolTipBlocked = false;
 
   @observable
   canvases = [
@@ -338,6 +339,17 @@ class UiState {
   triggerComment = () => {
     dataAPI.activeCanvas.showComment = !dataAPI.activeCanvas.showComment;
   };
+
+  @action
+  blockToolTip() {
+    this.toolTipBlocked = true;
+  }
+
+  @action
+  unblockToolTip() {
+    this.hoveredNodeId = null;
+    this.toolTipBlocked = false;
+  }
 
   // Data
 
