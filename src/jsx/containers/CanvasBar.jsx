@@ -71,12 +71,12 @@ const CanvasBar = observer(props => {
   // render
   return (
     <aside
-      className="c-canvas-bar l-content-container"
+      className="c-canvas-bar l-content-container l-content-container-border"
       style={{ width: CANVAS_BAR_WIDTH }}>
       <header className="c-header--small">
         <h2>Canvas View</h2>
       </header>
-      <div className="c-canvas-bar__thumbnails l-content-spacing">
+      <div className="c-canvas-bar__thumbnails l-content-spacing-canvasbar">
         <input type="text" onChange={handlesearchStringChange}/>
         <div className="c-canvas-bar__add" onClick={handleOpenAddCanvasDialog}>
           <span>+</span>
