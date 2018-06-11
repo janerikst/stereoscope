@@ -27,7 +27,7 @@ const CanvasControls = observer(props => {
   const handleFilterToggle = () => uiState.triggerFilterPanel();
   const handleLayoutToggle = () => uiState.triggerLayoutPanel();
   const handleLabelToggle = () => uiState.triggerLabels();
-  const handleCommentToggle = () => uiState.triggerComment();
+  const handleCommentToggle = () => uiState.triggerCommentPanel();
   const handleDeleteCanvas = () => uiState.deleteCanvas(activeCanvas.id);
 
   // content
@@ -44,7 +44,7 @@ const CanvasControls = observer(props => {
     <div className="c-canvas-controls">
       <div className="c-canvas-controls__select">
         <ChartIcon />
-        <select value={activeCanvas.layout} onChange={handleLayoutChange}>
+        <select className="c-canvas-controls__select__element" value={activeCanvas.layout} onChange={handleLayoutChange}>
           {layoutOptions}
         </select>
       </div>

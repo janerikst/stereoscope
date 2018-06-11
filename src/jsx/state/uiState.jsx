@@ -56,6 +56,7 @@ class UiState {
   @observable showDataDialog = false;
   @observable showFilterPanel = false;
   @observable showLayoutPanel = false;
+  @observable editComment = false; 
   @observable showLabels = true;
   @observable toolTipBlocked = false;
 
@@ -69,10 +70,11 @@ class UiState {
       layoutControls: {},
       textBarShowsAll: true,
       showLabels: true,
-      showComment: false,
+      showComment: true,
       filters: [],
       glyphs: {},
       selectedAnnotationIds: [],
+      isMatch: true
     },
   ];
 
@@ -245,6 +247,9 @@ class UiState {
     this.showLabels = canvas.showLabels;
     this.activeLayoutControls = canvas.layoutControls;
     this.selectedAnnotationIds = canvas.selectedAnnotationIds;
+
+    //copy comment
+    dataAPI.activeCanvas.comment = canvas.comment;
   };
 
   @action
@@ -298,6 +303,18 @@ class UiState {
     this.activeLayoutControls.push({ id: id, value: value });
   };
 
+  @action
+  changeComment = comment => {
+    const canvas = this.canvases.find(d => d.id == this.activeCanvasId);
+    canvas.comment = comment.target.value;
+  };
+
+  @action 
+  changeSearchString = searchString => {
+    this.canvasSearchString = searchString.target.value;
+  }
+
+
   // Dialogs
 
   @action
@@ -336,8 +353,19 @@ class UiState {
   };
 
   @action
-  triggerComment = () => {
+  triggerCommentPanel = () => {
     dataAPI.activeCanvas.showComment = !dataAPI.activeCanvas.showComment;
+  };
+
+  @action
+  startEditComment = () => {
+    this.editComment = true;
+  };
+
+  @action
+  endEditComment = () => {
+    this.editComment = false;
+    console.log(this.editComment);
   };
 
   @action

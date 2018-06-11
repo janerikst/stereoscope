@@ -13,6 +13,7 @@ import CanvasControls from './CanvasControls';
 import Glyph from '../components/Glyph';
 import FilterPanel from '../components/FilterPanel';
 import LayoutPanel from '../components/LayoutPanel';
+import CommentPanel from '../components/CommentPanel';
 
 import {
   call,
@@ -98,15 +99,24 @@ class Canvas extends Component {
     } = dataAPI;
 
     const { showFilterPanel, showLayoutPanel, showLabels } = uiState;
-    const { FILTER_PANEL_WIDTH, FILTER_PANEL_HEIGHT, CANVAS_MARGIN } = config;
+    const { FILTER_PANEL_WIDTH, FILTER_PANEL_HEIGHT, CANVAS_MARGIN, COMMENT_PANEL_WIDTH, COMMENT_PANEL_HEIGHT } = config;
 
     // interactions
     const handleFilterChange = filter =>
       uiState.changeActiveCanvasFilters(filter);
     const handleFilterReset = filter => uiState.resetActiveCanvasFilters();
 
+    const handleCommentChange = comment => {
+      //console.log(comment.target.value);
+      uiState.changeComment(comment);
+    }
+
+    const handleCommentEditToggle = () => uiState.startEditComment();
+    const handleCommentEndEditToggle = () => uiState.endEditComment();
+
     const handleFilterToggle = () => uiState.triggerFilterPanel();
     const handleLayoutToggle = () => uiState.triggerLayoutPanel();
+    const handleCommentToggle = () => uiState.triggerCommentPanel();
 
     const handleLayoutControlChange = (id, value) =>
       uiState.changeActiveCanvasLayoutControls(id, value);
@@ -216,12 +226,29 @@ class Canvas extends Component {
                 />
               </div>
             )}
-            {activeCanvas.showComment &&
+
+            {/* In progress: Making Commentbox clickable to change comment. */}
+
+            {/*activeCanvas.showComment &&
             activeCanvas.comment.length != 0 && (
               <div className="c-canvas__layout-comment">
                 {activeCanvas.comment}
               </div>
-            )}
+            )*/}
+
+            {activeCanvas.showComment &&
+              <div className="c-canvas__comment-panel">
+                <CommentPanel
+                  onClick={handleCommentEditToggle}
+                  onSave={handleCommentEndEditToggle}
+                  onChange={handleCommentChange}
+                  onTriggerPanel={handleCommentToggle}
+                  value={activeCanvas.comment}
+                />
+              </div>
+            }
+
+
             {showFilterPanel && (
               <div className="c-canvas__filter-panel">
                 <FilterPanel
