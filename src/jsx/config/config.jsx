@@ -1,6 +1,6 @@
 export default {
-  TEXT_FILE: 'data/Kafka_InDerStrafkolonie.txt',
-  ANNOTATION_FILE: 'data/strafkolonie.json',
+  TEXT_FILE: '',
+  ANNOTATION_FILE: '',
   TEXT_BAR_WIDTH: 420,
   TEXT_NAV_WIDTH: 16,
   CANVAS_BAR_WIDTH: 190,
