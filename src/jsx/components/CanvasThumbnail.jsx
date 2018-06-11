@@ -16,6 +16,7 @@ class CanvasThumbnail extends React.Component {
       title,
       layout,
       isActive,
+      isMatch,
       isDeleteable,
       onSelect,
       onEdit,
@@ -27,7 +28,7 @@ class CanvasThumbnail extends React.Component {
     } = this.props;
 
     return (
-      <div className={`c-canvas-thumbnail ${isActive ? 'is-active' : ''}`}>
+      <div className={`c-canvas-thumbnail ${isActive ? 'is-active' : ''} ${isMatch ? 'is-highlighted' : ''}`}>
         <div className="c-canvas-thumbnail__image_container">
           <span
             className="c-canvas-thumbnail__icon c-canvas-thumbnail__clone"

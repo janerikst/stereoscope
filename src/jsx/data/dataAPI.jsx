@@ -1023,9 +1023,69 @@ class DataAPI {
         }),
         thumbnailWidth: CANVAS_THUMB_WIDTH,
         thumbnailHeight: thumbHeight,
+        comment: d.comment
       });
     });
 
+    return orderBy(output, 'id', 'desc');
+  }
+
+
+  // *****
+  // list of all canvas with thumbnail data – filtered by CanvasBar input field
+  // *****
+
+  @computed
+  get filteredCanvasList() {
+    const { canvases, activeCanvasId, canvasSearchString } = uiState;
+    if (canvases.length == 0 || isEmpty(this.layoutsById)) {
+      return [];
+    }
+
+    const { CANVAS_BAR_WIDTH, CANVAS_THUMB_WIDTH } = config;
+
+    // scales
+    const scaleRatio = CANVAS_THUMB_WIDTH / this.canvasWidth;
+    const thumbHeight =
+      CANVAS_THUMB_WIDTH * this.canvasHeight / this.canvasWidth;
+
+    const output = [];
+    let isMatch = true;
+    let matchesFilter = new RegExp(canvasSearchString, "i");
+
+    canvases.forEach(d => {
+      const glyphs =
+        d.id == activeCanvasId
+          ? this.filteredLayoutedElements.glyphs
+          : d.glyphs;
+
+      if (!canvasSearchString || matchesFilter.test(d.comment)) {
+        isMatch = true;
+      } else {
+        isMatch = false;
+      }
+
+      output.push({
+        id: d.id,
+        title: d.title ? d.title : config.CANVAS_DEFAULT_NAME,
+        layout: this.layoutsById[d.layout].title,
+        active: d.id == activeCanvasId,
+        glyphs: map(glyphs, d => {
+          return {
+            x: d.x * scaleRatio,
+            y: d.y * scaleRatio,
+            radius: Math.max(d.radius * scaleRatio, 1),
+            color: d.color,
+          };
+        }),
+        thumbnailWidth: CANVAS_THUMB_WIDTH,
+        thumbnailHeight: thumbHeight,
+        comment: d.comment,
+        isMatch: isMatch
+      });
+    });
+
+    console.log(output);
     return orderBy(output, 'id', 'desc');
   }
 

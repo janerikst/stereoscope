@@ -11,7 +11,7 @@ import CanvasThumbnail from '../components/CanvasThumbnail';
 
 const CanvasBar = observer(props => {
   // vars
-  const { canvasList, downloadDetailedAnnotations } = dataAPI;
+  const { canvasList, filteredCanvasList, downloadDetailedAnnotations } = dataAPI;
   const { CANVAS_BAR_WIDTH } = config;
 
   // interactions
@@ -24,9 +24,12 @@ const CanvasBar = observer(props => {
   const handleDownloadCanvas = id => {
     dataAPI.downloadCanvas(id);
   };
+  const handlesearchStringChange = searchString => {
+      uiState.changeSearchString(searchString);
+    }
 
   // content
-  const canvasEls = canvasList.map((d, i) => (
+  /*const canvasEls = canvasList.map((d, i) => (
     <CanvasThumbnail
       key={d.id}
       id={d.id}
@@ -34,6 +37,26 @@ const CanvasBar = observer(props => {
       layout={d.layout}
       glyphs={d.glyphs}
       isActive={d.active}
+      isDeleteable={d.id != 1}
+      onSelect={handleSelectCanvas}
+      onDelete={handleDeleteCanvas}
+      onClone={handleOpenCloneCanvasDialog}
+      onDownload={handleDownloadCanvas}
+      onEdit={handleOpenEditCanvasDialog}
+      width={d.thumbnailWidth}
+      height={d.thumbnailHeight}
+    />
+  ));*/
+
+  const canvasEls = filteredCanvasList.map((d, i) => (
+    <CanvasThumbnail
+      key={d.id}
+      id={d.id}
+      title={d.title}
+      layout={d.layout}
+      glyphs={d.glyphs}
+      isActive={d.active}
+      isMatch={d.isMatch}
       isDeleteable={d.id != 1}
       onSelect={handleSelectCanvas}
       onDelete={handleDeleteCanvas}
@@ -54,6 +77,7 @@ const CanvasBar = observer(props => {
         <h2>Canvas View</h2>
       </header>
       <div className="c-canvas-bar__thumbnails l-content-spacing">
+        <input type="text" onChange={handlesearchStringChange}/>
         <div className="c-canvas-bar__add" onClick={handleOpenAddCanvasDialog}>
           <span>+</span>
         </div>

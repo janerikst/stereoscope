@@ -83,6 +83,7 @@ class UiState {
   @observable cloneCanvasId = '';
   @observable activeFilterIds = [];
   @observable activeLayoutControls = [];
+  @observable canvasSearchString = '';
 
   @observable annotationProperties = [];
 
