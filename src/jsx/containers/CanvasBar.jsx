@@ -74,7 +74,7 @@ const CanvasBar = observer(props => {
       className="c-canvas-bar l-content-container l-content-container-border"
       style={{ width: CANVAS_BAR_WIDTH }}>
       <header className="c-header--small">
-        <h2>Canvas View</h2>
+        <h2>Views</h2>
       </header>
       <div className="c-canvas-bar__thumbnails l-content-spacing-canvasbar">
         <input type="text" onChange={handlesearchStringChange}/>

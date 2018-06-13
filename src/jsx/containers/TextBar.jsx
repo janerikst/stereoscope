@@ -160,7 +160,7 @@ class TextBar extends Component {
             <span
               className={textBarShowsAll ? 'is-active' : ''}
               onClick={() => handleTextBarModeChange(true)}>
-              Text
+              Full Text
             </span>{' '}
             |{' '}
             <span

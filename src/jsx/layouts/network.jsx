@@ -8,7 +8,7 @@ import {
 
 export default {
   id: 'network',
-  title: 'Network',
+  title: 'Overlaps',
   inputs: [],
   create: function grid(glyphs, width, height, options) {
     // vars
