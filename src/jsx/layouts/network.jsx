@@ -48,7 +48,7 @@ export default {
           .distance(20)
           .strength(1),
       )
-      .force('charge', forceManyBody().strength(-1))
+      .force('charge', forceManyBody().strength(-4))
       .force('center', forceCenter(stageWidth / 2, stageHeight / 2))
       .force('collide', forceCollide(d => d.radius * 1.2))
       // .force('box_force', boxForce)
