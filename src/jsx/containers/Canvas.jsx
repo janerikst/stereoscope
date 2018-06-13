@@ -11,6 +11,7 @@ import FileDownload from 'react-file-download';
 
 import CanvasControls from './CanvasControls';
 import Glyph from '../components/Glyph';
+import Line from '../components/Line';
 import FilterPanel from '../components/FilterPanel';
 import LayoutPanel from '../components/LayoutPanel';
 import CommentPanel from '../components/CommentPanel';
@@ -98,7 +99,7 @@ class Canvas extends Component {
       glyphScaleImportance,
     } = dataAPI;
 
-    const { showFilterPanel, showLayoutPanel, showLabels } = uiState;
+    const { showFilterPanel, showLayoutPanel, showLabels, showLines } = uiState;
     const { FILTER_PANEL_WIDTH, FILTER_PANEL_HEIGHT, CANVAS_MARGIN, COMMENT_PANEL_WIDTH, COMMENT_PANEL_HEIGHT } = config;
 
     // interactions
@@ -159,6 +160,23 @@ class Canvas extends Component {
       );
     });
 
+    const links = activeLayoutedElements.links
+        ? activeLayoutedElements.links.map(d => {
+          return (
+            <Line
+              id={d.id}
+              key={d.id}
+              x1={d.x1}
+              y1={d.y1}
+              x2={d.x2}
+              y2={d.y2}
+              color={d.color}
+              isHidden={d.hidden}
+            />
+          );
+        })
+        : [];
+
     const labels = activeLayoutedElements.labelGroups
       ? activeLayoutedElements.labelGroups.map(group => {
           const output = [];
@@ -208,6 +226,8 @@ class Canvas extends Component {
               <g
                 className="c-canvas__container"
                 ref={x => (this.containerEl = x)}>
+                {showLines && 
+                  <g>{links}</g>}
                 <g className="c-canvas__glyphs">{glyphs}</g>
                 {showLabels &&
                 labels.length != 0 && (

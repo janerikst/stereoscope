@@ -1085,7 +1085,6 @@ class DataAPI {
       });
     });
 
-    console.log(output);
     return orderBy(output, 'id', 'desc');
   }
 

@@ -58,6 +58,7 @@ class UiState {
   @observable showLayoutPanel = false;
   @observable editComment = false; 
   @observable showLabels = true;
+  @observable showLines = false;
   @observable toolTipBlocked = false;
 
   @observable

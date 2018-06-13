@@ -23,7 +23,7 @@ export default {
     glyphs.forEach(d => {
       if (d.intersections.length) {
         d.intersections.forEach(e => {
-          links.push({ source: d.id, target: e.id, value: e.value });
+          links.push({ source: d.id, x1: d.x, y1: d.y, target: e.id, x2: e.x, y2: e.y, value: e.value });
         });
       }
       output.push({ ...d });
@@ -56,6 +56,20 @@ export default {
 
     for (var i = 0; i < 400; ++i) simulation.tick();
 
-    return { glyphs: output };
+    links.forEach(d => {
+      output.forEach(e => {
+        if (d.source.id.localeCompare(e.id) == 0) {
+          d.x1 = e.x;
+          d.y1 = e.y;
+        }
+        if (d.target.id.localeCompare(e.id) == 0) {
+          d.x2 = e.x;
+          d.y2 = e.y;
+        }
+      });
+    });
+
+
+    return { glyphs: output, links: links };
   },
 };
