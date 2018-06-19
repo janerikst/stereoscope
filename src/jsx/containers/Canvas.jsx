@@ -217,6 +217,7 @@ class Canvas extends Component {
             ref={x => {
               this.stage = x;
             }}>
+            <div className="c-canvas__title">{activeCanvas.title}</div>
             <svg
               width={canvasWidth}
               height={canvasHeight}
