@@ -4,9 +4,9 @@ import { observer } from 'mobx-react';
 
 import config from 'config/config';
 
-import TrashIcon from 'react-icons/lib/fa/trash';
-import CloneIcon from 'react-icons/lib/fa/clone';
-import DownloadIcon from 'react-icons/lib/fa/download';
+import TrashIcon from 'react-icons/lib/md/delete';
+import CloneIcon from 'react-icons/lib/md/content-copy';
+import DownloadIcon from 'react-icons/lib/md/file-download';
 
 @observer
 class CanvasThumbnail extends React.Component {

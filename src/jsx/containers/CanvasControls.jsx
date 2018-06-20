@@ -5,13 +5,13 @@ import dataAPI from 'data/dataAPI';
 import uiState from 'state/uiState';
 
 import Button from '../components/Button';
-import TrashIcon from 'react-icons/lib/fa/trash';
-import FilterIcon from 'react-icons/lib/fa/filter';
-import ConfigIcon from 'react-icons/lib/fa/cog';
-import ChartIcon from 'react-icons/lib/fa/bar-chart';
-import LabelIcon from 'react-icons/lib/fa/font';
-import CommentIcon from 'react-icons/lib/fa/comment';
-import FileIcon from 'react-icons/lib/fa/file-image-o';
+import TrashIcon from 'react-icons/lib/md/delete';
+import FilterIcon from 'react-icons/lib/md/filter-list';
+import ConfigIcon from 'react-icons/lib/md/settings';
+import ChartIcon from 'react-icons/lib/md/insert-chart';
+import LabelIcon from 'react-icons/lib/md/font-download';
+import CommentIcon from 'react-icons/lib/md/comment';
+import FileIcon from 'react-icons/lib/md/image';
 
 const CanvasControls = observer(props => {
   // var
