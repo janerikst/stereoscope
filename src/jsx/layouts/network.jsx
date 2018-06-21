@@ -9,7 +9,13 @@ import {
 export default {
   id: 'network',
   title: 'Overlaps',
-  inputs: [],
+  inputs: [{
+      id: 'lines',
+      title: 'Show lines',
+      type: 'checkbox',
+      value: 'true'
+    }
+  ],
   create: function grid(glyphs, width, height, options) {
     // vars
     const margins = { top: 30, bottom: 30, right: 30, left: 30 };
@@ -23,7 +29,7 @@ export default {
     glyphs.forEach(d => {
       if (d.intersections.length) {
         d.intersections.forEach(e => {
-          links.push({ source: d.id, x1: d.x, y1: d.y, target: e.id, x2: e.x, y2: e.y, value: e.value });
+          links.push({ id: (d.id+e.id), source: d.id, x1: d.x, y1: d.y, target: e.id, x2: e.x, y2: e.y, value: e.value });
         });
       }
       output.push({ ...d });

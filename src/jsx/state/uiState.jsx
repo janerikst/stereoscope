@@ -58,7 +58,7 @@ class UiState {
   @observable showLayoutPanel = false;
   @observable editComment = false; 
   @observable showLabels = true;
-  @observable showLines = false;
+  @observable showLines = true;
   @observable toolTipBlocked = false;
 
   @observable
@@ -303,6 +303,15 @@ class UiState {
       remove(this.activeLayoutControls, d => d.id == id);
     }
     this.activeLayoutControls.push({ id: id, value: value });
+    //console.log(id);
+    if (id.localeCompare("lines") == 0) {
+      if (value == true) {
+        this.showLines = true;
+      } else {
+        this.showLines = false;
+      }
+    }
+    //console.log(dataAPI.activeLayoutControlsById);
   };
 
   @action
@@ -367,7 +376,6 @@ class UiState {
   @action
   endEditComment = () => {
     this.editComment = false;
-    console.log(this.editComment);
   };
 
   @action

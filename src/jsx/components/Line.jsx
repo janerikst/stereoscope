@@ -16,7 +16,7 @@ const Line = props => {
       x2={x2}
       y2={y2}
       stroke="#000" 
-      stroke-opacity={0.1}
+      strokeOpacity={0.1}
       >
     </line>
   );

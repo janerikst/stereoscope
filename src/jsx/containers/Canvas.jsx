@@ -119,7 +119,7 @@ class Canvas extends Component {
     const handleLayoutToggle = () => uiState.triggerLayoutPanel();
     const handleCommentToggle = () => uiState.triggerCommentPanel();
 
-    const handleLayoutControlChange = (id, value) =>
+    const handleLayoutControlChange = (id, value) => 
       uiState.changeActiveCanvasLayoutControls(id, value);
 
     const handleHoverAnnotation = id => uiState.setHoveredAnnotation([id]);
@@ -228,7 +228,7 @@ class Canvas extends Component {
                 className="c-canvas__container"
                 ref={x => (this.containerEl = x)}>
                 {showLines && 
-                  <g>{links}</g>}
+                  <g className="c-canvas__links">{links}</g>}
                 <g className="c-canvas__glyphs">{glyphs}</g>
                 {showLabels &&
                 labels.length != 0 && (

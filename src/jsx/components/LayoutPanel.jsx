@@ -36,6 +36,9 @@ class LayoutPanel extends React.Component {
       } else if (d.type == 'input') {
         // field
         field = <input key={d.id} name={d.id} />;
+      } else if (d.type == 'checkbox') {
+        // checkbox
+        field = <input type="checkbox" key={d.id} checked={d.value} name={d.id} onChange={handleControlChange}/>;
       }
       return (
         <div key={d.id}>
