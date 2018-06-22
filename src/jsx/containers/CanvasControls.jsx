@@ -43,29 +43,29 @@ const CanvasControls = observer(props => {
   return (
     <div className="c-canvas-controls">
       <div className="c-canvas-controls__select">
-        <ChartIcon />
+        <ChartIcon size={20}/>
         <select className="c-canvas-controls__select__element" value={activeCanvas.layout} onChange={handleLayoutChange}>
           {layoutOptions}
         </select>
       </div>
       <Button isActive={showFilterPanel} onClick={handleFilterToggle}>
-        <FilterIcon />
+        <FilterIcon size={20}/>
       </Button>
       <Button isActive={showLayoutPanel} onClick={handleLayoutToggle}>
-        <ConfigIcon />
+        <ConfigIcon size={20}/>
       </Button>
       <Button isActive={showLabels} onClick={handleLabelToggle}>
-        <LabelIcon />
+        <LabelIcon size={20}/>
       </Button>
       <Button isActive={activeCanvas.showComment} onClick={handleCommentToggle}>
-        <CommentIcon />
+        <CommentIcon size={20}/>
       </Button>
       <Button isRight={true} onClick={onDownload}>
-        <FileIcon />
+        <FileIcon size={20}/>
       </Button>
       {activeCanvas.id != 1 && (
         <Button onClick={handleDeleteCanvas}>
-          <TrashIcon />
+          <TrashIcon size={20}/>
         </Button>
       )}
     </div>
