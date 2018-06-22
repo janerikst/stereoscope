@@ -157,17 +157,14 @@ class TextBar extends Component {
         style={{ width: TEXT_BAR_WIDTH }}>
         <header className="c-header--small">
           <div className="c-text-bar__controls">
-            <span
-              className={textBarShowsAll ? 'is-active' : ''}
-              onClick={() => handleTextBarModeChange(true)}>
-              Full Text
-            </span>{' '}
-            |{' '}
-            <span
-              className={!textBarShowsAll ? 'is-active' : ''}
-              onClick={() => handleTextBarModeChange(false)}>
-              Selected Annotations only ({countSelectedAnnotations})
-            </span>
+            <div className="c-text-bar__controls__buttons">
+              <button className={`o-button text-bar ${textBarShowsAll ? 'is-active' : ''}`} onClick={() => handleTextBarModeChange(true)}>
+                Full text
+              </button>
+              <button className={`o-button text-bar ${!textBarShowsAll ? 'is-active' : ''}`} onClick={() => handleTextBarModeChange(false)}>
+                Selected annotations
+              </button>
+            </div>
           </div>
         </header>
         <div className="l-content-spacing">

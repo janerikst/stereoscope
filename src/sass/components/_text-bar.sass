@@ -3,12 +3,20 @@
   
 .c-text-bar__controls
   color: $c-gray2
-  padding-left: $sp-small
-  display: relative
+  background-color: $c-lighter-gray
+  height: $sp-big
+  display: flex
+  align-items: center
 
-  span.is-active, span:hover
-    color: $c-gray
-    cursor: pointer
+  .c-text-bar__controls__buttons
+    position: relative
+    left: 50%
+    transform: translate(-50%,0%)
+  
+  .o-button.text-bar
+    width: 140px
+    margin: 0px
+    border: none
 
   .o-close
     position: relative
