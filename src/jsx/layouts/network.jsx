@@ -24,16 +24,28 @@ export default {
 
     const output = [];
     const links = [];
+    const ids = {}
 
-    // add links
+    // add links (with some code to sort out duplicates)
+
     glyphs.forEach(d => {
-      if (d.intersections.length) {
-        d.intersections.forEach(e => {
-          links.push({ id: (d.id+e.id), source: d.id, x1: d.x, y1: d.y, target: e.id, x2: e.x, y2: e.y, value: e.value });
+      //console.log(d.intersections);
+      if (d.relationships.length) {
+        d.relationships.forEach(e => {
+          ids[(e.id+d.id)] = 0;
+          if (ids[(d.id+e.id)] == undefined) {
+            links.push({ id: (d.id+e.id), source: d.id, x1: d.x, y1: d.y, target: e.id, x2: e.x, y2: e.y, relationship: e.value });
+          }
+          ids[(d.id+e.id)] = 0;
+          
         });
       }
       output.push({ ...d });
     });
+
+    //console.log(ids);
+
+    //console.log(links);
 
     // box boundaries
     // const boxForce = () => {
@@ -74,6 +86,8 @@ export default {
         }
       });
     });
+
+    console.log(links);
 
 
     return { glyphs: output, links: links };

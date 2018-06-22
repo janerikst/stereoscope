@@ -7,10 +7,12 @@ const Line = props => {
     y1,
     x2,
     y2,
+    relationship
   } = props;
 
   return (
     <line
+      className={`o-line ${relationship}`}
       x1={x1}
       y1={y1}
       x2={x2}

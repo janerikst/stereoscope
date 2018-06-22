@@ -170,6 +170,7 @@ class Canvas extends Component {
               y1={d.y1}
               x2={d.x2}
               y2={d.y2}
+              relationship={d.relationship}
               color={d.color}
               isHidden={d.hidden}
             />

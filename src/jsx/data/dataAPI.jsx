@@ -802,22 +802,47 @@ class DataAPI {
         const intersectionLen = d.endOffset - d.startOffset;
         for (let i = 0; i < annotationLen; i++) {
           let annotation1 = d.annotations[i];
+          const annotation1Length = this.annotationsById[annotation1].endOffset - this.annotationsById[annotation1].startOffset;
+          const annotation1Start = this.annotationsById[annotation1].startOffset;
+          const annotation1End = this.annotationsById[annotation1].endOffset;
           if (intersections[annotation1] == undefined) {
             intersections[annotation1] = {};
           }
+          intersections[annotation1].relationship = {};
+          intersections[annotation1].ids = {};
           for (let j = 0; j < annotationLen; j++) {
             if (i == j) {
               continue;
             }
             let annotation2 = d.annotations[j];
-            if (intersections[annotation1][annotation2] == undefined) {
-              intersections[annotation1][annotation2] = 0;
+            const annotation2Length = this.annotationsById[annotation2].endOffset - this.annotationsById[annotation2].startOffset;
+            const annotation2Start = this.annotationsById[annotation2].startOffset;
+            const annotation2End = this.annotationsById[annotation2].endOffset;
+            if (intersections[annotation1]["ids"][annotation2] == undefined) {
+              intersections[annotation1]["ids"][annotation2] = 0;
             }
-            intersections[annotation1][annotation2] += intersectionLen;
+            intersections[annotation1]["ids"][annotation2] += intersectionLen;
+            let relationship = intersectionLen / annotation1Length;
+            let relationship2 = intersectionLen / annotation2Length;
+            if ((relationship == 1) && (relationship2 < 1)) {
+                intersections[annotation1].relationship[annotation2] = "enclosed";
+            } else if ((relationship2 == 1) && (relationship < 1)) {
+                intersections[annotation1].relationship[annotation2] = "enclosed";  
+            } else if ((relationship2 == 1) && (relationship == 1)) {
+                intersections[annotation1].relationship[annotation2] = "coextensive";  
+            } else {
+              if (((annotation1Start < annotation2Start) && (annotation1End < annotation2End)) || 
+                  ((annotation2Start < annotation1Start) && (annotation2End < annotation1End))) {
+                intersections[annotation1].relationship[annotation2] = "overlapping";
+              } else {
+                intersections[annotation1].relationship[annotation2] = "enclosed";
+              }
+            }
           }
         }
       }
     });
+
 
     return this.annotations.map(d => {
       const textLength = d.endOffset - d.startOffset + 1;
@@ -826,7 +851,10 @@ class DataAPI {
         radius: Math.round(annotationScale(textLength)),
         textLength: textLength,
         intersections: intersections[d.id]
-          ? map(intersections[d.id], (d, k) => ({ id: k, value: d }))
+          ? map(intersections[d.id].ids, (d, k) => ({ id: k, value: d }))
+          : [],
+        relationships: intersections[d.id]
+          ? map(intersections[d.id].relationship, (d, k) => ({ id: k, value: d }))
           : [],
       };
     });
