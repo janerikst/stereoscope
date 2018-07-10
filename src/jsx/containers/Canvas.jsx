@@ -62,17 +62,19 @@ class Canvas extends Component {
 
   componentDidUpdate() {
     const { activeCanvas } = dataAPI;
-    if (activeCanvas.layout != this.lastLayout) {
-      this.lastLayout = activeCanvas.layout;
-      const svglEl = select(this.svgEl);
-      if (svglEl) {
-        var t = zoomIdentity.translate(0, 0).scale(1);
-        svglEl.call(this.zoomBehavior.transform, t);
-      }
+    const svglEl = select(this.svgEl);
+    if (svglEl) {
+      var t = zoomIdentity.translate(activeCanvas.zoomState.x, activeCanvas.zoomState.y).scale(activeCanvas.zoomState.k);
+      svglEl.call(this.zoomBehavior.transform, t);
     }
   }
 
   dragAndZoomContainer() {
+    const { activeCanvas } = dataAPI;
+    activeCanvas.zoomState.x = event.transform.x;
+    activeCanvas.zoomState.y = event.transform.y;
+    activeCanvas.zoomState.k = event.transform.k;
+  
     select(this.containerEl).attr(
       'transform',
       'translate(' +

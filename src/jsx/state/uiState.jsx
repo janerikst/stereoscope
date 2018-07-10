@@ -75,7 +75,12 @@ class UiState {
       filters: [],
       glyphs: {},
       selectedAnnotationIds: [],
-      isMatch: true
+      isMatch: true,
+      zoomState: {
+        x: 0,
+        y: 0,
+        k: 1
+      }
     },
   ];
 
@@ -209,6 +214,12 @@ class UiState {
       filters: [],
       glyphs: {},
       selectedAnnotationIds: [],
+      isMatch: true,
+      zoomState: {
+        x: 0,
+        y: 0,
+        k: 1
+      }
     });
     this.showAddCanvasDialog = !this.showAddCanvasDialog;
     this.setActiveCanvas(newId);
@@ -241,7 +252,7 @@ class UiState {
     canvas.layoutControls = this.activeLayoutControls;
     canvas.selectedAnnotationIds = this.selectedAnnotationIds;
     canvas.glyphs = [...dataAPI.filteredLayoutedElements.glyphs];
-
+    canvas.zoomState = dataAPI.activeCanvas.zoomState;
     // copy new active filters
     this.activeCanvasId = id;
     canvas = this.canvases.find(d => d.id == id);
@@ -256,7 +267,7 @@ class UiState {
 
   @action
   cloneCanvas = (title, layout, comment) => {
-    let orginialCanvas = this.canvases.find(d => d.id == this.cloneCanvasId);
+    let originalCanvas = this.canvases.find(d => d.id == this.cloneCanvasId);
     const newId = last(this.canvases).id + 1;
     this.canvases.push({
       id: newId,
@@ -264,13 +275,19 @@ class UiState {
       comment: comment,
       layout: layout,
       layoutControls: [...this.activeLayoutControls],
-      textBarShowsAll: orginialCanvas.textBarShowsAll,
+      textBarShowsAll: originalCanvas.textBarShowsAll,
       showLabels: this.showLabels,
       showComment:
-        orginialCanvas.showComment || comment.length != 0 ? true : false,
+        originalCanvas.showComment || comment.length != 0 ? true : false,
       filters: [...this.activeFilterIds],
       glyphs: [...dataAPI.filteredLayoutedElements.glyphs],
       selectedAnnotationIds: [...this.selectedAnnotationIds],
+      isMatch: originalCanvas.isMatch,
+      zoomState: {
+        x: originalCanvas.zoomState.x,
+        y: originalCanvas.zoomState.y,
+        k: originalCanvas.zoomState.k
+      }
     });
     this.cloneCanvasId = '';
     this.setActiveCanvas(newId);

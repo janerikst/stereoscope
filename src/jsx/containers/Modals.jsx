@@ -11,7 +11,7 @@ import DataForm from '../components/DataForm';
 
 const Modals = observer(props => {
   // vars
-  const { layoutList, canvasDetails, needDataFiles } = dataAPI;
+  const { layoutList, canvasDetails, needDataFiles, activeCanvas } = dataAPI;
   const {
     showAddCanvasDialog,
     showDataDialog,
