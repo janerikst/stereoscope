@@ -41,7 +41,7 @@ class Canvas extends Component {
 
     const svglEl = select(this.svgEl);
     this.zoomBehavior = zoom()
-      .scaleExtent([0.5, 3])
+      .scaleExtent([0.5, 10])
       .on('start', () => {
         uiState.blockToolTip();
       })
