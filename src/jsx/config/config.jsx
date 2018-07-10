@@ -34,6 +34,7 @@ export default {
     },
     catma_displaycolor: { id: 'color', type: 'color', changeable: false },
     catma_markupauthor: { id: 'author', type: 'string', changeable: false },
+    Kommentar: { id: 'comment', type: 'comment', changeable: false }
   },
   LAYOUT_DEFAULT: 'scatterplot',
 };
