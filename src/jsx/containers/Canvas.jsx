@@ -32,21 +32,21 @@ class Canvas extends Component {
   constructor(props) {
     super(props);
     let zoomBehavior;
-    let lastLayout;
+    this.zoomFactor = 1.0;
   }
 
   componentDidMount() {
     const { activeCanvas } = dataAPI;
-    this.lastLayout = activeCanvas.layout;
-
+    //const zFactor = this.zoomFactor;
     const svglEl = select(this.svgEl);
     this.zoomBehavior = zoom()
-      .scaleExtent([0.5, 10])
+      .scaleExtent([0.5, 7])
       .on('start', () => {
         uiState.blockToolTip();
       })
       .on('end', () => {
         uiState.unblockToolTip();
+        uiState.setZoomState(this.zoomFactor);
       })
       .on('zoom', this.dragAndZoomContainer.bind(this));
     svglEl.call(this.zoomBehavior);
@@ -71,9 +71,12 @@ class Canvas extends Component {
 
   dragAndZoomContainer() {
     const { activeCanvas } = dataAPI;
+   
     activeCanvas.zoomState.x = event.transform.x;
     activeCanvas.zoomState.y = event.transform.y;
     activeCanvas.zoomState.k = event.transform.k;
+    this.zoomFactor = event.transform.k;
+
   
     select(this.containerEl).attr(
       'transform',
@@ -99,7 +102,7 @@ class Canvas extends Component {
       canvasHeight,
       glyphScaleCertainty,
       glyphScaleImportance,
-    } = dataAPI;
+    } = dataAPI; 
 
     const { showFilterPanel, showLayoutPanel, showLabels, showLines } = uiState;
     const { FILTER_PANEL_WIDTH, FILTER_PANEL_HEIGHT, CANVAS_MARGIN, COMMENT_PANEL_WIDTH, COMMENT_PANEL_HEIGHT } = config;
@@ -147,7 +150,7 @@ class Canvas extends Component {
           x={d.x}
           y={d.y}
           color={d.color}
-          radius={d.radius}
+          radius={d.cRadius}
           certainty={d.certainty}
           importance={d.importance}
           scaleCertainty={glyphScaleCertainty}

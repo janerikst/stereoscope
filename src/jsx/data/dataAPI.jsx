@@ -849,6 +849,7 @@ class DataAPI {
       return {
         ...d,
         radius: Math.round(annotationScale(textLength)),
+        cRadius: Math.round(annotationScale(textLength))/uiState.zoomState,
         textLength: textLength,
         intersections: intersections[d.id]
           ? map(intersections[d.id].ids, (d, k) => ({ id: k, value: d }))

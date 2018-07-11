@@ -96,6 +96,7 @@ class UiState {
   @observable hoveredAnnotationIds = [];
   @observable selectedAnnotationIds = [];
   @observable scrollToAnnotationId = '';
+  @observable zoomState = 1.0;
 
   // --------------------
   //
@@ -340,7 +341,12 @@ class UiState {
   @action 
   changeSearchString = searchString => {
     this.canvasSearchString = searchString.target.value;
-  }
+  };
+
+  @action
+  setZoomState = zoomState => {
+    this.zoomState = zoomState;
+  };
 
 
   // Dialogs
@@ -398,13 +404,13 @@ class UiState {
   @action
   blockToolTip() {
     this.toolTipBlocked = true;
-  }
+  };
 
   @action
   unblockToolTip() {
     this.hoveredNodeId = null;
     this.toolTipBlocked = false;
-  }
+  };
 
   // Data
 
