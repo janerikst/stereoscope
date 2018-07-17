@@ -9,9 +9,22 @@ import {
 export default {
   id: 'network',
   title: 'Overlaps',
-  inputs: [{
-      id: 'lines',
-      title: 'Show lines',
+  inputs: [
+    {
+      id: 'enclosed',
+      title: 'Enclosed',
+      type: 'checkbox',
+      value: 'true'
+    },
+    {
+      id: 'overlapping',
+      title: 'Overlapping',
+      type: 'checkbox',
+      value: 'true'
+    },
+    {
+      id: 'coextensive',
+      title: 'Coextensive',
       type: 'checkbox',
       value: 'true'
     }
@@ -86,8 +99,6 @@ export default {
         }
       });
     });
-
-    console.log(links);
 
 
     return { glyphs: output, links: links };

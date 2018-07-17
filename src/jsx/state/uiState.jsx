@@ -59,6 +59,9 @@ class UiState {
   @observable editComment = false; 
   @observable showLabels = true;
   @observable showLines = true;
+  @observable showEnclosedLines = true;
+  @observable showOverlappingLines = true;
+  @observable showCoextensiveLines = true;
   @observable toolTipBlocked = false;
 
   @observable
@@ -320,12 +323,24 @@ class UiState {
       remove(this.activeLayoutControls, d => d.id == id);
     }
     this.activeLayoutControls.push({ id: id, value: value });
-    //console.log(id);
-    if (id.localeCompare("lines") == 0) {
+    
+    if (id.localeCompare("enclosed") == 0) {
       if (value == true) {
-        this.showLines = true;
+        this.showEnclosedLines = true;
       } else {
-        this.showLines = false;
+        this.showEnclosedLines = false;
+      }
+    } else if (id.localeCompare("overlapping") == 0) {
+      if (value == true) {
+        this.showOverlappingLines = true;
+      } else {
+        this.showOverlappingLines = false;
+      }
+    } else if (id.localeCompare("coextensive") == 0) {
+      if (value == true) {
+        this.showCoextensiveLines = true;
+      } else {
+        this.showCoextensiveLines = false;
       }
     }
     //console.log(dataAPI.activeLayoutControlsById);

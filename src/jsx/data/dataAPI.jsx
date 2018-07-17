@@ -929,6 +929,33 @@ class DataAPI {
     };
   }
 
+  /////////// WORK IN PROGRESS
+
+  /*@computed
+  get activeLayoutedElementsConnections() {
+    if (isEmpty(this.filteredLayoutedElements) ||
+        isEmpty(this.activeLayoutedElements.links) ||
+        isEmpty(this.activeDetailedAnnotationsById)) {
+      return { glyphs: [] };
+    }
+
+    return {
+      ...this.activeLayoutedElements,
+      //glyphs: this.activeLayoutedElements.glyphs,
+      links: this.activeLayoutedElements.links.map(d => {
+        return {
+          ...d,
+          relationship:
+          hidden: 
+            ()
+        };
+      })
+    }
+  }*/
+
+  /////////// WORK IN PROGRESS
+
+
   // *****
   // glyph scale for certainty
   // *****
