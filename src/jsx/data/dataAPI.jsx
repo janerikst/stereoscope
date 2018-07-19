@@ -136,7 +136,7 @@ class DataAPI {
       }
     };
 
-    const intersects = (x1, x2, y1, y2) => x2 >= y1 && y2 >= x1;
+    const intersects = (x1, x2, y1, y2) => x2 > y1 && y2 > x1;
 
     // go through the annotation and split them
     const annotationCount = this.annotations.length;
