@@ -828,12 +828,14 @@ class DataAPI {
                 intersections[annotation1].relationship[annotation2] = "enclosed";
             } else if ((relationship2 == 1) && (relationship < 1)) {
                 intersections[annotation1].relationship[annotation2] = "enclosed";  
-            } else if ((relationship2 == 1) && (relationship == 1)) {
+            } /*else if ((relationship2 == 1) && (relationship == 1)) {
                 intersections[annotation1].relationship[annotation2] = "coextensive";  
-            } else {
+            }*/ else {
               if (((annotation1Start < annotation2Start) && (annotation1End < annotation2End)) || 
                   ((annotation2Start < annotation1Start) && (annotation2End < annotation1End))) {
                 intersections[annotation1].relationship[annotation2] = "overlapping";
+              }  else if ((annotation1Start == annotation2Start) && (annotation1End == annotation2End)) {
+                intersections[annotation1].relationship[annotation2] = "coextensive";
               } else {
                 intersections[annotation1].relationship[annotation2] = "enclosed";
               }
