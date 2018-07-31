@@ -1177,11 +1177,19 @@ class DataAPI {
 
   @computed
   get canvasDetails() {
-    const { canvases, editCanvasId, cloneCanvasId } = uiState;
+    const { canvases, editCanvasId, cloneCanvasId, editTagsCanvasId } = uiState;
     if (canvases.length == 0) {
       return {};
     }
-    const canvasId = editCanvasId ? editCanvasId : cloneCanvasId;
+    //var canvasId = editCanvasId ? editCanvasId : cloneCanvasId;
+    var canvasId;
+    if (editCanvasId) {
+      canvasId = editCanvasId;
+    } else if (cloneCanvasId) {
+      canvasId = cloneCanvasId;
+    } else if (editTagsCanvasId) {
+      canvasId = editTagsCanvasId;
+    }
     return canvases.find(d => d.id == canvasId);
   }
 

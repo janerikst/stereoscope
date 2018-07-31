@@ -7,6 +7,7 @@ import config from 'config/config';
 
 import ReactModal from 'react-modal';
 import CanvasForm from '../components/CanvasForm';
+import CanvasTags from '../components/CanvasTags';
 import DataForm from '../components/DataForm';
 
 const Modals = observer(props => {
@@ -14,9 +15,11 @@ const Modals = observer(props => {
   const { layoutList, canvasDetails, needDataFiles, activeCanvas } = dataAPI;
   const {
     showAddCanvasDialog,
+    showEditTagsDialog,
     showDataDialog,
     editCanvasId,
     cloneCanvasId,
+    editTagsCanvasId,
   } = uiState;
 
   const { LAYOUT_DEFAULT } = config;
@@ -34,6 +37,16 @@ const Modals = observer(props => {
   };
   const handleCloseEditCanvasDialog = () => {
     uiState.triggerEditCanvasDialog();
+  };
+
+  //fill in the according handlers for EditTags
+
+  const handleSubmitEditTagsDialog = tags => {
+    uiState.editTagsDialog(tags);
+  };
+
+  const handleCloseEditTagsDialog = () => {
+    uiState.triggerEditTagsDialog();
   };
 
   const handleSubmitCloneCanvasDialog = (title, layout, comment) => {
@@ -90,6 +103,24 @@ const Modals = observer(props => {
             comment={canvasDetails.comment}
             layouts={layoutList}
             onSubmit={handleSubmitEditCanvasDialog}
+          />
+        </ReactModal>
+      )}
+      {editTagsCanvasId &&
+        canvasDetails && (
+        <ReactModal
+          isOpen={true}
+          ariaHideApp={false}
+          className="c-modal__content"
+          overlayClassName="c-modal__overlay">
+          <span
+            className="c-modal__close o-close"
+            onClick={handleCloseEditTagsDialog}
+          />
+          <CanvasTags
+            header="Edit Tags"
+            tags={canvasDetails.tags}
+            onSubmit={handleSubmitEditTagsDialog}
           />
         </ReactModal>
       )}

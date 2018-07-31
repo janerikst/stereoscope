@@ -53,6 +53,7 @@ class UiState {
   @observable annotationFile = '';
 
   @observable showAddCanvasDialog = false;
+  @observable showEditTagsDialog = false;
   @observable showDataDialog = false;
   @observable showFilterPanel = false;
   @observable showLayoutPanel = false;
@@ -75,6 +76,7 @@ class UiState {
       textBarShowsAll: true,
       showLabels: true,
       showComment: true,
+      tags: [],
       filters: [],
       glyphs: {},
       selectedAnnotationIds: [],
@@ -90,6 +92,7 @@ class UiState {
   @observable activeCanvasId = 1;
   @observable editCanvasId = '';
   @observable cloneCanvasId = '';
+  @observable editTagsCanvasId = '';
   @observable activeFilterIds = [];
   @observable activeLayoutControls = [];
   @observable canvasSearchString = '';
@@ -215,6 +218,7 @@ class UiState {
       showLabels: true,
       showComment: comment.length != 0 ? true : false,
       filters: [],
+      tags: [],
       glyphs: {},
       selectedAnnotationIds: [],
       isMatch: true,
@@ -234,7 +238,7 @@ class UiState {
     canvas.title = title;
     canvas.layout = layout;
     canvas.comment = comment;
-    this.editCanvasId = '';
+    this.editCanvasId = ''; 
   };
 
   @action
@@ -283,6 +287,7 @@ class UiState {
       showComment:
         originalCanvas.showComment || comment.length != 0 ? true : false,
       filters: [...this.activeFilterIds],
+      tags: originalCanvas.tags,
       glyphs: [...dataAPI.filteredLayoutedElements.glyphs],
       selectedAnnotationIds: [...this.selectedAnnotationIds],
       isMatch: originalCanvas.isMatch,
@@ -294,6 +299,15 @@ class UiState {
     });
     this.cloneCanvasId = '';
     this.setActiveCanvas(newId);
+  };
+
+  @action
+  editTagsDialog = tags => {
+    //console.log(tags);
+    const canvas = this.canvases.find(d => d.id == this.editTagsCanvasId);
+    canvas.tags = tags;
+    this.editTagsCanvasId = '';
+    //console.log(canvas);
   };
 
   @action
@@ -398,6 +412,13 @@ class UiState {
   @action
   triggerCommentPanel = () => {
     dataAPI.activeCanvas.showComment = !dataAPI.activeCanvas.showComment;
+  };
+
+  @action
+  triggerEditTagsDialog = id => {
+    //this.showEditTagsDialog = !this.showEditTagsDialog;
+    this.editTagsCanvasId = id;
+    console.log(this.editTagsCanvasId);
   };
 
   @action
