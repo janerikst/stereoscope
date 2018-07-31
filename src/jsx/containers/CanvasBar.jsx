@@ -98,7 +98,12 @@ const CanvasBar = observer(props => {
       className="c-canvas-bar l-content-container l-content-container-border"
       style={{ width: CANVAS_BAR_WIDTH }}>
       <header className="c-header--small">
-        <h2>Views</h2>
+        <div className="c-canvas-bar__controls">
+          <h2>Views</h2>
+          <Button isRight={true}>
+            <MenuIcon size={20}/>
+          </Button>
+        </div>
       </header>
       <div className="c-canvas-bar__search">
         {activeTag &&
