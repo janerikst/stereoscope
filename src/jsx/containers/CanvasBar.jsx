@@ -5,14 +5,18 @@ import dataAPI from 'data/dataAPI';
 import uiState from 'state/uiState';
 import config from 'config/config';
 
+import Button from '../components/Button';
+import MenuIcon from 'react-icons/lib/md/menu';
+
 import { scaleLinear } from 'd3';
 
 import CanvasThumbnail from '../components/CanvasThumbnail';
 
 const CanvasBar = observer(props => {
   // vars
-  const { canvasList, filteredCanvasList, downloadDetailedAnnotations } = dataAPI;
+  const { canvasList, filteredCanvasList, taggedAndFilteredCanvasList, downloadDetailedAnnotations } = dataAPI;
   const { CANVAS_BAR_WIDTH } = config;
+  const { activeTag } = uiState;
 
   // interactions
   const handleOpenAddCanvasDialog = () => uiState.triggerAddCanvasDialog();
@@ -28,45 +32,65 @@ const CanvasBar = observer(props => {
       uiState.changeSearchString(searchString);
     }
 
-  // content
-  /*const canvasEls = canvasList.map((d, i) => (
-    <CanvasThumbnail
-      key={d.id}
-      id={d.id}
-      title={d.title}
-      layout={d.layout}
-      glyphs={d.glyphs}
-      isActive={d.active}
-      isDeleteable={d.id != 1}
-      onSelect={handleSelectCanvas}
-      onDelete={handleDeleteCanvas}
-      onClone={handleOpenCloneCanvasDialog}
-      onDownload={handleDownloadCanvas}
-      onEdit={handleOpenEditCanvasDialog}
-      width={d.thumbnailWidth}
-      height={d.thumbnailHeight}
-    />
-  ));*/
+  const handleOpenEditTagsDialog = id => uiState.triggerEditTagsDialog(id);
 
-  const canvasEls = filteredCanvasList.map((d, i) => (
-    <CanvasThumbnail
-      key={d.id}
-      id={d.id}
-      title={d.title}
-      layout={d.layout}
-      glyphs={d.glyphs}
-      isActive={d.active}
-      isMatch={d.isMatch}
-      isDeleteable={d.id != 1}
-      onSelect={handleSelectCanvas}
-      onDelete={handleDeleteCanvas}
-      onClone={handleOpenCloneCanvasDialog}
-      onDownload={handleDownloadCanvas}
-      onEdit={handleOpenEditCanvasDialog}
-      width={d.thumbnailWidth}
-      height={d.thumbnailHeight}
-    />
-  ));
+  const handleTagSelected = tag => {
+    //console.log(event.target.attributes.getNamedItem('tag'));
+    //const tag = event.target.attributes.getNamedItem('tag').value;    
+    uiState.setActiveTag(tag);
+  }
+
+  const canvasEls = taggedAndFilteredCanvasList 
+    ? taggedAndFilteredCanvasList.map((d, i) => {
+        return (<CanvasThumbnail
+          key={d.id}
+          id={d.id}
+          title={d.title}
+          layout={d.layout}
+          tags={d.tags}
+          tagSelected={d.tagSelected}
+          glyphs={d.glyphs}
+          isActive={d.active}
+          isMatch={d.isMatch}
+          isDeleteable={d.id != 1}
+          onSelect={handleSelectCanvas}
+          onTagSelect={handleOpenEditTagsDialog}
+          onTagFilter={handleTagSelected}
+          onDelete={handleDeleteCanvas}
+          onClone={handleOpenCloneCanvasDialog}
+          onDownload={handleDownloadCanvas}
+          onEdit={handleOpenEditCanvasDialog}
+          width={d.thumbnailWidth}
+          height={d.thumbnailHeight}
+        />)
+      })
+    : [];
+
+    const taggedCanvasEls = taggedAndFilteredCanvasList
+      ? taggedAndFilteredCanvasList.filter(d => d.tagSelected == true).map((d,i) => {
+        return (<CanvasThumbnail
+          key={d.id}
+          id={d.id}
+          title={d.title}
+          layout={d.layout}
+          tags={d.tags}
+          tagSelected={d.tagSelected}
+          glyphs={d.glyphs}
+          isActive={d.active}
+          isMatch={d.isMatch}
+          isDeleteable={d.id != 1}
+          onSelect={handleSelectCanvas}
+          onTagSelect={handleOpenEditTagsDialog}
+          onTagFilter={handleTagSelected}
+          onDelete={handleDeleteCanvas}
+          onClone={handleOpenCloneCanvasDialog}
+          onDownload={handleDownloadCanvas}
+          onEdit={handleOpenEditCanvasDialog}
+          width={d.thumbnailWidth}
+          height={d.thumbnailHeight}
+        />)
+      })
+      : [];
 
   // render
   return (
@@ -76,12 +100,30 @@ const CanvasBar = observer(props => {
       <header className="c-header--small">
         <h2>Views</h2>
       </header>
-      <div className="c-canvas-bar__thumbnails l-content-spacing-canvasbar">
-        <input type="text" onChange={handlesearchStringChange}/>
+      <div className="c-canvas-bar__search">
+        {activeTag &&
+          <div className="c-canvas-bar__tag_container">
+            <span className="c-canvas-bar__before_tag">
+              Tag
+            </span>
+            <div className="c-canvas-bar__tag">
+              <span>
+                {activeTag + " "}
+              </span>
+              <span className="c-canvas-bar__tagicon" onClick={() => handleTagSelected()}>
+                x
+              </span>
+            </div>
+          </div>
+        }
+        <input type="text" placeholder="Search comments" onChange={handlesearchStringChange}/>
+      </div>
+      <div className="c-canvas-bar__thumbnails l-content-spacing-canvasbar">  
         <div className="c-canvas-bar__add" onClick={handleOpenAddCanvasDialog}>
           <span>+</span>
         </div>
-        {canvasEls}
+        {activeTag && taggedCanvasEls}
+        {!activeTag && canvasEls}
       </div>
     </aside>
   );

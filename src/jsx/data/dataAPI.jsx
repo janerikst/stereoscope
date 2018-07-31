@@ -1044,7 +1044,7 @@ class DataAPI {
   // list of all canvas with thumbnail data
   // *****
 
-  @computed
+  /*@computed
   get canvasList() {
     const { canvases, activeCanvasId } = uiState;
     if (canvases.length == 0 || isEmpty(this.layoutsById)) {
@@ -1086,7 +1086,7 @@ class DataAPI {
     });
 
     return orderBy(output, 'id', 'desc');
-  }
+  }*/
 
 
   // *****
@@ -1146,6 +1146,38 @@ class DataAPI {
     });
 
     return orderBy(output, 'id', 'desc');
+  }
+
+  // *****
+  // list of all canvas with thumbnail data – filtered by CanvasBar input field
+  // and by selected tag
+  // *****
+
+  @computed
+  get taggedAndFilteredCanvasList() {
+    const { activeTag } = uiState;
+    if (this.filteredCanvasList.length == 0 || isEmpty(this.layoutsById)) {
+      return [];
+    }
+
+    const output = [];
+    let isTagMatch = false;
+
+    this.filteredCanvasList.forEach(d => {
+      isTagMatch = false;
+      d.tags.forEach(e => {
+        if (e.localeCompare(activeTag) == 0) {
+          isTagMatch = true;
+        }
+      })
+
+      output.push({
+        ...d,
+        tagSelected: isTagMatch
+      });
+    });
+
+    return  orderBy(output, 'id', 'desc');;
   }
 
   // *****

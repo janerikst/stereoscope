@@ -4,11 +4,23 @@
   flex: 1;
   overflow: auto
 
+.c-canvas-bar__search
+  background: $c-lighter-gray
+  display: block
+  padding: 10
+
+  input 
+    position: relative
+    padding: 0 10 0 10
+    width: 100%
+    height: $sp-semi-medium
+    border: none
+
 .c-canvas-bar__add
   display: table;
   width: $canvas-thumbnail-width
   height: $canvas-thumbnail-height
-  margin-bottom: $sp-small
+  margin-bottom: $sp-base
   background-color: $c-lightest-gray
   position: relative
   cursor: pointer
@@ -26,3 +38,37 @@
 
     span
       color: $c-gray
+
+.c-canvas-bar__controls
+  background: $c-light-gray
+  display: flex
+  line-height: $sp-big
+  align-items: center
+
+.c-canvas-bar__tag_container
+  margin : $sp-xsmall 0 15 0 
+  
+ 
+.c-canvas-bar__tag
+  display: inline
+  color: $c-white
+  font-size: $fs-xsmall
+  padding: $sp-xsmall
+  margin : 0 0 $sp-xsmall 0
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+  background-color: $c-red
+
+.c-canvas-bar__before_tag
+  display: inline
+  background-color: $c-lighter-gray
+  font-size: $fs-xsmall
+  padding: $sp-xsmall
+  margin : 0 $sp-xsmall $sp-xsmall 0
+
+.c-canvas-bar__tagicon
+  color: $c-white
+  font-size: $fs-xsmall
+  padding: $sp-xsmall
+  cursor: pointer;
