@@ -1069,6 +1069,7 @@ class DataAPI {
         id: d.id,
         title: d.title ? d.title : config.CANVAS_DEFAULT_NAME,
         layout: this.layoutsById[d.layout].title,
+        tags: d.tags,
         active: d.id == activeCanvasId,
         glyphs: map(glyphs, d => {
           return {
@@ -1126,6 +1127,8 @@ class DataAPI {
         id: d.id,
         title: d.title ? d.title : config.CANVAS_DEFAULT_NAME,
         layout: this.layoutsById[d.layout].title,
+        tags: d.tags,
+        //tagSelected: isTagMatch,
         active: d.id == activeCanvasId,
         glyphs: map(glyphs, d => {
           return {

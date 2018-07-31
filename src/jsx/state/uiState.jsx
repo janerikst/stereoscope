@@ -77,6 +77,7 @@ class UiState {
       showLabels: true,
       showComment: true,
       tags: [],
+      tagSelected: false,
       filters: [],
       glyphs: {},
       selectedAnnotationIds: [],
@@ -96,6 +97,7 @@ class UiState {
   @observable activeFilterIds = [];
   @observable activeLayoutControls = [];
   @observable canvasSearchString = '';
+  @observable activeTag = '';
 
   @observable annotationProperties = [];
 
@@ -219,6 +221,7 @@ class UiState {
       showComment: comment.length != 0 ? true : false,
       filters: [],
       tags: [],
+      tagSelected: false,
       glyphs: {},
       selectedAnnotationIds: [],
       isMatch: true,
@@ -288,6 +291,7 @@ class UiState {
         originalCanvas.showComment || comment.length != 0 ? true : false,
       filters: [...this.activeFilterIds],
       tags: originalCanvas.tags,
+      tagSelected: false,
       glyphs: [...dataAPI.filteredLayoutedElements.glyphs],
       selectedAnnotationIds: [...this.selectedAnnotationIds],
       isMatch: originalCanvas.isMatch,
@@ -430,6 +434,16 @@ class UiState {
   endEditComment = () => {
     this.editComment = false;
   };
+
+  @action 
+  setActiveTag = tag => {
+    //console.log(tag);
+    if (tag) {
+      this.activeTag = tag;
+    } else {
+      this.activeTag = '';
+    }
+  }
 
   @action
   blockToolTip() {

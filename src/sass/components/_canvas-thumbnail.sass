@@ -2,6 +2,7 @@
   line-height: $lh-base
   margin-bottom: $sp-base
   cursor: pointer
+  opacity: 1
 
   h3 
     color: $c-gray
@@ -15,10 +16,13 @@
   p
     color: $c-gray
     font-size: $fs-xsmall
-    font-style: italic
+    font-style: normal
 
   h3:hover 
     background-color: $c-lighter-gray
+
+.c-canvas-thumbnail__metadata_container
+  margin-left: $sp-xxxsmall
 
 .c-canvas-thumbnail__image_container
   background-color: $c-white
@@ -34,8 +38,9 @@
 .c-canvas-thumbnail.is-active .c-canvas-thumbnail__image_container
   border: 3px solid $c-red
 
-.c-canvas-thumbnail.is-highlighted .c-canvas-thumbnail__image_container
-  border: 3px solid $c-light-blue
+.c-canvas-thumbnail.is-not-highlighted .c-canvas-thumbnail__image_container
+  //border: 3px solid $c-light-blue
+  opacity: 0.2
 
 .c-canvas-thumbnail:hover .c-canvas-thumbnail__delete, .c-canvas-thumbnail:hover .c-canvas-thumbnail__clone, .c-canvas-thumbnail:hover .c-canvas-thumbnail__download
   display: block
@@ -63,3 +68,20 @@
   top: 0
   left: 40px
 
+.c-canvas-thumbnail__tag_container
+  margin: $sp-xsmall 0 $sp-small 0
+
+.c-canvas-thumbnail__tag
+  display: inline
+  background-color: $c-light-red
+  font-size: $fs-xsmall
+  padding: $sp-xxsmall
+  margin : 0 $sp-xsmall $sp-xsmall 0
+  float: left
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+
+.c-canvas-thumbnail__tag:hover
+  background-color: $c-red
+  color: $c-white
