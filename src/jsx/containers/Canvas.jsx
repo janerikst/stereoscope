@@ -32,12 +32,11 @@ class Canvas extends Component {
   constructor(props) {
     super(props);
     let zoomBehavior;
-    let lastLayout;
+    let lastDOMnode;
   }
 
   componentDidMount() {
     const { activeCanvas } = dataAPI;
-    this.lastLayout = activeCanvas.layout;
 
     const svglEl = select(this.svgEl);
     this.zoomBehavior = zoom()
@@ -110,7 +109,6 @@ class Canvas extends Component {
     const handleFilterReset = filter => uiState.resetActiveCanvasFilters();
 
     const handleCommentChange = comment => {
-      //console.log(comment.target.value);
       uiState.changeComment(comment);
     }
 
@@ -136,7 +134,9 @@ class Canvas extends Component {
       domtoimage.toBlob(stageEl).then(blob => {
         FileDownload(blob, 'canvas.png');
       });
+      
     };
+
 
     // content
     const glyphs = activeLayoutedElements.glyphs.map(d => {

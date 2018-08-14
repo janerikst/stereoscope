@@ -1417,6 +1417,7 @@ class DataAPI {
     });
     FileDownload(blob, 'canvas.json');
   }
+
 }
 
 const dataAPI = new DataAPI();
