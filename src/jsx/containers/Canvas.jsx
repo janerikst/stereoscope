@@ -274,12 +274,10 @@ class Canvas extends Component {
         <header className="c-header--small">
           <CanvasControls onDownload={handleDownloadCanvasImage} />
         </header>
-        <div className="c-canvas__stage">
+        <div className="c-canvas__stage" ref={x => {this.stage = x;}}>
           <div
             className="c-canvas__innerstage"
-            ref={x => {
-              this.stage = x;
-            }}>
+            >
             <div className="c-canvas__title">{activeCanvas.title}</div>
             <svg
               width={canvasWidth}
