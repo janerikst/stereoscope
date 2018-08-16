@@ -23,8 +23,8 @@ class TextElement extends Component {
     annotations.forEach((d, i) => {
       const color =
         d.active == undefined || d.active ? d.color : TEXT_SELECT_COLOR;
-      annotationsGradient += `,${color} ${i * 3}px, ${backgroundColor} ${i * 3 +
-        2}px, ${backgroundColor} ${i * 3 + 3}px`;
+      annotationsGradient += `,${color} ${i * 3}px, ${color} ${i * 3 + 2}px, ${backgroundColor} ${i * 3 +
+        3}px`;
     });
 
     const activeAnnotations = () => {
@@ -52,7 +52,7 @@ class TextElement extends Component {
               lineHeight: `${22 + annotations.length * 2}px`,
               background: `linear-gradient(0deg ${annotationsGradient})`,
               backgroundPosition: '0 100%',
-              paddingBottom: annotations.length * 2,
+              paddingBottom: annotations.length * 3,
             }
           ) : (
             {}
