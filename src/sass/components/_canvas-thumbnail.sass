@@ -39,7 +39,7 @@
 .c-canvas-thumbnail.is-active .c-canvas-thumbnail__image_container
   border: 3px solid $c-red
 
-.c-canvas-thumbnail.is-not-highlighted .c-canvas-thumbnail__image_container
+.c-canvas-thumbnail.is-not-highlighted 
   //border: 3px solid $c-light-blue
   opacity: 0.2
 
@@ -76,13 +76,28 @@
   display: inline
   background-color: $c-light-red
   font-size: $fs-xsmall
-  padding: $sp-xxsmall
+  padding: $sp-xxsmall $sp-small 
   margin : 0 $sp-xsmall $sp-xsmall 0
   float: left
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-  border-radius: 4px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
 
 .c-canvas-thumbnail__tag:hover
   background-color: $c-red
   color: $c-white
+
+.c-canvas-thumbnail__comment_container
+  background-color: $c-lightest-gray
+  padding: $sp-small
+
+  h4
+    color: $c-gray
+    font-size: $fs-xsmall
+    font-weight: 700
+    padding-bottom: $sp-xsmall
+
+  p
+    font-size: $fs-xsmall
+    font-weight: 300
+
