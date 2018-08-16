@@ -217,8 +217,8 @@ class TextBar extends Component {
     const textWrapperHeight = textWrapper.clientHeight;
     const textAreaHeight = textArea.clientHeight;
 
-    const ratio = textWrapperHeight / textAreaHeight;
-    const overlayHeight = Math.round(textArea.clientHeight / ratio);
+    const ratio = (textWrapperHeight) / textAreaHeight;
+    const overlayHeight = Math.round(textAreaHeight / ratio);
 
     this.setState({
       overlayHeight,
@@ -275,8 +275,10 @@ class TextBar extends Component {
   handleScroll() {
     if (!this.state.scrollToActive) {
       const panel = ReactDOM.findDOMNode(this.textArea);
+      const overlayBorder = 2;
+      const topBottomMargin = 10;
       this.setState({
-        overlayPos: panel.scrollTop / this.state.overlayRatio,
+        overlayPos: (panel.scrollTop / this.state.overlayRatio) - overlayBorder,
       });
     }
   }
