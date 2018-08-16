@@ -19,6 +19,8 @@ class CanvasThumbnail extends React.Component {
       layout,
       tags,
       tagSelected,
+      comment,
+      showAllComments,
       isActive,
       isMatch,
       isDeleteable,
@@ -78,9 +80,14 @@ class CanvasThumbnail extends React.Component {
           <h3 onClick={() => onEdit(id)}>{title}</h3>
           <p>Layout: {layout}</p>
           <div className="c-canvas-thumbnail__tag_container">{tagline}
-          <button className="o-small-dialog-button" onClick={() => onTagSelect(id)}>Edit Tags</button>
+            <button className="o-small-dialog-button" onClick={() => onTagSelect(id)}>Edit Tags</button>
           </div>
-          
+          {showAllComments && comment && (
+            <div className="c-canvas-thumbnail__comment_container">
+              <h4>Comment</h4>
+              <p>{comment}</p>
+            </div>
+          )}
         </div>
       </div>
     );

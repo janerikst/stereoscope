@@ -6,7 +6,7 @@ import uiState from 'state/uiState';
 import config from 'config/config';
 
 import Button from '../components/Button';
-import MenuIcon from 'react-icons/lib/md/menu';
+import CommentIcon from 'react-icons/lib/md/comment';
 
 import { scaleLinear } from 'd3';
 
@@ -16,7 +16,7 @@ const CanvasBar = observer(props => {
   // vars
   const { canvasList, filteredCanvasList, taggedAndFilteredCanvasList, downloadDetailedAnnotations } = dataAPI;
   const { CANVAS_BAR_WIDTH } = config;
-  const { activeTag } = uiState;
+  const { activeTag, showAllComments } = uiState;
 
   // interactions
   const handleOpenAddCanvasDialog = () => uiState.triggerAddCanvasDialog();
@@ -40,6 +40,8 @@ const CanvasBar = observer(props => {
     uiState.setActiveTag(tag);
   }
 
+  const handleCommentToggle = () => uiState.triggerShowAllComments();
+
   const canvasEls = taggedAndFilteredCanvasList 
     ? taggedAndFilteredCanvasList.map((d, i) => {
         return (<CanvasThumbnail
@@ -49,6 +51,8 @@ const CanvasBar = observer(props => {
           layout={d.layout}
           tags={d.tags}
           tagSelected={d.tagSelected}
+          comment={d.comment}
+          showAllComments={showAllComments}
           glyphs={d.glyphs}
           isActive={d.active}
           isMatch={d.isMatch}
@@ -75,6 +79,8 @@ const CanvasBar = observer(props => {
           layout={d.layout}
           tags={d.tags}
           tagSelected={d.tagSelected}
+          comment={d.comment}
+          showAllComments={showAllComments}
           glyphs={d.glyphs}
           isActive={d.active}
           isMatch={d.isMatch}
@@ -100,8 +106,8 @@ const CanvasBar = observer(props => {
       <header className="c-header--small">
         <div className="c-canvas-bar__controls">
           <h2>Views</h2>
-          <Button isRight={true}>
-            <MenuIcon size={20}/>
+          <Button isRight={true} isActive={showAllComments} onClick={handleCommentToggle}>
+            <CommentIcon size={20}/>
           </Button>
         </div>
       </header>

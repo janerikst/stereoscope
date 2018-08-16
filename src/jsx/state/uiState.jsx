@@ -58,6 +58,7 @@ class UiState {
   @observable showFilterPanel = false;
   @observable showLayoutPanel = false;
   @observable editComment = false; 
+  @observable showAllComments = true;
   @observable showLabels = true;
   @observable showLines = true;
   @observable showEnclosedLines = true;
@@ -443,7 +444,12 @@ class UiState {
     } else {
       this.activeTag = '';
     }
-  }
+  };
+
+  @action
+  triggerShowAllComments = () => {
+    this.showAllComments = !this.showAllComments
+  };
 
   @action
   blockToolTip() {
