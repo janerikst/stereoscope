@@ -52,20 +52,22 @@ class CanvasThumbnail extends React.Component {
           <span
             className="c-canvas-thumbnail__icon c-canvas-thumbnail__clone"
             onClick={() => onClone(id)}>
-            <CloneIcon />
+            <CloneIcon size={20}/>
           </span>
           <span
             className="c-canvas-thumbnail__icon c-canvas-thumbnail__download"
             onClick={() => onDownload(id)}>
-            <DownloadIcon />
+            <DownloadIcon size={20}/>
           </span>
           {isDeleteable && (
             <span
               className="c-canvas-thumbnail__icon c-canvas-thumbnail__delete"
               onClick={() => onDelete(id)}>
-              <TrashIcon />
+              <TrashIcon size={20}/>
             </span>
           )}
+          <div className="c-canvas-thumbnail__hoverstate">
+          </div>
           <canvas
             className="c-canvas-thumbnail__image"
             width={width}
@@ -75,6 +77,7 @@ class CanvasThumbnail extends React.Component {
             }}
             onClick={() => onSelect(id)}
           />
+          
         </div>
         <div className="c-canvas-thumbnail__metadata_container">
           <h3 onClick={() => onEdit(id)}>{title}</h3>
