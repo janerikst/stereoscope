@@ -20,7 +20,9 @@ export const textData = lazyObservable(sink => {
       };
       reader.readAsText(textFile);
     } else if (textFile == '' && TEXT_FILE != '') {
-      text(TEXT_FILE, result => sink(result ? result : ''));
+      text(TEXT_FILE).then(result => {
+        sink(result ? result : '')
+      })
     }
   });
 });
@@ -39,7 +41,9 @@ export const annotationData = lazyObservable(sink => {
       };
       reader.readAsText(annotationFile);
     } else if (annotationFile == '' && ANNOTATION_FILE != '') {
-      json(ANNOTATION_FILE, result => sink(result ? result : []));
+      json(ANNOTATION_FILE).then(result => {
+        sink(result ? result : '')
+      })
     }
   });
 });

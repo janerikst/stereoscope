@@ -1,6 +1,6 @@
 export default {
-  TEXT_FILE: '',
-  ANNOTATION_FILE: '',
+  TEXT_FILE: 'data/Novelle.txt',
+  ANNOTATION_FILE: 'data/Novelle.json',
   TEXT_BAR_WIDTH: 400,
   TEXT_NAV_WIDTH: 14,
   CANVAS_BAR_WIDTH: 240,
