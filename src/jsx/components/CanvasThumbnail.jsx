@@ -66,7 +66,7 @@ class CanvasThumbnail extends React.Component {
               <TrashIcon size={20}/>
             </span>
           )}
-          <div className="c-canvas-thumbnail__hoverstate">
+          <div className="c-canvas-thumbnail__hoverstate" onClick={() => onSelect(id)}>
           </div>
           <canvas
             className="c-canvas-thumbnail__image"
@@ -75,7 +75,7 @@ class CanvasThumbnail extends React.Component {
             ref={x => {
               this.canvasEl = x;
             }}
-            onClick={() => onSelect(id)}
+            
           />
           
         </div>
