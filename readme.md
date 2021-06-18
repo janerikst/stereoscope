@@ -4,7 +4,7 @@
 
 Stereoscope is a web-based prototype for visualizing two core processes of literary studies - hermeneutic exploration of textual meaning and construction of arguments about texts. In Stereoscope scholars can represent their manually created digital annotations with multiple visualizations to record and convey qualitative statements. Different visual representations of annotation data allow multiple perspectives which, in combination with comments and tags, provide the means to craft scholarly arguments about literary works and make them transparent to readers. 
 
-The research and the software prototype Stereoscope was developed as part of the 3DH project Three-Dimensional Dynamic Data Visualisation and Exploration for digital humanities Research at the University of Hamburg (04/2016–12/2018). The project is conducted by Jan Christoph Meister. Associated members are Marian Dörk (University of Applied Sciences Potsdam), Johanna Drucker (University of California), Evelyn Gius (TU Darmstadt), Geoffrey Rockwell (University of Alberta), Florian Windhager (Danube University Krems).
+The research and the software prototype Stereoscope was developed as part of the 3DH project Three-Dimensional Dynamic Data Visualisation and Exploration for Digital Humanities Research at the University of Hamburg (04/2016–12/2018). The project was conducted by Jan Christoph Meister (project leader). Research associates were Rabea Kleymann and Jan-Erik Stange. Associated members were Marian Dörk (University of Applied Sciences Potsdam), Johanna Drucker (University of California), Evelyn Gius (TU Darmstadt), Jan Horstmann (Marbach Weimar Wolfenbüttel Research Association), Geoffrey Rockwell (University of Alberta), Florian Windhager (Danube University Krems).
 
 # Usage
 Run
